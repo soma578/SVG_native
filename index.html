@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SVGMap 本家Container + 追加レイヤー</title>
+<style>
+  html,body{height:100%;margin:0;font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif}
+  #mapcanvas{position:absolute;inset:0}
+  #layerlist{position:absolute;right:8px;top:8px;z-index:50;max-height:92vh;overflow:auto;
+             background:rgba(255,255,255,.96);border:1px solid #cbd5e1;border-radius:8px;padding:6px;font-size:13px}
+</style>
+</head>
+<body>
+  <!-- 本家 svgmapjs に、本家 Container.svg をそのまま読ませる最小ホスト。
+       追加レイヤーは Container.svg の <animation> として並ぶので、
+       このホスト側にはレイヤー固有の記述を一切持たない。 -->
+  <img id="centerSight" alt="" width="1" height="1"
+       src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+       style="position:absolute;opacity:0;pointer-events:none">
+  <div id="mapcanvas" data-src="./svgmapAppLayers/Container.svg"></div>
+  <div id="controller"></div>
+  <div id="layerlist"></div>
+  <div id="layerList"></div>
+  <div id="layerSpecificUI"></div>
+  <div id="initLayerSpecificUI"></div>
+  <script type="module">
+    const module = await import('./svgmapjs/SVGMapLv0.1_r18module.js');
+    window.svgMap = module.svgMap;
+    window.svgMap.initLoad();
+  </script>
+  <script>
+    // 起動一式を裏で保存する。通信が切れても地図が開けるようにするため。
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch((error) => {
+          console.info('[host] service worker unavailable', error);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

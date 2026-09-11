@@ -5,7 +5,8 @@ import { fileURLToPath } from 'node:url'
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const publicDir = path.join(root, 'public')
 const links = new Map([
-  ['svgmapjs', '../svgmapjs'],
+	['svgmap.html', '../index.html'],
+	['svgmapjs', '../svgmapjs'],
   ['svgmapAppLayers', '../svgmapAppLayers'],
   ['sw.js', '../sw.js'],
 ])

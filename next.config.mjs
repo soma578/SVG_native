@@ -3,7 +3,6 @@ const nextConfig = {
   agentRules: false,
   // Next.js is only a delivery adapter. SVGMap and AppLayers stay as static,
   // browser-native assets and are not transpiled or bundled by Next.js.
-  output: 'standalone',
   poweredByHeader: false,
   turbopack: {
     root: process.cwd(),

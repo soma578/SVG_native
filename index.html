@@ -1,43 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-<head>
+<title>SVGMapLevel0.1 Demo</title>
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SVGMap 本家Container + 追加レイヤー</title>
-<style>
-  html,body{height:100%;margin:0;font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif}
-  #mapcanvas{position:absolute;inset:0}
-  #layerlist{position:absolute;right:8px;top:8px;z-index:50;max-height:92vh;overflow:auto;
-             background:rgba(255,255,255,.96);border:1px solid #cbd5e1;border-radius:8px;padding:6px;font-size:13px}
-</style>
-</head>
-<body>
-  <!-- 本家 svgmapjs に、本家 Container.svg をそのまま読ませる最小ホスト。
-       追加レイヤーは Container.svg の <animation> として並ぶので、
-       このホスト側にはレイヤー固有の記述を一切持たない。 -->
-  <img id="centerSight" alt="" width="1" height="1"
-       src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
-       style="position:absolute;opacity:0;pointer-events:none">
-  <div id="mapcanvas" data-src="./svgmapAppLayers/Container.svg"></div>
-  <div id="controller"></div>
-  <div id="layerlist"></div>
-  <div id="layerList"></div>
-  <div id="layerSpecificUI"></div>
-  <div id="initLayerSpecificUI"></div>
-  <script type="module">
-    const module = await import('./svgmapjs/SVGMapLv0.1_r18module.js');
-    window.svgMap = module.svgMap;
-    window.svgMap.initLoad();
-  </script>
-  <script>
-    // 起動一式を裏で保存する。通信が切れても地図が開けるようにするため。
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch((error) => {
-          console.info('[host] service worker unavailable', error);
-        });
-      });
-    }
-  </script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<!-- 本家 svgmap/svgMapDemo のレイヤーリストUI -->
+<link href="/layerListStyle.css" rel="stylesheet" type="text/css">
+
+<!-- 本家デモと同じGIS・SVGMap API構成。SVGMap本体だけローカル資産を読む。 -->
+<script type="text/javascript" src="https://unpkg.com/jsts@1.6.1/dist/jsts.min.js"></script>
+<script type="module" src="/svgmap-bootstrap.js"></script>
+
+<body bgcolor="#ffffff" style="overflow:hidden;">
+  <div id="mapcanvas" data-src="/svgmapAppLayers/Container.svg"></div>
+  <div id="gui">
+    <img id="zoomupButton" style="left:5px;top:5px;position:absolute;" src="https://raw.githubusercontent.com/svgmap/svgMapDemo/main/img/zoomup.png" onclick="svgMap.zoomup()" width="20" height="20" alt="拡大" title="拡大">
+    <img id="zoomdownButton" style="left:5px;top:25px;position:absolute;" src="https://raw.githubusercontent.com/svgmap/svgMapDemo/main/img/zoomdown.png" onclick="svgMap.zoomdown()" width="20" height="20" alt="縮小" title="縮小">
+    <img id="gpsButton" style="left:5px;top:45px;position:absolute;" src="https://raw.githubusercontent.com/svgmap/svgMapDemo/main/img/gps.png" onclick="svgMap.gps()" width="20" height="20" alt="現在地" title="現在地">
+
+    <span style="right:23px;top:2px;position:absolute;font-size:14px;color:blue"><a href="https://svgmap.org/" target="_blank" rel="noopener noreferrer">SVGMap</a>Level0.1 technical preview</span>
+    <img id="copyPermaLink" style="right:3px;top:3px;position:absolute;width:15px;height:15px;cursor:pointer;" onclick="svgMap.getBasicPermanentLink(true)" src="https://raw.githubusercontent.com/svgmap/svgMapDemo/main/img/permaLink.png" alt="パーマリンク" title="パーマリンクをクリップボードにコピーする">
+
+    <img id="centerSight" style="opacity:0.5" src="https://raw.githubusercontent.com/svgmap/svgMapDemo/main/img/Xcursor.png" width="15" height="15" alt="地図中心">
+    <table style="right:3px;top:20px;position:absolute;font-size:12px;color:brown">
+      <tbody><tr><td>Lat,Lng:</td><td id="centerPos"></td></tr></tbody>
+    </table>
+
+    <font id="noticeText" size="-2" color="black" style="left:3px;bottom:3px;position:absolute;background-color:rgba(0,200,200,0.5)">Notice: This page is provided solely for technical preview of <a href="https://svgmap.org/" target="_blank" rel="noopener noreferrer">SVGMap</a> technology. The originator of this page assumes no responsibility for any damages resulting from the use of the information on each layer displayed.</font>
+
+    <img id="vscaleImg" style="left:5px;bottom:20px;position:absolute;" src="https://raw.githubusercontent.com/svgmap/svgMapDemo/main/img/vscale.png" alt="縮尺">
+
+    <div id="layerList"
+         data-hiddenfilter
+         data-layerstylecontroller
+         data-customizer="/svgmapjs/SVGMapCustomLayersManager_r3module.html"
+         style="left:30px;top:10px;width:300px;height:90%;position:absolute;"></div>
+
+    <div id="layerSpecificUI" style="right:10px;top:40px;width:400px;height:400px;position:absolute;background-color:white;opacity:0.8;display:none;"></div>
+  </div>
 </body>
 </html>

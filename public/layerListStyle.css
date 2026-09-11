@@ -1,0 +1,8 @@
+/* Upstream UI: svgmap/svgMapDemo img/layerListStyle.css */
+table tr:nth-child(odd) { background-color: #c0c0ff; }
+table tr:nth-child(even) { background-color: #e0e0e0; }
+#layerTable { border: 2px solid #bbb; }
+.layerItem { background-color: white; }
+.noGroup { background-color: #fff0f0; }
+#layerList { background-color: #ffff80; opacity: 0.8; font-size: 12px; }
+#layerList button { padding: 1px 3px; }

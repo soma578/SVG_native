@@ -1,0 +1,13 @@
+<!-- Add this element inside your SVGMap Container.svg. Replace CSV_URL_HERE. -->
+<animation
+  id="external-csv-photo-layer"
+  title="外部CSV現地情報"
+  class="CSV clickable"
+  visibility="visible"
+  opacity="1"
+  x="-30000"
+  y="-30000"
+  width="60000"
+  height="60000"
+  xlink:href="./authoringLayers/local/csvLayer/csvXhr_r20.svg#csvPath=CSV_URL_HERE&amp;latCol=2&amp;lngCol=3&amp;titleCol=1&amp;popup=externalCsvPhoto"
+/>

@@ -1,8 +1,8 @@
 # Next.js development host
 
 The Next.js application is a thin delivery adapter around the existing SVGMap
-source trees. It does not copy, transpile, or bundle `svgmapjs/` or
-`svgmapAppLayers/`.
+source trees. It does not transpile or bundle `svgmapjs/` or
+`svgmapAppLayers/`; the asset preparation step copies them into `public/`.
 
 ```bash
 npm install
@@ -11,14 +11,32 @@ npm run dev
 
 Open <http://localhost:3000>. The Next.js route redirects to `/svgmap.html`,
 which is the upstream `svgmap/svgMapDemo` host UI adapted only to load this
-repository's `Container.svg` and local `svgmapjs` tree. `predev` creates four
-`public/` symlinks pointing to that host HTML, the existing source directories,
-and the service worker. On localhost the bootstrap unregisters service workers
-so edits are visible without stale shell-cache data.
+repository's `Container.svg` and local `svgmapjs` tree. `predev` and `prebuild`
+regenerate the service worker from current source files, then copy the host HTML,
+`svgmapjs/`, `svgmapAppLayers/`, and `sw.js` into `public/`. Internal source
+symlinks are copied as regular files and `.git` directories are excluded. This
+avoids Vercel's post-build handling of symlinks that point outside `public/`.
+Changes to copied source files require rerunning `npm run assets:prepare` (or
+restarting `npm run dev`); Next.js will not watch the original source trees.
 
 The upstream UI provides zoom, GPS, center coordinates, scale, permanent links,
 the grouped layer list, per-layer controllers, visibility/style controls, and the
 SVGMap Custom Layers Manager. Next.js does not reimplement those controls.
+
+## Offline cache
+
+The first online visit stores the SVGMap application shell in the background.
+It also stores map tiles as they are viewed and keeps the last successfully
+loaded Google Sheets CSV and Google Drive image responses. Online requests for
+the Sheet and Drive images are network-first, so an updated Sheet is used on the
+next online reload. Cached dynamic data is used only when the network request
+fails, and the map displays an offline/stale-data warning.
+
+The cache is deliberately bounded: 800 same-origin runtime responses, 1,500
+visited map tiles, and 50 dynamic Sheet/Drive responses. This is a browser cache,
+not a complete offline copy of Japan: an online first visit is required, only
+previously viewed tiles are available, and the browser may evict stored data
+under storage pressure or when site data is cleared.
 
 Production commands:
 

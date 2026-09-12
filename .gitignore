@@ -2,3 +2,8 @@ node_modules/
 .next/
 out/
 *.log
+public/.svgmap-generated-assets.json
+public/svgmap.html
+public/svgmapjs/
+public/svgmapAppLayers/
+public/sw.js

@@ -1,0 +1,485 @@
+<!doctype html>
+<html>
+<head>
+<title>Layer Specific UI for K-NET SVGMap Layer</title>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<style>
+#loader{
+    margin:auto;
+    width:30px;
+    height:30px;
+    border-radius:30px;
+    border:8px solid #17cddd;
+    border-right-color:transparent;
+    animation:spin 1s infinite linear;
+}
+#loader{
+    animation:spin 1s infinite linear;
+}
+@keyframes spin{
+    0%{transform:rotate(0deg); opacity:0.4;}
+    50%{transform:rotate(180deg); opacity:1;}
+    100%{transform:rotate(360deg); opacity:0.4;}
+    
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/gh/svgmap/svgmapjs@latest/svgMapLayerLib.js"></script>
+
+<script>
+
+// Description:
+// 防災科研 K_NETデータレイヤ
+// 
+//  Programmed by Satoru Takagi
+//  
+// 
+// License: (MPL v2)
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+// 
+// History:
+// 2021/11/22 Programmed by Satoru Takagi
+// 2026/05/12 接続先のシステム更改に対応　API変更および、CSRF対策のためにproxyを構築
+
+// プロキシのパス
+var PROXY_URL =".";
+var GET_TOKENS_URL, GET_DATA_URL;
+
+// API
+var API_BASE = "https://www.kyoshin.bosai.go.jp/ja/eqdownload/";
+var API_SEARCH = API_BASE + "api/eqsearch/";
+var API_REPORT = API_BASE + "api/eqreportsearch/";
+
+addEventListener("layerWebAppReady",function(){
+	if ( svgImageProps.hash.indexOf("proxy=")>0){
+		PROXY_URL = svgImageProps.hash.substring(svgImageProps.hash.indexOf("proxy=")+6);
+	}
+	GET_TOKENS_URL = PROXY_URL + "/getTokens.php";
+	GET_DATA_URL = PROXY_URL + "/getData.php";
+	
+	initEqYMsel();
+	init();
+});
+
+
+var debug=false;
+var eqColors= [ // 未満の値
+	{intensity:0.5,colorArray:[221, 221, 221]},
+	{intensity:1,  colorArray:[158, 189, 221]},
+	{intensity:2,  colorArray:[61, 121, 181]},
+	{intensity:3,  colorArray:[50, 200, 180]},
+	{intensity:4,  colorArray:[30, 220, 80]},
+	{intensity:5,  colorArray:[155, 255, 92]},
+	{intensity:5.5,colorArray:[255, 255, 0]},
+	{intensity:6,  colorArray:[255, 176, 71]},
+	{intensity:6.5,colorArray:[255, 80, 120]},
+	{intensity:7,  colorArray:[150, 0, 60]},
+];
+
+// トークンを保持するグローバル変数 2026/5
+var authData = null;
+
+// トークンを一括取得して保持する関数 2026/5
+async function initAuthData() {
+	if (authData) return authData; // 取得済みなら再利用
+	try {
+		var res = await fetch(GET_TOKENS_URL);
+		authData = await res.json();
+		return authData;
+	} catch(e) {
+		console.error("Token fetch failed:", e);
+		return null;
+	}
+}
+
+
+function makeColor(){
+	for ( var c of eqColors){
+		c.color="#"+pad(c.colorArray[0].toString(16))+pad(c.colorArray[1].toString(16))+pad(c.colorArray[2].toString(16));
+	}
+}
+
+
+var eqListCache;
+
+async function init(updateInstant, year, month){
+	eqListSelDiv.style.display = "none";
+	loaderDiv.style.display = "";
+	makeColor();
+	
+	var eqList = [];
+	if ( updateInstant ){
+		year = undefined;
+		month = undefined;
+	}
+	
+	if ( updateInstant && eqListCache ){
+		eqList = eqListCache;
+		console.log("use eqListCache");
+	} else {
+		//  month が 0 の場合でも通過できるように undefined を明示的にチェック
+		if ( year !== undefined && month !== undefined ){
+			if ( checkYM(year, month) == false ){
+				console.warn("yearMonthErr");
+				eqListSelDiv.style.display = "";
+				loaderDiv.style.display = "none";
+				return;
+			}
+			eqList = await getPastEqList(2, year, month);
+			eqListCache = null;
+		} else {
+			eqList = await getPastEqList(2);
+			eqListCache = eqList;
+		}
+	}
+	
+	var instantList = [];
+	// 同様に undefined をチェック
+	if ( year === undefined && month === undefined ){
+		var auth = await initAuthData();
+		if (auth) {
+			var formData = new FormData();
+			formData.append('csrfmiddlewaretoken', auth.token1);
+			formData.append('map_img_choice', 'accmap');
+			formData.append('sm_dl_choice', '1');
+			formData.append('repDlKind', '1');
+			formData.append('format', '');
+
+			try {
+				var response = await fetch(GET_DATA_URL + "?path=autopublish/api/smlist/&cookie=" + encodeURIComponent(auth.token2), {
+					method: 'POST',
+					body: formData
+				});
+				var json = await response.json();
+				console.log("即時公開API json:", json);
+				instantList = parseInstantJson(json);
+			} catch (e) {
+				console.error("Instant List API Error:", e);
+			}
+		}
+	}
+	
+	makeEqListSel(instantList, eqList);
+	eqListSelDiv.style.display = "";
+	loaderDiv.style.display = "none";
+	changeQuake();
+}
+
+function checkYM(year,month){
+	var ans = false;
+	if ( isNaN(year) || isNaN(month) ){
+		return(ans);
+	}
+	
+	if ( new Date().getTime() -  new Date(year,month).getTime() > 0){
+		ans = true;
+	}
+	return ( ans );
+}
+
+// 過去の公式地震一覧を取得する関数 2026/5
+async function getPastEqList(monthCount, year, month){
+	var ct = new Date();
+	if ( !year || month === undefined ){ year = ct.getFullYear(); month = ct.getMonth() + 1; }
+	else { month++; }
+	
+	var dateTo = new Date(year, month, 0); 
+	var dateFrom = new Date(year, month - monthCount, 1);
+	var dfStr = dateFrom.getFullYear() + "/" + pad(dateFrom.getMonth() + 1) + "/" + pad(dateFrom.getDate());
+	var dtStr = dateTo.getFullYear() + "/" + pad(dateTo.getMonth() + 1) + "/" + pad(dateTo.getDate());
+
+	// トークンを準備
+	var auth = await initAuthData();
+	if (!auth) return [];
+
+	var formData = new FormData();
+	formData.append('csrfmiddlewaretoken', auth.token1); // token1をセット
+	formData.append('datakind', '1');
+	formData.append('date_from', dfStr);
+	formData.append('date_to', dtStr);
+	formData.append('site_method', '0');
+
+	try {
+		// token2はURLに含めてgetData.phpへ投げる
+		var response = await fetch(GET_DATA_URL + "?path=eqdownload/api/eqsearch/&cookie=" + encodeURIComponent(auth.token2), {
+			method: 'POST',
+			body: formData
+		});
+		var json = await response.json();
+		return parseQuakeJson(json);
+	} catch (e) {
+		console.error("EqSearch API Error:", e);
+		return [];
+	}
+}
+
+// 公式一覧JSONを既存の配列形式に変換 2026/5
+function parseQuakeJson(json) {
+	var ans = [];
+	if (!json || !json.results) return ans;
+	for (var eq of json.results) {
+		ans.push({
+			value: eq.eqid_id__eqid_id,
+			text: `${eq.origintime} M${eq.mag} 深さ${eq.depth}km`,
+			detail: {
+				latitude: parseFloat(eq.lat),
+				longitude: parseFloat(eq.lon),
+				depth: parseFloat(eq.depth),
+				magnitude: parseFloat(eq.mag),
+				title: "震央"
+			}
+		});
+	}
+	return ans;
+}
+
+// 【新規追加】即時公開データの一覧JSONをパースする関数
+function parseInstantJson(json) {
+	var ans = [];
+	if (!json || !json.items) return ans;
+
+	for (var eq of json.items) {
+		ans.push({
+			value: eq.eqid,
+			text: `(即時) ${eq.origintime} M${eq.mag} 深さ${eq.depth}km`,
+			detail: {
+				latitude: parseFloat(eq.lat),
+				longitude: parseFloat(eq.lon),
+				depth: parseFloat(eq.depth),
+				magnitude: parseFloat(eq.mag),
+				title: "震央(即時)"
+			}
+		});
+	}
+	return ans;
+}
+
+// 公式詳細APIのJSONをSVGMap描画形式に変換 2026/5
+function parseQuakeReportJson(json, eqDetail) {
+	var ans = [];
+	if (!json || !json.results || json.results.length === 0) return ans;
+
+	// 震央データの追加（引数で受け取ったデータを使用）
+	if ( eqDetail ){
+		ans.push({
+			text: "震央",
+			value: "center",
+			detail: {
+				latitude: eqDetail.latitude,
+				longitude: eqDetail.longitude,
+				title: "震央",
+				magnitude: eqDetail.magnitude,
+				depth: eqDetail.depth
+			}
+		});
+	}
+
+	// 各観測点データの追加
+	for (var site of json.results) {
+		ans.push({
+			text: site.sitename,
+			value: site.sitecode,
+			detail: {
+				latitude: parseFloat(site.lat),
+				longitude: parseFloat(site.lon),
+				intensity: parseFloat(site.inst_seismic_intensity || site.maxsindo),
+				acceleration: parseFloat(site.maxacc),
+				title: site.sitename + " (" + site.sitecode + ")",
+			}
+		});
+	}
+	return ans;
+}
+
+// 即時自動公開・詳細APIのJSONをSVGMap描画形式に変換 2026/5
+function parseInstantReportJson(json, eqDetail) {
+	var ans = [];
+	if (!json || !json.items) return ans;
+
+	// 震央データを追加（smlist取得時のデータを流用）
+	if (eqDetail) {
+		ans.push({
+			text: "震央",
+			value: "center",
+			detail: eqDetail
+		});
+	}
+
+	// 各観測点データの追加
+	for (var site of json.items) {
+		ans.push({
+			text: site.sitename,
+			value: site.sitecode,
+			detail: {
+				latitude: parseFloat(site.lat),
+				longitude: parseFloat(site.lon),
+				intensity: parseFloat(site.sindo),   // 即時版は sindo
+				acceleration: parseFloat(site.maxacc),
+				title: site.sitename + " (" + site.sitecode + ")"
+			}
+		});
+	}
+	return ans;
+}
+
+// 選択した地震の詳細データ取得と描画 2026/5
+async function changeQuake(event){
+	var eq = eqListSel.options[eqListSel.selectedIndex];
+	if (!eq) return;
+
+	var cat = eq.getAttribute("data-cat");
+	var auth = await initAuthData();
+	if (!auth) return;
+
+	if ( cat == "quake" ){
+		// --- 公式データの処理 ---
+		var formData = new FormData();
+		formData.append('csrfmiddlewaretoken', auth.token1);
+		formData.append('eq', eq.value);
+
+		try {
+			var response = await fetch(GET_DATA_URL + "?path=eqdownload/api/eqreportsearch/&cookie=" + encodeURIComponent(auth.token2), {
+				method: 'POST',
+				body: formData
+			});
+			var json = await response.json();
+			
+			// 即時公開側と同様、DOMに持たせたデータを渡す
+			var dl = parseQuakeReportJson(json, eq.detailData); 
+			
+			if ( svgMap ) drawMap(dl);
+		} catch (e) { console.error("Quake Report Error:", e); }
+
+	} else {
+		// --- 即時公開データの処理（現状維持） ---
+		var formData = new FormData();
+		formData.append('csrfmiddlewaretoken', auth.token1);
+		formData.append('eqid', eq.value);
+
+		try {
+			var response = await fetch(GET_DATA_URL + "?path=autopublish/api/smreplist/&cookie=" + encodeURIComponent(auth.token2), {
+				method: 'POST',
+				body: formData
+			});
+			var json = await response.json();
+			var dl = parseInstantReportJson(json, eq.detailData);
+			if ( svgMap ) drawMap(dl);
+		} catch (e) { console.error("Instant Report Error:", e); }
+	}
+}
+
+function makeEqListSel(instantList, quakeList){
+	var isFirst = true;
+	removeChildren(eqListSel);
+	
+	function addOptions(list, cat) {
+		for ( var itm of list){
+			var opt = document.createElement("option");
+			if (isFirst) { opt.selected = true; isFirst = false; }
+			opt.value = itm.value;
+			opt.setAttribute("data-cat", cat);
+			opt.innerText = itm.text;
+			// 震央データをプロパティとして持っておく
+			opt.detailData = itm.detail; 
+			eqListSel.appendChild(opt);
+		}
+	}
+	
+	addOptions(instantList, "instant");
+	addOptions(quakeList, "quake");
+}
+
+
+
+function drawMap(dl){
+	//console.log("called drawMap:",dl);
+	var centerg = svgImage.getElementById("center");
+	removeChildren(centerg);
+	var pointsg = svgImage.getElementById("points");
+	removeChildren(pointsg);
+	for ( var poi of dl){
+		var sp = svgImage.createElement("use");
+		sp.setAttribute("transform","ref(svg,"+poi.detail.longitude+","+(-poi.detail.latitude)+")");
+		sp.setAttribute("xlink:title",poi.detail.title);
+		if(poi.value=="center"){
+			sp.setAttribute("xlink:href","#centerMark");
+			sp.setAttribute("content",poi.detail.magnitude+","+poi.detail.depth+",,");
+			centerg.appendChild(sp);
+		} else {
+			sp.setAttribute("xlink:href","#p0");
+			sp.setAttribute("fill",getColor(poi.detail.intensity));
+			sp.setAttribute("content",",,"+poi.detail.intensity+","+poi.detail.acceleration);
+			pointsg.appendChild(sp);
+		}
+	}
+	svgMap.refreshScreen();
+}
+
+function getColor(inte){
+	ans="black";
+	for ( var it of eqColors){
+		ans = it.color;
+		if (inte <= it.intensity ){
+			break;
+		}
+	}
+	return ( ans );
+}
+function removeChildren(elm){
+	while(elm.firstChild){
+		elm.removeChild(elm.firstChild);
+	}
+}
+
+
+function pad( inp ){
+	return ( ("0"+inp).slice(-2));
+}
+
+function initEqYMsel(){
+	var cd = new Date();
+	var cy = cd.getFullYear();
+	var cm = cd.getMonth();
+	console.log("initEqYMsel:",cy,cm);
+	for ( var y = 2000 ; y <= cy; y++){
+		eqYearSel.insertAdjacentHTML("afterbegin",`<option ${y==cy?"selected":""} value=${y}>${y}年</option>`);
+	}
+	for ( var m = 0 ; m <=11 ; m++ ){
+		eqMonthSel.insertAdjacentHTML("afterbegin",`<option ${m==cm?"selected":""} value=${m}>${m+1}月</option>`);
+	}
+}
+
+function changeYM(){
+	var cd = new Date();
+	var cy = cd.getFullYear();
+	var cm = cd.getMonth();
+	
+	var y = Number(eqYearSel.options[eqYearSel.selectedIndex].value);
+	var m = Number(eqMonthSel.options[eqMonthSel.selectedIndex].value);
+	var updateInstant=false;
+	if ( y==cy && m==cm){
+		updateInstant=true;
+	}
+	console.log(updateInstant,y,m);
+	init(updateInstant,y,m);
+}
+
+</script>
+<body>
+<h3>防災科研　K-NET強震観測網レイヤー</h3>
+
+<p><a href="https://www.kyoshin.bosai.go.jp/kyoshin/" target="_blank">強震観測網 K-NET</a>、<a href="https://www.kyoshin.bosai.go.jp/ja/autopublish/" target="_blank"> 自動公開</a> and <a href="https://www.kyoshin.bosai.go.jp/ja/eqdownload/" target="_blank">地震</a>より</p>
+<p style="font-size:10px"><div style="; float: left; text-align: center">震度凡例：</div>
+<div  style="background-color: rgb(158, 189, 221); float: left; height: 17.0781px; width: 13.9219px; text-align: center">1</div><div  style="background-color: rgb(61, 121, 181); float: left; height: 17.0781px; width: 13.9219px; text-align: center">2</div><div  style="background-color: rgb(50, 200, 180); float: left; height: 17.0781px; width: 13.9219px; text-align: center">3</div><div  style="background-color: rgb(30, 220, 80); float: left; height: 17.0781px; width: 13.9219px; text-align: center">4</div><div  style="background-color: rgb(155, 255, 92); float: left; height: 17.0781px; width: 13.9219px; text-align: center">5-</div><div  style="background-color: rgb(255, 255, 0); float: left; height: 17.0781px; width: 13.9219px; text-align: center">5+</div><div  style="background-color: rgb(255, 176, 71); float: left; height: 17.0781px; width: 13.9219px; text-align: center">6-</div><div  style="background-color: rgb(255, 80, 120); float: left; height: 17.0781px; width: 13.9219px; text-align: center">6+</div><div  style="background-color: rgb(150, 0, 60); float: left; height: 17.0781px; width: 13.9219px; text-align: center">7</div></p>
+
+<div id="eqYMselDiv"><select id="eqYearSel"></select><select id="eqMonthSel"></select><input type="button" value="設定/更新" onClick="changeYM()"></input></div>
+<div id="eqListSelDiv">
+<select id="eqListSel" size="10" onchange="changeQuake(event)" style="width:425px"></select>
+</div>
+<div id="loaderDiv"><div> Loading.. </div><div id="loader"></div></div>
+</body>
+</html>

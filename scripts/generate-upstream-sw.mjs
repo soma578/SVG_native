@@ -19,7 +19,7 @@ const externalShell = [
 const walk = (directory, base = root) => {
   const files = []
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-    if (['.git', '.next', 'node_modules', 'public'].includes(entry.name)) continue
+    if (['.git', '.next', 'node_modules', 'public', '.submodule-git-backup'].includes(entry.name)) continue
     const target = path.join(directory, entry.name)
     if (entry.isDirectory()) files.push(...walk(target, base))
     else if (entry.isFile() || entry.isSymbolicLink()) files.push(path.relative(base, target).split(path.sep).join('/'))

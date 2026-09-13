@@ -3,6 +3,11 @@
 The Next.js application is a thin delivery adapter around the existing SVGMap
 source trees. It does not transpile or bundle `svgmapjs/` or
 `svgmapAppLayers/`; the asset preparation step copies them into `public/`.
+Both source trees are committed as ordinary directories in this repository,
+not gitlinks. This is necessary because `svgmapAppLayers/` contains local CSV
+photo and disaster-map additions that are not present in the upstream commit.
+The former nested Git metadata is retained locally under
+`.submodule-git-backup/` and is intentionally not deployed.
 
 ```bash
 npm install

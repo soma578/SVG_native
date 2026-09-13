@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8"></meta>
+<title>地理院の　日本の主な山岳一覧コンテンツからCSVを構築する</title>
+</head>
+<script>
+// 地理院の　日本の主な山岳一覧コンテンツからCSVを構築する～
+// https://www.gsi.go.jp/kihonjohochousa/kihonjohochousa41140.html
+// 2025/05/20 上のページが消滅し、2025/4版というcsvデータができたのでそちらを単にDLすることにする
+// https://www.gsi.go.jp/kihonjohochousa/kihonjohochousa41139.html
+// の
+// https://www.gsi.go.jp/KOKUJYOHO/MOUNTAIN/1003zan20250401.csv
+// 2026/04/21 https://www.gsi.go.jp/kihonjohochousa/kihonjohochousa41140.html
+// からcsvのエンドポイントを調べてそこから取得する仕組みに変更　これでページ更新にある程度対応できた？
+//
+// Programmed by Satoru Takagi
+// 
+// License: (MPL v2)
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+
+var csvIndexContent = "https://www.gsi.go.jp/kihonjohochousa/kihonjohochousa41139.html";
+
+//var srcContent = "https://www.gsi.go.jp/KOKUJYOHO/MOUNTAIN/1003zan20250401.csv";
+var corsPxy ="";
+
+function getCORSURL(srcUrl){
+	if (!corsPxy){
+		corsPxy = (new URL(location.href.replace("#","?"))).searchParams.get("proxy");
+	}
+	if (!corsPxy){
+		corsPxy ="";
+	}
+	var srcURL;
+	if (!corsPxy && window.opener?.opener?.svgMap){
+		console.log("use svgmap cors proxy func");
+		srcURL = window.opener.opener.svgMap.getCORSURL(srcUrl);
+	} else {
+		srcURL = corsPxy+srcUrl
+	}
+	return ( srcURL );
+}
+
+onload = async function(){
+	var p_csvIndexContent = getCORSURL(csvIndexContent);
+	console.log("Index Content URL:", csvIndexContent);
+	var srcContent = await getLatestGsiCsvUrl(p_csvIndexContent);
+	console.log("Csv Src Content URL:", srcContent);
+	var srcURL = getCORSURL(srcContent);
+	
+	var res = await fetch(srcURL);
+	
+	// --- 文字化け対策（自動判別） ---
+	// text()ではなく、生のバイナリデータ（ArrayBuffer）として取得する
+	var buffer = await res.arrayBuffer();
+	var txt = "";
+	
+	try {
+		// まずUTF-8としてデコードを試みる
+		// fatal: true を指定すると、UTF-8以外の文字（SJISなど）が混ざっていた場合に例外(Error)を投げる
+		const utf8Decoder = new TextDecoder("utf-8", { fatal: true });
+		txt = utf8Decoder.decode(buffer);
+		console.log("UTF-8としてデコードしました。");
+	} catch (e) {
+		// UTF-8でのデコードに失敗した場合（例外が発生した場合）は、Shift_JISとしてデコードする
+		console.log("UTF-8ではない文字コードを検出したため、Shift_JISでデコードします。");
+		const sjisDecoder = new TextDecoder("shift_jis");
+		txt = sjisDecoder.decode(buffer);
+	}
+	// ------------------------------
+	
+	printCsv(txt);
+}
+
+var csvContent=null;
+function printCsv(csvTxt){
+	mtbl.value=csvTxt;
+	csvContent = csvTxt;
+}
+
+function getCsvData(){
+	return new Promise( async function(okCallback, ngCallback) {
+		while (!csvContent ){
+			await new Promise(s => setTimeout(s, 1000));
+		}
+		okCallback(csvContent);
+	});
+}
+
+
+
+function downloadCsv(){
+	var blob = new Blob([csvContent],{type:"text/plain"});
+	
+	var element = document.createElement('a');
+	element.download = 'japanMountains.csv';
+	element.href = URL.createObjectURL(blob);
+	element.click();
+	URL.revokeObjectURL(element.href);
+}
+
+
+/**
+ * 国土地理院の親ページをフェッチし、最新のCSVの絶対URLを特定して返す
+ * @param {string} parentUrlResolv - プロキシ解決済みの親ページ(HTML)のURL
+ * @returns {Promise<string|null>} 特定されたCSVの絶対URL
+ */
+async function getLatestGsiCsvUrl(parentUrlResolv) {
+	const baseDomain = "https://www.gsi.go.jp/";
+	try {
+		const response = await fetch(parentUrlResolv);
+		const htmlText = await response.text();
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(htmlText, "text/html");
+		
+		// 弁別基準でリンクを特定
+		const csvLink = Array.from(doc.querySelectorAll("a")).find(a => {
+			const href = a.getAttribute("href") || "";
+			const text = a.textContent || "";
+			return href.toLowerCase().endsWith(".csv") && text.includes("CSV");
+		});
+		if (!csvLink) {
+			console.warn("CSV link not found in the page content.");
+			return null;
+		}
+		const rawHref = csvLink.getAttribute("href");
+		return new URL(rawHref, baseDomain).href;
+	} catch (e) {
+		console.error("Failed to fetch or parse GSI page:", e);
+		return null;
+	}
+}
+</script>
+<body>
+<h3><a href="https://www.gsi.go.jp/" target="_blank">地理院</a>の<a href="https://www.gsi.go.jp/kihonjohochousa/kihonjohochousa41139.html" target="_blank">日本の主な山岳標高（１００３山）</a>からCSVデータを構築</h3>
+<input type="button" value="download CSV" onclick="downloadCsv()"></input>
+<textarea style="width:100%; height:500px" id="mtbl"></textarea>
+</body>
+</html>

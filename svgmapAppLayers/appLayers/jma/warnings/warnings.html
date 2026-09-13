@@ -1,0 +1,851 @@
+<!doctype html>
+<html>
+<head>
+	<title>気象庁警報注意報レイヤー</title>
+	<meta charset="utf-8"></meta>
+</head>
+<script src="https://cdn.jsdelivr.net/gh/svgmap/svgmapjs@latest/svgMapLayerLib.js"></script>
+<script>
+// 気象庁早期注意情報可視化
+// Programmed by Satoru Takagi
+// 
+// License: (MPL v2)
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// History:
+// 2023/07 初期版
+// 2025/05/09 過去の情報対応
+// 2026/06/01 参照先の更改に対応
+
+var  hasDatOnly = true; // 情報があるエリアのみ表示
+
+// https://dmdata.jp/docs/jma/manual/0205-0205.pdf P27 警報注意報コード表
+// https://www.jma.go.jp/jma/kishou/know/bosai/keiho-update2026/tech-info/index.html (R8変更情報)
+// https://xml.kishou.go.jp/tec_material.html の
+// https://xml.kishou.go.jp/jmaxml_20260430_code.xlsx 個別コード表（平成21年5月15日公表（令和8年4月30日一部更新））
+
+// 
+// name, level[null,"yellow","red","purple","black"]
+var warningCodes = { 
+	"00" : ["解 除", 0],
+	
+	// --- 注意報 (Level 2: Yellow) ---
+	"10" : ["大雨注意報（レベル2）" ,1],
+	"12" : ["大雪注意報" ,1],
+	"13" : ["風雪注意報" ,1],
+	"14" : ["雷注意報" ,1],
+	"15" : ["強風注意報" ,1],
+	"16" : ["波浪注意報" ,1],
+	"17" : ["融雪注意報" ,1],
+	"18" : ["洪水注意報（レベル2）" ,1],
+	"19" : ["高潮注意報（レベル2）" ,1], 
+	"20" : ["濃霧注意報" ,1],
+	"21" : ["乾燥注意報" ,1],
+	"22" : ["なだれ注意報" ,1],
+	"23" : ["低温注意報" ,1],
+	"24" : ["霜注意報" ,1],
+	"25" : ["着氷注意報" ,1],
+	"26" : ["着雪注意報" ,1],
+	"27" : ["その他の注意報" ,1],
+	"29" : ["土砂災害注意報（レベル2）" ,1],
+
+	// --- 警報 (Level 3: Red) ---
+	"02" : ["暴風雪警報" ,2],
+	"03" : ["大雨警報（レベル3）" ,2],
+	"04" : ["洪水警報（レベル3）" ,2],
+	"05" : ["暴風警報" ,2],
+	"06" : ["大雪警報" ,2],
+	"07" : ["波浪警報" ,2],
+	"08" : ["高潮警報（レベル3）" ,2],
+	"09" : ["土砂災害警報（レベル3）" ,2],
+
+	// --- 危険警報 (Level 4: Purple) ---
+//	"42" : ["暴風雪危険警報" ,3],
+	"43" : ["大雨危険警報（レベル4）" ,3],
+//	"44" : ["洪水危険警報（レベル4）" ,3],
+//	"45" : ["暴風危険警報" ,3],
+//	"46" : ["大雪危険警報" ,3],
+//	"47" : ["波浪危険警報" ,3],
+	"48" : ["高潮危険警報（レベル4）" ,3],
+	"49" : ["土砂災害危険警報（レベル4）" ,3],
+
+	// --- 特別警報 (Level 5: Black) ---
+	"32" : ["暴風雪特別警報" ,4], 
+	"33" : ["大雨特別警報（レベル5）" ,4],
+//	"34" : ["洪水特別警報（レベル5）" ,4],
+	"35" : ["暴風特別警報" ,4],
+	"36" : ["大雪特別警報" ,4],
+	"37" : ["波浪特別警報" ,4],
+	"38" : ["高潮特別警報（レベル5）" ,4],
+	"39" : ["土砂災害特別警報（レベル5）" ,4]
+};
+
+// typeCat:[null,"氷","雨","風","海","他"]
+typeCats={
+	0:{val:["00"],title:null},
+	1:{val:["02","06","12","13","17","22","23","24","25","26","32","36"],title:"雪"},
+	2:{val:["03","04","10","14","18","33"],title:"雨"},
+	3:{val:["05","15","35"],title:"風"},
+	4:{val:["07","08","16","19","37","38"],title:"海"},
+	5:{val:["20","21","27"],title:"他"},
+}
+
+var landSlideStatDict={
+	"0":"なし",
+	"1":"解除",
+	"3":"警戒"
+}
+
+const currentBaseURL = "https://www.jma.go.jp/";
+
+
+// 大縮尺地図データ関連
+//var lsmaps=[{"ne":[45.5569,148.8922],"sw":[41.3521,139.3344]},{"ne":[41.5559,142.0725],"sw":[38.7478,139.6932]},{"ne":[39.2086,141.6747],"sw":[36.7365,137.635]},{"ne":[37.1543,153.9864],"sw":[24.2254,138.3971]},{"ne":[37.8553,139.1766],"sw":[34.5781,136.2439]},{"ne":[36.2953,136.9877],"sw":[33.433,134.2527]},{"ne":[37.2429,134.8208],"sw":[32.7025,131.668]},{"ne":[34.7987,132.4913],"sw":[31.9887,128.3437]},{"ne":[33.1944,131.8857],"sw":[27.0187,128.3955]},{"ne":[27.8853,131.3312],"sw":[24.0456,122.9337]}]; // 大縮尺地図データ AREANUMBERと領域対応表　/bosai/common/const/relm.jsonのデータ
+var lsmapsRelmURL=currentBaseURL+"bosai/common/const/relm.json"; // (大縮尺地図データ 0...9)
+var lsmaps;
+var lsmapsURLtempl=currentBaseURL+"bosai/common/const/geojson/class20s_{AREANUMBER}.json"; // (大縮尺地図データ 0...9)
+var lsmapData;
+
+
+
+
+let baseURL = currentBaseURL;
+
+var urls={
+	mainSrcData:"bosai/warning/data/r8/map.json",//　本体データ
+	floodSrcData:"bosai/flood/data/r8/flood_xml.json", //　洪水データ
+//	landslideSrcData:"bosai/warning/data/landslide/map.json",//　本体データ
+//	movieSrcData:"bosai/warning/data/warning/movie.json",// 直近の予想(もっと先は別レイヤ:早期注意情報)
+	catDict:"bosai/const/selectorinfos/probability.json",//　名称辞書？
+	mapData:"bosai/common/const/geojson/class10s.json",// 地図データ？
+	areaStruct:"bosai/forecast/const/week_area05.json",// 週予報時にエリアが包含される？
+	areaNames:"bosai/common/const/area.json",//　エリアの名称辞書？
+	lsAreaNames:"bosai/common/const/landslide_area.json", // 土砂災害エリア辞書(包含関係)情報
+}
+
+var mainSrcData,landslideSrcData, catDict,mapData,areaStruct,areaNames,lsAreaNames,movieSrcData;
+
+var valueColors =[null,"yellow","red","purple","black"]; // warningCodesの2番目の数字に対応する色
+var dataTypes=["warning","landslide","movie"];
+
+// 整形済みデータ
+var mainData; // 現況データ
+var movieData, normalizedMovieTimeSeries,movieValues; // 直近予想
+var appearedWarnings; // 現況・直近含め現在現出しているワーニングの一覧(Array)
+
+
+var movieValuesMeta={"00":"None","10":"Low","30":"High"};
+
+addEventListener("layerWebAppReady",initLoad); // このソフトウェアの入り口
+
+async function initLoad(){
+	await loadLsMaps(); // これはbaseURLが変わっても常に同じなのだと思う
+	await init();
+}
+
+function changeBaseURL(url){
+	if ( url ){
+		baseURL = url;
+	} else {
+		baseURL = currentBaseURL;
+	}
+	init();
+}
+
+async function init(){
+	await loadData();
+	
+	appearedWarnings ={};
+	console.log({mainSrcData,landslideSrcData,catDict,mapData,areaStruct,areaNames});
+	
+	// --- 警報注意報の解析（新R8仕様に変更） ---
+	mainData = buildWarningsTableR8(mainSrcData); // 新パーサーに変更
+	// 氾濫情報のマージ処理を追加
+	if (typeof floodSrcData !== 'undefined' && floodSrcData) {
+		mergeFloodDataR8(floodSrcData, mainData);
+	}
+	
+	//mainData = buildWarningsTable(mainSrcData,"warning");
+	//var landslideData = buildWarningsTable(landslideSrcData,"landslide");
+	console.log("mergedMainData:",mainData);
+	
+	//movieData = buildWarningsTable(movieSrcData,"movie");
+	movieData = [{}, {}];
+	normalizedMovieTimeSeries = [];
+	movieValues = {};
+	
+	console.log("movieData:",movieData);
+	console.log("normalizedMovieTimeSeries:",normalizedMovieTimeSeries," movieValues:",movieValues);
+	
+	delete appearedWarnings.undefined;
+	appearedWarnings = Object.keys(appearedWarnings).sort();
+	console.log("appearedWarnings:",appearedWarnings);
+	
+	initUI(); // UIの初期化
+	
+	//changeTimeSpan();
+	drawView(-1, {});
+}
+
+
+async function loadLsMaps(){
+	lsmaps = await ( await fetch( lsmapsRelmURL )).json();
+	var lsmps=[];
+	for ( var i = 0 ; i < lsmaps.length ; i++){
+		lsmps.push( fetchJson(lsmapsURLtempl.replace("{AREANUMBER}",i) ));
+	}
+	var lsms=await Promise.all(lsmps);
+	lsmapData ={
+		type:"FeatureCollection",
+		features:[]
+	}
+	for ( var i = 0 ; i < lsmaps.length ; i++){
+		lsmaps[i].map = lsms[i];
+		lsmapData.features = lsmapData.features.concat(lsms[i].features);
+	}
+	console.log(lsmaps, lsmapData);
+}
+
+async function loadData(){
+	var ps=[];
+	for ( var vn in urls){
+		ps.push(async function (){
+			window[vn] = await fetchJson(baseURL+urls[vn]);
+		}());
+	}
+	await Promise.all(ps);
+}
+
+function drawMap(filterObj){
+	var metaSchema = ["title","code","filteredLevel","warns"];
+	svgImage.documentElement.setAttribute("property",metaSchema.join());
+	
+	// 常に現況データ（mainData[1]）のポリゴンを取得
+	var geojs = getPolygon(mainData[1], filterObj, lsmapData);
+	
+	console.log(geojs);
+	var grp = svgImage.getElementById("vectorData");
+	removeChildren(grp);
+	svgMapGIStool.drawGeoJson(geojs,layerID,"red",2,"orange","p0","title",null,grp,metaSchema);
+	svgMap.refreshScreen();
+}
+
+function resolveLandSlidePolyRelations(code,polyRelations){
+	if ( lsAreaNames.class20s[code] ){
+		var ans =[];
+		var children = lsAreaNames.class20s[code].children;
+		for ( var areaCode of children ){
+			if ( polyRelations[areaCode] ){
+				ans = ans.concat(polyRelations[areaCode]);
+			}
+		}
+		return ans;
+	} else {
+		return [];
+	}
+}
+
+
+function getPolygon(pt,filterObj, mapData, timeIndex){
+	var geojs ={
+		type:"FeatureCollection",
+		features:[]
+	}
+	var dateConditions = null;
+	var typeConditions = null;
+	if ( filterObj ){
+		if (filterObj.typeConditions){
+			typeConditions = filterObj.typeConditions;
+		}
+		if (filterObj.valueColors){
+			valueColors = filterObj.valueColors;
+		}
+	}
+	var polyRelations = getFeatureRelations(mapData);
+	//console.log(polyRelations);
+	for ( var areaCode in pt){
+		var areaData = pt[areaCode];
+		var area = areaData.area;
+		var warns=areaData.warnings;
+		var fts = polyRelations[areaCode];
+		if (!fts){
+			fts = resolveLandSlidePolyRelations(areaCode,polyRelations);
+		}
+		
+		var warnString=[];
+		for ( var wc in warns){
+			warnString.push(warns[wc].name);
+		}
+		if ( fts ){
+			for ( var ft of fts){
+				ft = filterFeature(ft, warns, typeConditions , valueColors, area, timeIndex);
+				if ( ft ){
+//					var areaName=areaData.office.name;
+					var areaName =["","","","",""];// office,class10,class15,class20
+					if ( area){
+						areaName[3] = area.name
+						areaName[0]=area.office.name;
+						if ( area.class10s){
+							areaName[1]=area.class10s.name;
+							areaName[2]=area.class15s.name;
+						}
+					}
+					
+					areaName = areaName.join(" ");
+					
+					ft.properties.title = areaName;
+					ft.properties.warns = warnString.join(" ");
+					geojs.features.push(ft);
+				}
+			}
+		} else {
+			console.warn ("NO feature for areaCode:",areaCode,area);
+		}
+	}
+	return geojs;
+}
+
+function filterFeature(feature, warns, typeConditions, valueColors, area){ 
+	if (!valueColors){
+		valueColors = [null,"orange","red"]; // 値 -,中,高 に対応する色 nullでオブジェクトつくらない
+	}
+	var val = -1;
+	for ( var warnCode in warns){
+		var warn = warns[warnCode];
+		// 配列の完全一致検索のみでシンプルにレベル判定
+		if ( !typeConditions || typeConditions.indexOf(warnCode) >= 0 ){
+			val = Math.max(val, warn.level);
+		}
+	}
+	if ( val == -1 ){
+		return null;
+	} else {
+		var color = valueColors[val];
+		if ( color == null ){
+			return null;
+		} else {
+			feature.properties.fill = color;
+			feature.properties.filteredLevel=val;
+			return feature;
+		}
+	}
+}
+
+
+function getFeatureRelations(mapData){
+	//mapDataとIDの紐づけ情報を得る
+	var rel ={};
+	for ( var ft of mapData.features){
+		var code = ft.properties.code;
+		if ( !rel[code]){
+			rel[code]=[];
+		}
+		rel[code].push(ft);
+	}
+	return rel;
+}
+
+async function fetchJson(url){
+	var res = await fetch(`${url}?t=${new Date().getTime()}`);
+	var json = await res.json();
+	return json;
+}
+
+
+function removeChildren(elm){
+	while (elm.firstChild) {
+		elm.removeChild(elm.firstChild);
+	}
+}
+const sleep = ms => new Promise(res => setTimeout(res, ms));
+
+// =========================================================
+// 新R8仕様の map.json 用パーサー（バグ修正・完成版）
+// =========================================================
+function buildWarningsTableR8(dat) {
+	var wt = [{}, {}];
+	for (var i = 0; i < dat.length; i++) {
+		var report = dat[i];
+		if (!report.warning) continue;
+		if (report.warning.class10Items) {
+			buildWarningsTableSubR8(report.warning.class10Items, wt[0], false);
+		}
+		if (report.warning.class20Items) {
+			buildWarningsTableSubR8(report.warning.class20Items, wt[1], true);
+		}
+	}
+	return wt;
+}
+
+function buildWarningsTableSubR8(items, wt, isHR) {
+	for (var i = 0; i < items.length; i++) {
+		var item = items[i];
+		var areaCode = item.areaCode;
+		if (!areaCode || !item.kinds) continue;
+
+		if (!wt[areaCode]) {
+			wt[areaCode] = { warnings: {} };
+			var area;
+			if (isHR) {
+				area = areaNames.class20s[areaCode];
+			} else {
+				area = areaNames.class10s[areaCode];
+			}
+			if (area) {
+				wt[areaCode].area = area;
+				if (isHR) {
+					var class15s = areaNames.class15s[area.parent];
+					var class10s = areaNames.class10s[class15s.parent];
+					wt[areaCode].area.class15s = class15s;
+					wt[areaCode].area.class10s = class10s;
+					wt[areaCode].area.office = areaNames.offices[class10s.parent];
+				} else {
+					wt[areaCode].area.office = areaNames.offices[area.parent];
+				}
+			}
+		}
+
+		for (var k = 0; k < item.kinds.length; k++) {
+			var kind = item.kinds[k];
+			var warnCode = kind.code;
+			var stat = kind.status;
+
+			// 🚨 ここが修正ポイント！
+			// 「はなし」や「解除」は単に無視するだけ！絶対に {} で初期化したり削除しない！
+			if (!warnCode || (stat && stat.indexOf("はなし") >= 0) || stat === "解除") {
+				continue;
+			}
+
+			var warnDef = warningCodes[warnCode];
+			if (!warnDef) continue;
+
+			appearedWarnings[warnCode] = true;
+			wt[areaCode].warnings[warnCode] = {
+				status: stat,
+				name: warnDef[0],
+				level: warnDef[1]
+			};
+
+			if (kind.additions) {
+				wt[areaCode].warnings[warnCode].attentions = kind.additions;
+			}
+		}
+	}
+}
+
+// =========================================================
+// 新R8仕様の 氾濫情報(flood_xml.json) マージ処理
+// =========================================================
+function mergeFloodDataR8(dat, wt) {
+	// 時系列順（古い順）にソートして歴史を再生
+	dat.sort(function(a, b) {
+		var timeA = new Date(a.reportDatetime).getTime();
+		var timeB = new Date(b.reportDatetime).getTime();
+		return timeA - timeB;
+	});
+
+	for (var i = 0; i < dat.length; i++) {
+		var report = dat[i];
+		if (!report.item) continue;
+		
+		var code = report.item.code; // "10", "20", "51" など
+		var infoName = report.item.name || "氾濫情報"; // "氾濫注意情報" など
+		var riverName = report.riverName || "指定河川";
+		
+		var level = 0;
+		if (code.indexOf("1") === 0 || infoName.indexOf("解除") >= 0) {
+			level = 0;
+		} else if (code.indexOf("2") === 0) {
+			level = 1; // 注意報
+			infoName = "氾濫注意報（レベル2）";
+		} else if (code.indexOf("3") === 0) {
+			level = 2; // 警報
+			infoName = "氾濫警報（レベル3）";
+		} else if (code.indexOf("4") === 0) {
+			level = 3; // 危険警報
+			infoName = "氾濫危険警報（レベル4）";
+		} else if (code.indexOf("5") === 0) {
+			level = 4; // 特別警報
+			infoName = "氾濫特別警報（レベル5）";
+		}
+
+		if (level === 0) continue; // 解除はスキップ（パーサー側で消去処理をするため）
+
+		// 河川ごとの固有コードを生成
+		var warnCode = "FLOOD_" + report.riverCode;
+		
+		// warningCodes 辞書に「川の名前＋最適化されたステータス名（スペース無し）」を動的に追加・更新
+		warningCodes[warnCode] = [riverName + infoName, level];
+
+		// 小縮尺 (class10) への適用
+		if (report.class10Codes) {
+			applyFloodWarningR8(report.class10Codes, warnCode, level, wt[0], false);
+		}
+		// 大縮尺 (class20) への適用
+		if (report.class20Codes) {
+			applyFloodWarningR8(report.class20Codes, warnCode, level, wt[1], true);
+		}
+	}
+}
+
+function applyFloodWarningR8(areaCodes, warnCode, level, wtObj, isHR) {
+	for (var c = 0; c < areaCodes.length; c++) {
+		var areaCode = areaCodes[c];
+		
+		// エリア未登録の場合は初期化
+		if (!wtObj[areaCode]) {
+			wtObj[areaCode] = { warnings: {} };
+			var area;
+			if (isHR) {
+				area = areaNames.class20s[areaCode];
+			} else {
+				area = areaNames.class10s[areaCode];
+			}
+			if (area) {
+				wtObj[areaCode].area = area;
+				if (isHR) {
+					var class15s = areaNames.class15s[area.parent];
+					var class10s = areaNames.class10s[class15s.parent];
+					wtObj[areaCode].area.class15s = class15s;
+					wtObj[areaCode].area.class10s = class10s;
+					wtObj[areaCode].area.office = areaNames.offices[class10s.parent];
+				} else {
+					wtObj[areaCode].area.office = areaNames.offices[area.parent];
+				}
+			}
+		}
+		
+		wtObj[areaCode].warnings[warnCode] = {
+			status: "発表",
+			name: warningCodes[warnCode][0],
+			level: level
+		};
+		appearedWarnings[warnCode] = true;
+	}
+}
+
+function applyFloodWarningR8(areaCodes, warnCode, level, wtObj, isHR) {
+	for (var c = 0; c < areaCodes.length; c++) {
+		var areaCode = areaCodes[c];
+		
+		// エリア未登録の場合は初期化
+		if (!wtObj[areaCode]) {
+			wtObj[areaCode] = { warnings: {} };
+			var area;
+			if (isHR) {
+				area = areaNames.class20s[areaCode];
+			} else {
+				area = areaNames.class10s[areaCode];
+			}
+			if (area) {
+				wtObj[areaCode].area = area;
+				if (isHR) {
+					var class15s = areaNames.class15s[area.parent];
+					var class10s = areaNames.class10s[class15s.parent];
+					wtObj[areaCode].area.class15s = class15s;
+					wtObj[areaCode].area.class10s = class10s;
+					wtObj[areaCode].area.office = areaNames.offices[class10s.parent];
+				} else {
+					wtObj[areaCode].area.office = areaNames.offices[area.parent];
+				}
+			}
+		}
+
+		if (level === 0) {
+			// 解除の場合は辞書から消去
+			if (wtObj[areaCode].warnings[warnCode]) {
+				delete wtObj[areaCode].warnings[warnCode];
+			}
+		} else {
+			// 発表・継続の場合は辞書に追加
+			wtObj[areaCode].warnings[warnCode] = {
+				status: "発表",
+				name: warningCodes[warnCode][0],
+				level: level
+			};
+			appearedWarnings[warnCode] = true;
+		}
+	}
+}
+
+var altAreaDict;
+function getAltAreaCodes(code){
+	// areaStructを使って、代替エリアを得る
+	if (!altAreaDict){
+		altAreaDict={};
+		for ( var ak in areaStruct){
+			var subAreas = areaStruct[ak];
+			for ( subAreaCode of subAreas ){
+				if ( !altAreaDict[subAreaCode] ){
+					altAreaDict[subAreaCode] =[];
+				}
+				altAreaDict[subAreaCode].push(ak);
+			}
+		}
+	}
+	var altCodes = altAreaDict[code];
+	return altCodes;
+}
+
+function getTimeSpanStr(tts,span){
+	var startTime = new Date(tts);
+	var endTime = new Date( startTime.getTime() + span * 60 * 60 * 1000);
+	var sd = startTime.toLocaleDateString().substring(5);
+	var ed = endTime.toLocaleDateString().substring(5);
+	if (sd==ed){
+		ed ="";
+	}
+	ans = `${sd} ${startTime.getHours()}時 - ${ed} ${endTime.getHours()}時`;
+	return ans;
+}
+
+
+function getAreaName(areaData){
+	var areaName =["","","","",""];// office,class10,class15,class20
+	var area = areaData.area;
+	if ( area){
+		areaName[3] = area.name
+		areaName[0]=area.office.name;
+		if ( area.class10s){
+			areaName[1]=area.class10s.name;
+			areaName[2]=area.class15s.name;
+		}
+	}
+	
+	areaName = areaName.join(" ");
+	return ( areaName );
+}
+
+function printWarningTable(pt, hasDatOnly, targetTableElement, typeConditions){
+	var tableData = pt;
+	if ( !targetTableElement ){
+		targetTableElement = document.getElementById("probTbl");
+	}
+	// ここにあった typeConditions = typeConditions.join(); を削除！
+	
+	removeChildren(targetTableElement);
+	
+	var hd="<tr><th>エリア <span id='areaRecords'></span></th><th>種別</th><th>状態</td>";
+	hd+="</tr>";
+	
+	targetTableElement.insertAdjacentHTML("beforeend",hd);
+	printedAreas = 0;
+
+	// エリアコード（北から南）順にソートして配列化する
+	var areaCodes = Object.keys(tableData).sort();
+
+	// ソートされたエリアコードの順番でループを回す
+	for ( var i = 0; i < areaCodes.length; i++){
+		var areaCode = areaCodes[i];
+		var areaData = tableData[areaCode];
+		var warns = areaData.warnings;
+		var areaName = getAreaName(areaData);
+		var firstArea = true;
+		var warnCount = 0;
+		var hd="";
+
+		// そのエリア内の各警報・注意報を処理
+		for ( var warnCode in warns){
+			if ( typeConditions && typeConditions.indexOf(warnCode) === -1){ continue; }
+			
+			var hasDat=false;
+			var color="black";  // 背景色
+			var textColor="black"; // 文字色
+
+			var lvl = warns[warnCode].level;
+			if ( valueColors[lvl] ){
+				color = valueColors[lvl];
+				hasDat = true;
+				
+				// レベルが2（赤）、3（紫）、4（黒）の時は文字を白にする
+				if (lvl >= 2) {
+					textColor = "white";
+				}
+			}
+			
+			var shd;
+			if ( firstArea ){
+				shd = `<tr><td rowspan="{ROWSPAN}">${areaName}</td><td style="background-color:${color}; color:${textColor};">${warns[warnCode].name}</td><td style="background-color:${color}; color:${textColor};">${warns[warnCode].status}</td></tr>`;
+				firstArea=false;
+			} else {
+				shd = `<tr><td style="background-color:${color}; color:${textColor};">${warns[warnCode].name}</td><td style="background-color:${color}; color:${textColor};">${warns[warnCode].status}</td></tr>`;
+			}
+			
+			if ( hasDatOnly){
+				if(hasDat ){
+					++warnCount;
+					++printedAreas;
+					hd += shd;
+				}
+			} else {
+				hd += shd;
+				++warnCount;
+				++printedAreas;
+			}
+		}
+		// もし表示する警報があればHTMLに追加
+		if (warnCount > 0) {
+			hd = hd.replace("{ROWSPAN}",warnCount);
+			targetTableElement.insertAdjacentHTML("beforeend",hd);
+		}
+	}
+	areaRecords.innerText=`(計${printedAreas}レコード)`;
+}
+
+
+function customShowPoiProperty(target){
+	var metaSchema = target.ownerDocument.firstChild.getAttribute("property").split(","); // debug 2013.8.27
+	var message="<table border='1' style='word-break: break-all;table-layout:fixed;width:100%;border:solid orange;border-collapse: collapse;font-size:12px'>";
+	var titleAndLayerName = target.getAttribute("data-title") + "/" + target.getAttribute("data-layername") + "\n";
+	
+	var metaData = svgMap.parseEscapedCsvLine(target.getAttribute("content"));
+	message += "<tr><th style='width=25%'>name</th><th>value</th></tr>";
+	message += "<tr><td>title/Layer</td><td> " + titleAndLayerName + "</td></tr>";
+	for ( var i = 0 ; i < metaSchema.length ; i++ ){
+		if ( metaSchema[i]=="code"){
+			console.log(metaData[i],mainData[1][metaData[i]])
+			var warnData = mainData[0][metaData[i]]?.warnings;
+			if ( !warnData){warnData = mainData[1][metaData[i]]?.warnings;}
+			for ( var catCode in warnData){
+				 var catName = warnData[catCode].name;
+				 var catStatus = warnData[catCode].status;
+				message+=`<tr><td >${catName}</td><td>${catStatus}</td></tr>`;
+			}
+			const detailURL = `${currentBaseURL}bosai/warning/#area_type=class20s&area_code=${metaData[i]}&lang=ja&timeline_efilter=all&timeline_lfilter=all`;
+			message+=`<tr><td>詳細情報リンク</td><td><a href="${detailURL}" target="_blanl">詳細情報を表示する</a></td></tr>`;
+		} else if ( metaSchema[i]=="filteredLevel"){
+			message += `<tr><td>${metaSchema[i]}</td><td>${Number(metaData[i])+1}</td></tr>`;
+		} else {
+			message += `<tr><td>${metaSchema[i]}</td><td>${getHTMLval(metaData[i])}</td></tr>`;
+		}
+	}
+	message += "</table>";
+	//console.log(message);
+	svgMap.showModal(message,400,600);
+}
+
+function getHTMLval( val , embedImage){
+	var ans;
+	if ( val.toLowerCase().indexOf(".png")>=0 || val.toLowerCase().indexOf(".jpg")>=0 || val.toLowerCase().indexOf(".jpeg")>=0 || val.toLowerCase().indexOf(".gif")>=0 || val.toLowerCase().indexOf(".svg")>=0 || embedImage ){
+		var cors = "";
+		var imgSrc = val;
+		if ( val.indexOf("http:")==0 ){
+			imgSrc = svgMap.getCORSURL(val);
+			cors="crossorigin='anonymous'";
+		}
+		ans =`<a target="img" href="${val}"><img style="opacity:1" src="${imgSrc}" width="100%" ${cors}/></a>`;
+	} else if ( val.indexOf("http://")==0 || val.indexOf("https://")==0 || val.toLowerCase().indexOf(".html")>=0 || val.indexOf(".htm")>=0){
+		ans =`<a target="htmlContent" href="${val}" >${val}</a>`;
+	} else {
+		ans = val;
+	}
+	return ( ans );
+}
+
+function warnFilter(event){
+	console.log("warnFilter:",event.target.checked);
+	if (event.target.options){ // プルダウン操作
+		var hfc = document.getElementById("highFilterCheck");
+		if ( hfc ){
+			var filterValue = event.target.options[event.target.selectedIndex].value;
+			if ( filterValue == "警報級"){
+				hfc.checked=true;
+			} else {
+				hfc.checked=false;
+			}
+		}
+	} else { // チェックボックス操作
+		var tsel = document.getElementById("typeSelect");
+		if ( tsel ){
+			if ( event.target.checked ){
+				tsel.selectedIndex= 1;
+			} else {
+				tsel.selectedIndex= 0;
+			}
+		}
+	}
+	
+	changeTimeSpan();
+}
+
+function getTypeFilter(filterType){
+	var typeConditions=[];
+	if ( filterType =="警報級"){
+		for ( var typeCode in warningCodes){
+			if ( warningCodes[typeCode][1]>1){
+				console.log("C",warningCodes[typeCode][1], warningCodes[typeCode][1]>1,typeCode);
+				typeConditions.push(typeCode);
+			}
+		}
+	} else if( filterType =="警報以外"){ //　特別警報は警報じゃないということにｗ
+		for ( var typeCode in warningCodes){
+			if ( warningCodes[typeCode][1]!=2){
+				typeConditions.push(typeCode);
+			}
+		}
+	} else if( filterType =="ALL"){
+		return null;
+	} else {
+		typeConditions.push(filterType);
+	}
+	console.log(filterType,typeConditions);
+	//printProbabilityTable(mainData, hasDatOnly,targetTableElement,filter);
+	return ( typeConditions );
+}
+
+function initUI(){
+	if ( typeof svgMap == 'object'){
+		svgMap.setShowPoiProperty(customShowPoiProperty, layerID);
+	}
+
+	var target = document.getElementById("typeSelect");
+	if (target) {
+		var opt = `<option value="ALL" selected>全て</option>`;
+		target.insertAdjacentHTML("beforeend",opt);
+		opt = `<option value="警報級">警報級のみ</option>`;
+		target.insertAdjacentHTML("beforeend",opt);
+		for ( var typeCode of appearedWarnings){
+			var warnName = warningCodes[typeCode][0];
+			opt = `<option value="${typeCode}">${warnName}</option>`;
+			target.insertAdjacentHTML("beforeend",opt);
+		}
+		target.addEventListener("change", warnFilter);
+	}
+}
+
+function changeTimeSpan(){
+	var filterObj ={};
+	var tsel = document.getElementById("typeSelect");
+	if ( tsel ){
+		var tselv = tsel.options[tsel.selectedIndex].value;
+		var tf = getTypeFilter(tselv);
+		if ( tf ){
+			filterObj.typeConditions = tf;
+		}
+	} else {
+		var hfc = document.getElementById("highFilterCheck");
+		if ( hfc && hfc.checked ){
+			filterObj.typeConditions = getTypeFilter("警報級");
+		}
+	}
+	drawView(filterObj); // timeIndexValueを渡さないように変更
+}
+
+function drawView(filterObj){ // すべての描画処理(地図・表)はこれが起点
+	printWarningTable(mainData[0], hasDatOnly, null, filterObj.typeConditions );
+	
+	if ( typeof svgMap == 'object'){
+		drawMap(filterObj);
+	}
+	console.log("filterObj:", filterObj);
+}
+</script>
+<body>
+<h4>気象庁警報注意報レイヤー <span id="hasDatOnlySpan"></span></h4>
+<div style="font-size:12px">出典 <a target="_blank" href="https://www.jma.go.jp/bosai/map.html#5/34.5/137/&elem=all&contents=warning">気象庁ホームページ　気象警報・注意報</a>を加工して作成</div>
+ <span style="font-size:11px;"><input type="checkbox" id="highFilterCheck" onchange="warnFilter(event)"></input><label for="highFilterCheck">警報級のみ</label>　<select id="typeSelect"></select></span>
+<table border="1" id="probTbl" style="font-size:10px;"></table>
+</body>
+</html>

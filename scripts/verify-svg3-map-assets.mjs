@@ -25,8 +25,15 @@ for (const filename of walk(sourceHazard)) {
 }
 assert(hazardReferences > 1000, 'Hazard source references were not found')
 
-assert(container.includes('teamActivityAreaLayer.svg#data='), 'Team activity area is not in Container.svg')
+const teamLayerController = fs.readFileSync(path.join(root,
+  'svgmapAppLayers/appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/teamActivityLayer.html'), 'utf8')
+const areaCore = fs.readFileSync(path.join(root,
+  'svgmapAppLayers/appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/teamActivityAreaCore.js'), 'utf8')
+assert(container.includes('title="L3 チーム活動"'), 'Unified team activity is not in Container.svg')
+assert(!container.includes('teamActivityAreaLayer.svg'), 'Team activity area should not be a separate root layer')
 assert(container.includes('districtSvgUrlTemplate=/map/data/districts/{recordRegionId}/districts-svg/{code}.svg'))
+assert(teamLayerController.includes('initTeamActivityAreaLayer()'), 'Pin controller does not initialize team activity area')
+assert(areaCore.includes("const DRAW_GROUP_ID = 'team-activity-area-draw'"), 'Team activity area renderer is unavailable')
 
 const detail = JSON.parse(fs.readFileSync(path.join(root,
   'svgmapAppLayers/appLayers/svg3-bosai/team-activity/map/data/qtct/teamActivity/detail/0.json'), 'utf8'))

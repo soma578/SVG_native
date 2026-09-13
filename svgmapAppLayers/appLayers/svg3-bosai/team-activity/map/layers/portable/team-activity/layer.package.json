@@ -28,27 +28,20 @@
   "shared": [
     "teamActivityDetail.js",
     "teamActivityCsv.js",
+    "teamActivityAreaCore.js",
     "appLayersAdmin.html",
     "teamActivityAreaLayer.svg",
     "teamActivityAreaLayer.html"
   ],
   "containerAnimations": [
     {
-      "id": "layer-team-activity-pins",
+      "id": "layer-team-activity",
       "entrypoint": "teamActivityLayer.svg",
-      "title": "チーム活動ピン",
+      "title": "チーム活動",
       "class": "poi clickable",
       "opacity": "1",
       "primary": true,
-      "dataParams": ["summary", "data", "sourceCsv", "layer"]
-    },
-    {
-      "id": "layer-team-activity",
-      "entrypoint": "teamActivityAreaLayer.svg",
-      "title": "チーム活動エリア",
-      "class": "vectorEtcData",
-      "opacity": "0.9",
-      "dataParams": ["data", "districtSvgUrlTemplate", "layer"]
+      "dataParams": ["summary", "data", "sourceCsv", "districtSvgUrlTemplate", "layer"]
     }
   ],
   "data": {

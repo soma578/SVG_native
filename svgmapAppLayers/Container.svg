@@ -250,9 +250,6 @@
              xlink:href="./appLayers/svg3-bosai/japan-river-webcams/map/layers/portable/japan-river-webcams/webcamLayer.svg#summary=../../../data/qtct/japanRiverWebcam/summary.json&amp;data=../../../data/qtct/japanRiverWebcam/detail-index.json&amp;layer=japanRiverWebcam"
              title="全国河川監視カメラ" class="防災情報" visibility="hidden" opacity="1" />
   <animation x="123" y="-46" width="22" height="22"
-             xlink:href="./appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/teamActivityLayer.svg#summary=../../../data/qtct/teamActivity/summary.json&amp;data=../../../data/qtct/teamActivity/detail-index.json&amp;layer=teamActivity"
-             title="L3 チーム活動ピン" class="防災情報" visibility="hidden" opacity="1" />
-  <animation x="123" y="-46" width="22" height="22"
-             xlink:href="./appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/teamActivityAreaLayer.svg#data=../../../data/qtct/teamActivity/detail-index.json&amp;districtSvgUrlTemplate=/map/data/districts/{recordRegionId}/districts-svg/{code}.svg&amp;layer=teamActivity"
-             title="L3 チーム活動エリア" class="防災情報" visibility="hidden" opacity="0.9" />
+             xlink:href="./appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/teamActivityLayer.svg#summary=../../../data/qtct/teamActivity/summary.json&amp;data=../../../data/qtct/teamActivity/detail-index.json&amp;districtSvgUrlTemplate=/map/data/districts/{recordRegionId}/districts-svg/{code}.svg&amp;layer=teamActivity"
+             title="L3 チーム活動" class="防災情報" visibility="hidden" opacity="1" />
 </svg>

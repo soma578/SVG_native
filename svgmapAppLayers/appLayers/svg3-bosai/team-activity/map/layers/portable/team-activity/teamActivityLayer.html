@@ -48,6 +48,7 @@
 <script type="module">
 import { initRepresentativePinsLayer, portableLayerDataParams } from '../representative-pins/representativePinsCore.js';
 import { renderTeamActivityDetail } from './teamActivityDetail.js';
+import { initTeamActivityAreaLayer } from './teamActivityAreaCore.js';
 import {
   TEAM_ACTIVITY_CSV_CHANNEL, TEAM_ACTIVITY_CSV_STORAGE_KEY, TEAM_ACTIVITY_CSV_TEMPLATE,
   buildTeamActivityCsvDocuments, parseTeamActivityCsv,
@@ -61,6 +62,7 @@ const start = () => {
     mode: 'portable',
     renderFeatureDetail: renderTeamActivityDetail,
   });
+  void initTeamActivityAreaLayer();
   const status = document.getElementById('csv-status');
   const sourceCsvUrl = portableLayerDataParams().get('sourceCsv') || '';
   const appLayersAdmin = document.getElementById('app-layers-admin');

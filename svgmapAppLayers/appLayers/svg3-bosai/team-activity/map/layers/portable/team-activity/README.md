@@ -2,6 +2,7 @@
 
 CSV を正本として生成した静的 QTCT を表示し、コントローラーからローカルCSVも
 追加できる、Next.js / Supabase 非依存の SVGMap portable layer。
+ピンと活動エリアは同じレイヤー内で描画し、1つの表示切り替えに連動する。
 
 利用者向けの「CSVを追加」はレイヤー本体に含まれる。既存データを置換せず、
 追加QTCTとして合成するため、低ズームの密度表示と高ズームの個別ピンを共有する。
@@ -42,7 +43,7 @@ SVGMap からの利用例:
 
 ```xml
 <animation
-  xlink:href="/map/layers/portable/team-activity/teamActivityLayer.svg#summary=/map/data/qtct/teamActivity/summary.json&amp;data=/map/data/qtct/teamActivity/okayama/detail.json&amp;layer=teamActivity"
+  xlink:href="/map/layers/portable/team-activity/teamActivityLayer.svg#summary=/map/data/qtct/teamActivity/summary.json&amp;data=/map/data/qtct/teamActivity/okayama/detail.json&amp;districtSvgUrlTemplate=/map/data/districts/{recordRegionId}/districts-svg/{code}.svg&amp;layer=teamActivity"
   title="チーム活動"
   class="poi clickable"
   visibility="hidden"

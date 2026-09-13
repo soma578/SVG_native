@@ -5,7 +5,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-const sheetUrl = 'https://docs.google.com/spreadsheets/d/1RR_LtusyFPtp4Ut09Qc2Aoe92-Ocv4Dn1NZH73JOmcA/export?format=csv'
+const gasCsvUrl = 'https://script.google.com/macros/s/AKfycbyAD-xMVje_lJL7452V7wdcMv15bphid722XzmLHwakuDT0ZeHd4SV83y5ezzdp6FTQ/exec'
 const externalShell = [
   'https://unpkg.com/jsts@1.6.1/dist/jsts.min.js',
   'https://raw.githubusercontent.com/svgmap/svgMapDemo/main/img/zoomup.png',
@@ -67,7 +67,7 @@ const RUNTIME_CACHE = 'svgmap-runtime-' + VERSION;
 const DYNAMIC_CACHE = 'svgmap-dynamic-v2';
 const TILE_CACHE = 'svgmap-tiles-v2';
 const META_CACHE = 'svgmap-cache-meta-v1';
-const SHEET_URL = ${JSON.stringify(sheetUrl)};
+const GAS_CSV_URL = ${JSON.stringify(gasCsvUrl)};
 const SHELL = ${JSON.stringify(shell, null, 2)};
 const MAX_RUNTIME_ENTRIES = 800;
 const MAX_DYNAMIC_ENTRIES = 50;
@@ -200,8 +200,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  if (request.url === SHEET_URL) {
-    event.respondWith(networkFirst(request, DYNAMIC_CACHE, MAX_DYNAMIC_ENTRIES, 'Google Sheets CSV'));
+  if (request.url === GAS_CSV_URL) {
+    event.respondWith(networkFirst(request, DYNAMIC_CACHE, MAX_DYNAMIC_ENTRIES, 'GAS CSV'));
     return;
   }
 

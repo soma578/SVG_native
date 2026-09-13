@@ -190,7 +190,7 @@ test("Drive image failure hides the image and reveals a safe sharing link", () =
 	assert.equal(link.rel, "noopener noreferrer");
 });
 
-test("CsvMapper fetches the Sheet export URL and creates POIs with existing mapping", async () => {
+test("CsvMapper fetches the GAS CSV URL and creates POIs with existing mapping", async () => {
 	const originalWindow = globalThis.window;
 	const originalDocument = globalThis.document;
 	const originalXhr = globalThis.XMLHttpRequest;
@@ -230,7 +230,7 @@ test("CsvMapper fetches the Sheet export URL and creates POIs with existing mapp
 				script: {
 					src: "https://map.example/csvUI_r20.html",
 					location: {
-						hash: "#csvPath=https://docs.google.com/spreadsheets/d/1RR_LtusyFPtp4Ut09Qc2Aoe92-Ocv4Dn1NZH73JOmcA/export?format=csv&latCol=2&lngCol=3&titleCol=1",
+						hash: "#csvPath=https://script.google.com/macros/s/AKfycbyAD-xMVje_lJL7452V7wdcMv15bphid722XzmLHwakuDT0ZeHd4SV83y5ezzdp6FTQ/exec&latCol=2&lngCol=3&titleCol=1",
 						pathname: "/csvUI_r20.html"
 					}
 				}
@@ -240,7 +240,7 @@ test("CsvMapper fetches the Sheet export URL and creates POIs with existing mapp
 		mapper.onload();
 		await new Promise((resolve) => setTimeout(resolve, 30));
 
-		assert.deepEqual(requestedUrls, ["https://docs.google.com/spreadsheets/d/1RR_LtusyFPtp4Ut09Qc2Aoe92-Ocv4Dn1NZH73JOmcA/export?format=csv"]);
+		assert.deepEqual(requestedUrls, ["https://script.google.com/macros/s/AKfycbyAD-xMVje_lJL7452V7wdcMv15bphid722XzmLHwakuDT0ZeHd4SV83y5ezzdp6FTQ/exec"]);
 		const pois = svgImage.getElementsByTagName("use");
 		assert.equal(pois.length, 2);
 		assert.equal(pois[0].getAttribute("xlink:title"), "地点A");

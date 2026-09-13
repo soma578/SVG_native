@@ -30,7 +30,7 @@ CSV由来の文字列はDOMの `textContent` で表示します。画像URLはUR
 
 1. コピー先に動作するSVGMap本体と互換性のある `svgmapjs` / `svgmapAppLayers` を用意します。この共有フォルダだけでは地図本体は起動しません。
 2. `svgmapAppLayers/authoringLayers/local/csvLayer/` をコピー先の同じ位置へ配置します。既に本家CSVレイヤーがある場合は、上書き前に差分を確認してください。元のシンボリックリンクはこの共有パッケージ内では実ファイルとしてコピーされています。ライセンスは `svgmapAppLayers/LICENSE` を参照してください。
-3. `Container-animation.xml` の `<animation>` をコピー先の `svgmapAppLayers/Container.svg` 内に追加し、`CSV_URL_HERE` を匿名アクセスできる実際のCSV配信URLに置換します。Google Sheetsを使う場合は「ウェブに公開」したCSV URL、または匿名でCSVレスポンスを返すエクスポートURLを使い、`/edit` URLは使いません。CSV URLに `&` がないことも確認してください。
+3. `Container-animation.xml` の `<animation>` をコピー先の `svgmapAppLayers/Container.svg` 内に追加し、`CSV_URL_HERE` を匿名アクセスできる実際のCSV配信URLに置換します。Google Sheetsの公開CSV URLに加え、Google Apps ScriptのWebアプリが `text/csv` を返す `/exec` URLも使用できます。JSONを返すURLはこのCSVレイヤーへ直接渡せません。`/edit` URLは使わず、CSV URLに `&` がないことも確認してください。
 4. Google Drive共有リンクを写真列に入れる場合、Next.jsホストでは `nextjs/app/api/drive-image/route.js` を `app/api/drive-image/route.js` へ配置します。Next.js以外では同等のAPIを実装するか、thumbnailへの再試行と共有ページへのフォールバックのみを利用します。
 5. HTTP(S)サーバーで地図を開き、レイヤー「外部CSV現地情報」を有効にします。`file://` での直開きは対象外です。POIをクリックすると写真・説明・CSV属性が表示されます。
 

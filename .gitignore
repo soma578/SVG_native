@@ -6,5 +6,6 @@ public/.svgmap-generated-assets.json
 public/svgmap.html
 public/svgmapjs/
 public/svgmapAppLayers/
+public/map/
 public/sw.js
 .submodule-git-backup/

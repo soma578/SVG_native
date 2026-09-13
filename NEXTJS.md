@@ -18,11 +18,15 @@ Open <http://localhost:3000>. The Next.js route redirects to `/svgmap.html`,
 which is the upstream `svgmap/svgMapDemo` host UI adapted only to load this
 repository's `Container.svg` and local `svgmapjs` tree. `predev` and `prebuild`
 regenerate the service worker from current source files, then copy the host HTML,
-`svgmapjs/`, `svgmapAppLayers/`, and `sw.js` into `public/`. Internal source
+`svgmapjs/`, `svgmapAppLayers/`, `map/`, and `sw.js` into `public/`. Internal source
 symlinks are copied as regular files and `.git` directories are excluded. This
 avoids Vercel's post-build handling of symlinks that point outside `public/`.
 Changes to copied source files require rerunning `npm run assets:prepare` (or
 restarting `npm run dev`); Next.js will not watch the original source trees.
+
+`map/` contains the original SVG3 hazard polygons referenced by the native
+hazard LOD layer and Okayama district boundaries for the team activity area.
+See [`map/README.md`](map/README.md) for provenance, size, and regional scope.
 
 The upstream UI provides zoom, GPS, center coordinates, scale, permanent links,
 the grouped layer list, per-layer controllers, visibility/style controls, and the

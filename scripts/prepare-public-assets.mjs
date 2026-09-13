@@ -10,6 +10,7 @@ const assets = [
   ['svgmap.html', 'index.html'],
   ['svgmapjs', 'svgmapjs'],
   ['svgmapAppLayers', 'svgmapAppLayers'],
+  ['map', 'map'],
   ['sw.js', 'sw.js'],
 ]
 
@@ -24,7 +25,7 @@ if (fs.existsSync(markerPath)) {
   managed = true
 }
 
-// Validate every target before touching any of the four asset locations.
+// Validate every target before touching any generated asset location.
 for (const [destName, sourceName] of assets) {
   const source = path.join(root, sourceName)
   const destination = path.join(publicDir, destName)

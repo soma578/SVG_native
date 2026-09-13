@@ -9,7 +9,7 @@
     "prebuild": "npm run assets:prepare",
     "build": "next build",
     "start": "next start",
-    "test": "node svgmapAppLayers/authoringLayers/local/csvLayer/externalCsvLayer.test.mjs"
+    "test": "node svgmapAppLayers/authoringLayers/local/csvLayer/externalCsvLayer.test.mjs && node scripts/verify-svg3-map-assets.mjs"
   },
   "dependencies": {
     "next": "^16.2.1",

@@ -35,8 +35,8 @@ assert(!container.includes('teamActivityAreaLayer.svg'), 'Team activity area sho
 assert(container.includes('districtSvgUrlTemplate=/map/data/districts/{recordRegionId}/districts-svg/{code}.svg'))
 assert(container.includes('sourceCsv=./current.csv'), 'Team activity live CSV is not configured')
 assert(teamLayerController.includes('initTeamActivityAreaLayer()'), 'Pin controller does not initialize team activity area')
-assert(teamLayerController.includes('runtime.setSourceDocuments(buildTeamActivityCsvDocuments(parsed.records))'), 'Team activity CSV does not replace pin source')
-assert(teamLayerController.includes('setTeamActivitySourceRecords(parsed.records)'), 'Team activity CSV does not replace area source')
+assert(teamLayerController.includes('runtime.setSourceDocuments(buildTeamActivityCsvDocuments(visibleRecords))'), 'Team activity CSV does not replace pin source')
+assert(teamLayerController.includes('setTeamActivitySourceRecords(visibleRecords)'), 'Team activity CSV does not replace area source')
 assert(areaCore.includes("const DRAW_GROUP_ID = 'team-activity-area-draw'"), 'Team activity area renderer is unavailable')
 
 const liveCsv = fs.readFileSync(path.join(root,

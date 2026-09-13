@@ -100,8 +100,11 @@ const start = () => {
       currentCsvText = await response.text();
       const parsed = parseTeamActivityCsv(currentCsvText);
       if (parsed.errors.length) throw new Error(parsed.errors[0]);
-      runtime.setSourceDocuments(buildTeamActivityCsvDocuments(parsed.records));
-      void setTeamActivitySourceRecords(parsed.records);
+      const publicationResponse = await fetch('/map/layers/managed/team-activity-pins/publication.json', { cache: 'no-store' });
+      const publication = publicationResponse.ok ? await publicationResponse.json() : { published: true };
+      const visibleRecords = publication.published === false ? [] : parsed.records;
+      runtime.setSourceDocuments(buildTeamActivityCsvDocuments(visibleRecords));
+      void setTeamActivitySourceRecords(visibleRecords);
       const body = document.querySelector('#current-csv-table tbody');
       body.replaceChildren();
       for (const record of parsed.records) {
@@ -118,7 +121,7 @@ const start = () => {
       document.getElementById('current-csv-table').hidden = false;
       document.getElementById('current-csv-count').textContent = `（${parsed.records.length}件）`;
       document.getElementById('current-csv-download').disabled = false;
-      error.textContent = '';
+      error.textContent = publication.published === false ? 'このレイヤーは非公開です。' : '';
     } catch (loadError) {
       error.textContent = `現在のCSVを読み込めません: ${loadError.message}`;
     }

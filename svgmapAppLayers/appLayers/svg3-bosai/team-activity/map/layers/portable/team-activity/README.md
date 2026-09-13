@@ -10,7 +10,7 @@ CSVの取得に失敗した時のみ、同梱の静的QTCTを予備表示に使�
 ひな形の列順は `id,title,regionId,municipalityCode,lat,lon,status,summary,description,area,operator`。
 `regionId` と `municipalityCode` はエリア境界の取得に必要。CSVの各行がピンになり、
 緯度経度が一致する地区境界だけが活動エリアとして表示される。
-運用者が正本CSVを更新して静的成果物を公開する画面は次に分離している。
+運用者が元SVG3形式の10列CSVを編集・保存する画面は次に分離している。
 
 ```text
 map/publishers/team-activity-csv/admin.html
@@ -19,7 +19,7 @@ map/publishers/team-activity-csv/admin.html
 この配置で実行時に読むCSV:
 
 ```text
-map/layers/portable/team-activity/current.csv
+svgmapAppLayers/appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/current.csv
 ```
 
 別ホストのCSVを正本にする場合は、`Container.svg` の `sourceCsv` を公開URLへ変更する。
@@ -29,13 +29,9 @@ map/layers/portable/team-activity/current.csv
 `current.csv` をホスト内の静的ファイルとして更新する場合、公開ファイルの差し替えは必要だが
 QTCTの再生成は不要。外部配信URLならCSV更新後の地図再読み込みだけでよい。
 
-生成:
-
-```bash
-npm run map:build
-```
-
-QTCT生成、47地域Container、public同期、参照検査まで一括実行される。
+管理画面でプロジェクトルートを選択して保存すると、元CSVからQTCTと
+この `current.csv` が生成される。ローカル開発中は地図を再読み込みする。
+公開Vercelへの反映にはコミットと再デプロイが必要。
 代表ピンのサイズは固定。画面内の件数がズーム別閾値を超えるたびに1本増え、
 QTCT内の件数比に応じて高密度地域へ配分される。
 
@@ -46,9 +42,8 @@ node scripts/install-team-activity-applayer.mjs /path/to/svgmapAppLayers
 ```
 
 これはローカルディレクトリだけを書き換え、上流リポジトリへの通信は行わない。
-配置後はコントローラーの「SVGMap App Layers管理」、または同梱された
-`appLayersAdmin.html` から、現在CSVの確認・QTCT生成・ローカルフォルダーへの
-書き戻しができる。
+配置後はコントローラーの「SVGMap App Layers管理」から元SVG3の
+`/map/publishers/team-activity-csv/admin.html` を開ける。
 
 SVGMap からの利用例:
 

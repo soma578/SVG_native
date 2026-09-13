@@ -244,7 +244,9 @@
     const districtIndexes = new Map();
 
     const returnPath = new URLSearchParams(location.search).get('return');
-    if (returnPath?.startsWith('/') && !returnPath.startsWith('//')) backLink.href = returnPath;
+    if ((returnPath === '/svgmap.html' || returnPath?.startsWith('/map/')) && !returnPath.includes('\\')) {
+      backLink.href = returnPath;
+    }
 
     const setStatus = (message, tone = '') => {
       status.textContent = message;
@@ -401,6 +403,12 @@
       await writable.close();
     };
 
+    const writeProjectAsset = async (root, relativePath, text) => {
+      await writeText(root, relativePath, text);
+      // Next.js serves the prepared public copy while npm run dev is running.
+      await writeText(root, `public/${relativePath}`, text);
+    };
+
     try {
       const [response, publisherResponse] = await Promise.all([
         fetch('/map/regions/index.json'),
@@ -488,16 +496,18 @@
       if (!artifacts || artifacts.errors.length > 0) return;
       try {
         const projectRoot = await window.showDirectoryPicker({ mode: 'readwrite' });
+        try { await projectRoot.getFileHandle('package.json'); }
+        catch { throw new Error('SVGMapプロジェクトのルートフォルダーを選択してください（package.jsonが必要です）'); }
         setStatus('書き出し中...');
-        await writeText(projectRoot, publisherConfig.source.replace(/^\//, ''), csvText);
-        await writeText(projectRoot, publisherConfig.publication.replace(/^\//, ''), `${JSON.stringify({
+        await writeProjectAsset(projectRoot, publisherConfig.source.replace(/^\//, ''), csvText);
+        await writeProjectAsset(projectRoot, publisherConfig.publication.replace(/^\//, ''), `${JSON.stringify({
           published: published.checked,
           updatedAt: new Date().toISOString(),
         }, null, 2)}\n`);
         for (const [relativePath, content] of artifacts.files) {
-          await writeText(projectRoot, `map/${relativePath}`, content);
+          await writeProjectAsset(projectRoot, `map/${relativePath}`, content);
         }
-        await writeText(projectRoot, publisherConfig.runtimeCsv.replace(/^\//, ''), buildRuntimeCsv(artifacts.records));
+        await writeProjectAsset(projectRoot, publisherConfig.runtimeCsv.replace(/^\//, ''), buildRuntimeCsv(artifacts.records));
         setStatus(`書き出し完了: ${artifacts.records.length}件。地図を再読み込みするとピンとエリアへ反映されます。公開サーバーへは別途デプロイが必要です。`, 'success');
       } catch (error) {
         if (error?.name !== 'AbortError') setStatus(`書き出しに失敗しました: ${error.message}`, 'error');

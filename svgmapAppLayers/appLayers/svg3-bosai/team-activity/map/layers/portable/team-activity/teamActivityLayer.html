@@ -48,7 +48,7 @@
 <script type="module">
 import { initRepresentativePinsLayer, portableLayerDataParams } from '../representative-pins/representativePinsCore.js';
 import { renderTeamActivityDetail } from './teamActivityDetail.js';
-import { initTeamActivityAreaLayer } from './teamActivityAreaCore.js';
+import { initTeamActivityAreaLayer, setTeamActivitySourceRecords } from './teamActivityAreaCore.js';
 import {
   TEAM_ACTIVITY_CSV_CHANNEL, TEAM_ACTIVITY_CSV_STORAGE_KEY, TEAM_ACTIVITY_CSV_TEMPLATE,
   buildTeamActivityCsvDocuments, parseTeamActivityCsv,
@@ -66,8 +66,8 @@ const start = () => {
   const status = document.getElementById('csv-status');
   const sourceCsvUrl = portableLayerDataParams().get('sourceCsv') || '';
   const appLayersAdmin = document.getElementById('app-layers-admin');
-  const adminUrl = new URL('./appLayersAdmin.html', window.location.href);
-  if (sourceCsvUrl) adminUrl.searchParams.set('sourceCsv', sourceCsvUrl);
+  const adminUrl = new URL('/map/publishers/team-activity-csv/admin.html', window.location.origin);
+  adminUrl.searchParams.set('return', '/svgmap.html');
   appLayersAdmin.href = adminUrl.href;
   let currentCsvText = '';
   const channel = typeof BroadcastChannel === 'function' ? new BroadcastChannel(TEAM_ACTIVITY_CSV_CHANNEL) : null;
@@ -100,6 +100,8 @@ const start = () => {
       currentCsvText = await response.text();
       const parsed = parseTeamActivityCsv(currentCsvText);
       if (parsed.errors.length) throw new Error(parsed.errors[0]);
+      runtime.setSourceDocuments(buildTeamActivityCsvDocuments(parsed.records));
+      void setTeamActivitySourceRecords(parsed.records);
       const body = document.querySelector('#current-csv-table tbody');
       body.replaceChildren();
       for (const record of parsed.records) {

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { parseTeamActivityCsv } from '../svgmapAppLayers/appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/teamActivityCsv.js'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const sourceHazard = path.join(root, 'svgmapAppLayers/appLayers/svg3-bosai/hazard')
@@ -32,8 +33,17 @@ const areaCore = fs.readFileSync(path.join(root,
 assert(container.includes('title="L3 チーム活動"'), 'Unified team activity is not in Container.svg')
 assert(!container.includes('teamActivityAreaLayer.svg'), 'Team activity area should not be a separate root layer')
 assert(container.includes('districtSvgUrlTemplate=/map/data/districts/{recordRegionId}/districts-svg/{code}.svg'))
+assert(container.includes('sourceCsv=./current.csv'), 'Team activity live CSV is not configured')
 assert(teamLayerController.includes('initTeamActivityAreaLayer()'), 'Pin controller does not initialize team activity area')
+assert(teamLayerController.includes('runtime.setSourceDocuments(buildTeamActivityCsvDocuments(parsed.records))'), 'Team activity CSV does not replace pin source')
+assert(teamLayerController.includes('setTeamActivitySourceRecords(parsed.records)'), 'Team activity CSV does not replace area source')
 assert(areaCore.includes("const DRAW_GROUP_ID = 'team-activity-area-draw'"), 'Team activity area renderer is unavailable')
+
+const liveCsv = fs.readFileSync(path.join(root,
+  'svgmapAppLayers/appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/current.csv'), 'utf8')
+const parsedLiveCsv = parseTeamActivityCsv(liveCsv)
+assert.deepEqual(parsedLiveCsv.errors, [], 'Team activity live CSV is invalid')
+assert.equal(parsedLiveCsv.records.length, 3, 'Team activity live CSV initial records are missing')
 
 const detail = JSON.parse(fs.readFileSync(path.join(root,
   'svgmapAppLayers/appLayers/svg3-bosai/team-activity/map/data/qtct/teamActivity/detail/0.json'), 'utf8'))

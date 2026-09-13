@@ -1,22 +1,33 @@
 # Team Activity Portable Layer
 
-CSV を正本として生成した静的 QTCT を表示し、コントローラーからローカルCSVも
-追加できる、Next.js / Supabase 非依存の SVGMap portable layer。
+同梱の `current.csv`（または `sourceCsv` で指定した配信CSV）を開くたびに取得し、
+その内容をピンと活動エリアの正本として表示する SVGMap portable layer。
+CSVの取得に失敗した時のみ、同梱の静的QTCTを予備表示に使用する。
 ピンと活動エリアは同じレイヤー内で描画し、1つの表示切り替えに連動する。
 
-利用者向けの「CSVを追加」はレイヤー本体に含まれる。既存データを置換せず、
-追加QTCTとして合成するため、低ズームの密度表示と高ズームの個別ピンを共有する。
+利用者向けの「CSVを追加」はレイヤー本体に含まれる。配信中のCSVを置換せず、
+そのブラウザ内で追加QTCTとして合成するため、低ズームの密度表示と高ズームの個別ピンを共有する。
+ひな形の列順は `id,title,regionId,municipalityCode,lat,lon,status,summary,description,area,operator`。
+`regionId` と `municipalityCode` はエリア境界の取得に必要。CSVの各行がピンになり、
+緯度経度が一致する地区境界だけが活動エリアとして表示される。
 運用者が正本CSVを更新して静的成果物を公開する画面は次に分離している。
 
 ```text
 map/publishers/team-activity-csv/admin.html
 ```
 
-CSV:
+この配置で実行時に読むCSV:
 
 ```text
-map/layers/managed/team-activity-pins/data.csv
+map/layers/portable/team-activity/current.csv
 ```
+
+別ホストのCSVを正本にする場合は、`Container.svg` の `sourceCsv` を公開URLへ変更する。
+そのURLは上記11列のCSVを返し、閲覧者のブラウザから匿名アクセス（必要ならCORS許可）できること。
+元のSVG3にある `prefecture,municipality,districtName` 形式のビルド用CSVは
+緯度経度を含まないため、この実行時入力へそのまま渡せない。
+`current.csv` をホスト内の静的ファイルとして更新する場合、公開ファイルの差し替えは必要だが
+QTCTの再生成は不要。外部配信URLならCSV更新後の地図再読み込みだけでよい。
 
 生成:
 
@@ -43,7 +54,7 @@ SVGMap からの利用例:
 
 ```xml
 <animation
-  xlink:href="/map/layers/portable/team-activity/teamActivityLayer.svg#summary=/map/data/qtct/teamActivity/summary.json&amp;data=/map/data/qtct/teamActivity/okayama/detail.json&amp;districtSvgUrlTemplate=/map/data/districts/{recordRegionId}/districts-svg/{code}.svg&amp;layer=teamActivity"
+  xlink:href="/map/layers/portable/team-activity/teamActivityLayer.svg#summary=/map/data/qtct/teamActivity/summary.json&amp;data=/map/data/qtct/teamActivity/okayama/detail.json&amp;sourceCsv=./current.csv&amp;districtSvgUrlTemplate=/map/data/districts/{recordRegionId}/districts-svg/{code}.svg&amp;layer=teamActivity"
   title="チーム活動"
   class="poi clickable"
   visibility="hidden"

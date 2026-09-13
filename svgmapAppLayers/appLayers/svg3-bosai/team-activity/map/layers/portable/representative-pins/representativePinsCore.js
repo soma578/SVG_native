@@ -1124,6 +1124,7 @@ export const initRepresentativePinsLayer = ({
         });
         return state[treeKey];
       } catch (error) {
+        if (seq !== loadSeqByTarget[target]) return null;
         console.error('[representativePinsLayer] load failed', error);
         state[treeKey] = null;
         state[loadedKey] = true;
@@ -1425,6 +1426,31 @@ export const initRepresentativePinsLayer = ({
   window.addEventListener('layerWebAppReady', start, { once: true });
   if (window.svgMap && window.svgImage) queueMicrotask(start);
   return {
+    setSourceDocuments({ summary = null, detail = null } = {}) {
+      for (const target of ['summary', 'detail']) {
+        loadSeqByTarget[target] += 1;
+        loadPromiseByTarget[target] = null;
+        state.shards[target] = { index: null, trees: new Map(), loading: new Map(), failures: new Map() };
+      }
+      state.summaryTree = summary?.tree || null;
+      state.detailTree = detail?.tree || null;
+      state.summaryLoaded = true;
+      state.detailLoaded = true;
+      state.summaryLoading = false;
+      state.detailLoading = false;
+      state.summaryLoadedAt = Date.now();
+      state.detailLoadedAt = state.summaryLoadedAt;
+      state.detailRecordIndex = null;
+      state.signature = '';
+      lastRenderedSignature = '';
+      if (!state.summaryTree && !state.detailTree) {
+        clearGroup();
+        notePoiSetChanged('source-empty', 0);
+      } else {
+        draw();
+      }
+      window.svgMap?.refreshScreen?.();
+    },
     setOverlayDocuments({ summary = null, detail = null } = {}) {
       state.overlaySummaryTree = summary?.tree || null;
       state.overlayDetailTree = detail?.tree || null;

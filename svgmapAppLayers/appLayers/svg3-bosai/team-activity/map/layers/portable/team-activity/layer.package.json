@@ -29,6 +29,7 @@
     "teamActivityDetail.js",
     "teamActivityCsv.js",
     "teamActivityAreaCore.js",
+    "current.csv",
     "appLayersAdmin.html",
     "teamActivityAreaLayer.svg",
     "teamActivityAreaLayer.html"

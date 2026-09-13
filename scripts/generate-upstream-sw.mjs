@@ -216,6 +216,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  if (url.pathname === '/svgmapAppLayers/appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/current.csv') {
+    event.respondWith(networkFirst(request, DYNAMIC_CACHE, MAX_DYNAMIC_ENTRIES, 'チーム活動CSV'));
+    return;
+  }
+
   event.respondWith((async () => {
     const shellHit = await caches.match(request, { cacheName: SHELL_CACHE });
     if (shellHit) return shellHit;

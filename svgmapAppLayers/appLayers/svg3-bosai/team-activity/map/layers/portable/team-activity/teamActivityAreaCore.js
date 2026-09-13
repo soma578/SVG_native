@@ -21,6 +21,7 @@ const state = {
   districtSvgUrlTemplate: '',
   records: [],
   baseRecords: [],
+  sourceRecords: null,
   overlayRecords: [],
   districtAreas: [],
   loadedDistrictKeys: new Set(),
@@ -160,6 +161,17 @@ const applyOverlayRecords = async (records) => {
   window.svgMap?.refreshScreen?.();
 };
 
+export const setTeamActivitySourceRecords = async (records) => {
+  state.sourceRecords = Array.isArray(records) ? records : [];
+  if (!state.loaded) return;
+  state.baseRecords = state.sourceRecords;
+  state.records = [...state.baseRecords, ...state.overlayRecords];
+  await loadDistrictAreas(state.baseRecords);
+  state.signature = '';
+  draw();
+  window.svgMap?.refreshScreen?.();
+};
+
 /**
  * 活動記録を読む。
  * 全国シャードインデックスも県別 detail.json も受け取れるようにする。
@@ -255,8 +267,9 @@ const start = async () => {
     return;
   }
   try {
-    state.baseRecords = await loadRecords();
-    state.records = [...state.baseRecords];
+    const fallbackRecords = await loadRecords();
+    state.baseRecords = state.sourceRecords ?? fallbackRecords;
+    state.records = [...state.baseRecords, ...state.overlayRecords];
     // 活動が実際にある (県, 市区町村) の組だけ地区SVGを引く。
     // 県をまたいだ活動が CSV に増えても、その県の地区がそのまま対象になる。
     await loadDistrictAreas(state.records);

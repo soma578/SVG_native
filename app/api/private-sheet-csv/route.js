@@ -58,6 +58,10 @@ export async function GET() {
   try {
     csv = normalizeSheetValues(response.data?.values, columns, {
       transformImageUrl: (raw) => buildPrivateDriveImageUrl(raw, credentials.private_key) || raw,
+      onInvalidRow: ({ row, reason }) => {
+        // Never log CSV cell contents or a private Sheet URL.
+        console.warn('Private Sheet row skipped', { row, reason })
+      },
     })
   } catch (error) {
     console.error('Private Sheet normalization failed', safeNormalizationFailure(error))

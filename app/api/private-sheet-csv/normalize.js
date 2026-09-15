@@ -42,6 +42,8 @@ const csvCell = (value) => {
 }
 
 export function normalizeSheetValues(values, map, options = {}) {
+  // The Sheets API omits `values` when the requested range is completely empty.
+  if (values == null) values = []
   if (!Array.isArray(values)) throw new Error('Sheet values are not rows')
   const output = [OUTPUT_COLUMNS]
   for (const [index, row] of values.entries()) {
@@ -55,7 +57,11 @@ export function normalizeSheetValues(values, map, options = {}) {
     const lon = Number(lonText)
     if (!title || !latText || !lonText || !Number.isFinite(lat) || !Number.isFinite(lon)
       || lat < -90 || lat > 90 || lon < -180 || lon > 180) {
-      throw new Error(`Missing title or invalid coordinates at row ${index + 1}`)
+      const reason = !title ? 'missing_title'
+        : !latText || !lonText ? 'missing_coordinates'
+          : 'invalid_coordinates'
+      options.onInvalidRow?.({ row: index + 1, reason })
+      continue
     }
     const rawImageUrl = value('imageUrl')
     const imageUrl = options.transformImageUrl ? options.transformImageUrl(rawImageUrl) : rawImageUrl

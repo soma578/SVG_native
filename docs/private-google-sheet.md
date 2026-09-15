@@ -19,8 +19,9 @@ Next.jsサーバー側の環境変数へ設定する。実CSV・実URLを開発�
    `photoUrl` をimageUrlに変換する。列設定は
    `{"id":0,"title":2,"lat":7,"lon":8,"imageUrl":10,"descriptionColumns":[3,4,5,6]}`。
    `timestamp` と `accuracy` は出力しない。緯度経度はWGS84の十進数とする。
-   空行は無視する。
-   緯度経度はWGS84の十進数とする。空行は無視する。
+   完全な空行は無視する。地点名・座標が欠けた行や座標が範囲外の行も
+   CSV全体を止めず、その行だけ除外する。Vercelログには行番号と理由だけを残す。
+   全行が除外された場合はヘッダーのみのCSVとなり、POIは表示されない。
 4. 環境変数を設定した後、ログイン済みのブラウザで
    `/api/private-sheet-csv` が `text/csv` を返すことを確認する。
    出力は `id,title,lat,lon,imageUrl,description` に正規化される。

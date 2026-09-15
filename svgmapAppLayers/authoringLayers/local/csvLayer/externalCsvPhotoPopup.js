@@ -17,6 +17,26 @@ export function isExternalCsvPhotoPopupEnabled(svgImageProps) {
 	return new URLSearchParams(getLayerHash(svgImageProps)).get("popup") === POPUP_MODE;
 }
 
+// Optional, zero-based column mapping for CSVs whose photo/description headers
+// differ from the original imageUrl/description names. The generic CSV parser
+// and the property table retain their original behavior.
+export function readExternalCsvPhotoFields(fields, svgImageProps) {
+	const params = new URLSearchParams(getLayerHash(svgImageProps));
+	const byName = new Map(fields.map((field) => [String(field.name).trim().toLowerCase(), field.value]));
+	const valueFor = (parameter, defaultName) => {
+		const column = params.get(parameter);
+		if (column !== null && /^(0|[1-9]\d*)$/.test(column)) {
+			const index = Number(column);
+			if (index < fields.length) return fields[index].value || "";
+		}
+		return byName.get(defaultName) || "";
+	};
+	return {
+		imageUrl: valueFor("imageCol", "imageurl"),
+		description: valueFor("descriptionCol", "description")
+	};
+}
+
 function isDevelopmentLocation(locationHref) {
 	try {
 		const hostname = new URL(locationHref).hostname;
@@ -91,6 +111,17 @@ export function buildGoogleDriveProxyUrl(driveFile, baseUrl) {
 	}
 }
 
+function getPrivateDrivePhotoSource(rawUrl, baseUrl) {
+	try {
+		const imageUrl = new URL(rawUrl, baseUrl);
+		const base = new URL(baseUrl);
+		if (imageUrl.origin !== base.origin || imageUrl.pathname !== "/api/private-sheet-image") return null;
+		return parseGoogleDriveFileUrl(imageUrl.searchParams.get("source"));
+	} catch (_error) {
+		return null;
+	}
+}
+
 function appendTextElement(doc, parent, tagName, text, styles = {}) {
 	const element = doc.createElement(tagName);
 	element.textContent = text;
@@ -112,9 +143,12 @@ export function buildExternalCsvPhotoPopup(doc, record, options = {}) {
 	const title = record.title || "名称未設定";
 	appendTextElement(doc, root, "h2", title, { margin: "0 0 12px", fontSize: "20px" });
 
-	const driveFile = parseGoogleDriveFileUrl(record.imageUrl);
-	const directDriveImageUrl = driveFile ? buildGoogleDriveImageUrl(driveFile) : null;
-	const safeImageUrl = driveFile
+	const privateDriveFile = getPrivateDrivePhotoSource(record.imageUrl, options.baseUrl);
+	const driveFile = privateDriveFile || parseGoogleDriveFileUrl(record.imageUrl);
+	const directDriveImageUrl = driveFile && !privateDriveFile ? buildGoogleDriveImageUrl(driveFile) : null;
+	const safeImageUrl = privateDriveFile
+		? getSafeImageUrl(record.imageUrl, options.baseUrl, options.allowHttp)
+		: driveFile
 		? (buildGoogleDriveProxyUrl(driveFile, options.baseUrl) || directDriveImageUrl)
 		: getSafeImageUrl(record.imageUrl, options.baseUrl, options.allowHttp);
 	if (safeImageUrl) {
@@ -222,10 +256,11 @@ export class ExternalCsvPhotoPopup {
 			value
 		}));
 		const valueByName = new Map(fields.map((field) => [field.name.toLowerCase(), field.value]));
+		const photoFields = readExternalCsvPhotoFields(fields, window.svgImageProps);
 		const record = {
 			title: target.getAttribute("data-title") || valueByName.get("title") || "",
-			imageUrl: valueByName.get("imageurl") || "",
-			description: valueByName.get("description") || "",
+			imageUrl: photoFields.imageUrl,
+			description: photoFields.description,
 			fields
 		};
 		let popupDocument = document;

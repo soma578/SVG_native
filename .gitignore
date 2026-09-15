@@ -2,6 +2,8 @@ node_modules/
 .next/
 out/
 *.log
+.env*
+!.env.example
 public/.svgmap-generated-assets.json
 public/svgmap.html
 public/svgmapjs/

@@ -200,6 +200,14 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Restricted Sheet data and its authenticated Drive images must not persist
+  // in the browser cache or replay after a user's Vercel SSO session ends.
+  if (url.origin === self.location.origin &&
+    (url.pathname === '/api/private-sheet-csv' || url.pathname === '/api/private-sheet-image')) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
   if (request.url === GAS_CSV_URL) {
     event.respondWith(networkFirst(request, DYNAMIC_CACHE, MAX_DYNAMIC_ENTRIES, 'GAS CSV'));
     return;

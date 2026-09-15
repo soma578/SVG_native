@@ -8,7 +8,8 @@ import {
 	buildGoogleDriveProxyUrl,
 	getSafeImageUrl,
 	isExternalCsvPhotoPopupEnabled,
-	parseGoogleDriveFileUrl
+	parseGoogleDriveFileUrl,
+	readExternalCsvPhotoFields
 } from "./externalCsvPhotoPopup.js";
 
 class FakeElement {
@@ -90,6 +91,23 @@ function collectTags(root) {
 test("photo popup mode is opt-in for only the configured CSV layer", () => {
 	assert.equal(isExternalCsvPhotoPopupEnabled({ Path: "csvXhr_r20.svg#popup=externalCsvPhoto" }), true);
 	assert.equal(isExternalCsvPhotoPopupEnabled({ Path: "csvXhr_r20.svg#latCol=2" }), false);
+});
+
+test("photo and description can be mapped by zero-based column without changing CSV headers", () => {
+	const fields = [
+		{ name: "地点コード", value: "001" },
+		{ name: "写真リンク", value: "https://example.com/001.jpg" },
+		{ name: "現場メモ", value: "安全に表示する説明" }
+	];
+	assert.deepEqual(readExternalCsvPhotoFields(fields, {
+		Path: "csvXhr_r20.svg#popup=externalCsvPhoto&imageCol=1&descriptionCol=2"
+	}), {
+		imageUrl: "https://example.com/001.jpg",
+		description: "安全に表示する説明"
+	});
+	assert.deepEqual(readExternalCsvPhotoFields(fields, {
+		Path: "csvXhr_r20.svg#popup=externalCsvPhoto&imageCol=-1&descriptionCol=999"
+	}), { imageUrl: "", description: "" });
 });
 
 test("image URLs accept HTTPS and reject executable schemes", () => {
@@ -190,7 +208,27 @@ test("Drive image failure hides the image and reveals a safe sharing link", () =
 	assert.equal(link.rel, "noopener noreferrer");
 });
 
-test("CsvMapper fetches the GAS CSV URL and creates POIs with existing mapping", async () => {
+test("server-generated private Drive image uses the signed route and keeps the fallback link", () => {
+	const source = "https://drive.google.com/file/d/ABC123/view?usp=sharing&resourcekey=RK_456";
+	const params = new URLSearchParams({ id: "ABC123", sig: "test-signature", source });
+	params.set("resourcekey", "RK_456");
+	const doc = new FakeDocument();
+	const popup = buildExternalCsvPhotoPopup(doc, {
+		title: "地点A",
+		imageUrl: `/api/private-sheet-image?${params}`,
+		description: "説明",
+		fields: []
+	}, { baseUrl: "https://map.example/svgmapAppLayers/csvUI_r20.html" });
+	const image = popup.childNodes[1].childNodes[0];
+	const fallback = popup.childNodes[1].childNodes[1];
+	assert.equal(image.src, `https://map.example/api/private-sheet-image?${params}`);
+	image.dispatch("error");
+	assert.equal(image.hidden, true);
+	assert.equal(fallback.hidden, false);
+	assert.equal(fallback.childNodes[1].href, source);
+});
+
+test("CsvMapper fetches the private CSV API and creates POIs with existing mapping", async () => {
 	const originalWindow = globalThis.window;
 	const originalDocument = globalThis.document;
 	const originalXhr = globalThis.XMLHttpRequest;
@@ -230,7 +268,7 @@ test("CsvMapper fetches the GAS CSV URL and creates POIs with existing mapping",
 				script: {
 					src: "https://map.example/csvUI_r20.html",
 					location: {
-						hash: "#csvPath=https://script.google.com/macros/s/AKfycbyAD-xMVje_lJL7452V7wdcMv15bphid722XzmLHwakuDT0ZeHd4SV83y5ezzdp6FTQ/exec&latCol=2&lngCol=3&titleCol=1",
+						hash: "#csvPath=/api/private-sheet-csv&latCol=2&lngCol=3&titleCol=1",
 						pathname: "/csvUI_r20.html"
 					}
 				}
@@ -240,7 +278,7 @@ test("CsvMapper fetches the GAS CSV URL and creates POIs with existing mapping",
 		mapper.onload();
 		await new Promise((resolve) => setTimeout(resolve, 30));
 
-		assert.deepEqual(requestedUrls, ["https://script.google.com/macros/s/AKfycbyAD-xMVje_lJL7452V7wdcMv15bphid722XzmLHwakuDT0ZeHd4SV83y5ezzdp6FTQ/exec"]);
+		assert.deepEqual(requestedUrls, ["https://map.example/api/private-sheet-csv"]);
 		const pois = svgImage.getElementsByTagName("use");
 		assert.equal(pois.length, 2);
 		assert.equal(pois[0].getAttribute("xlink:title"), "地点A");

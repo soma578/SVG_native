@@ -9,5 +9,5 @@
   y="-30000"
   width="60000"
   height="60000"
-  xlink:href="./authoringLayers/local/csvLayer/csvXhr_r20.svg#csvPath=CSV_URL_HERE&amp;latCol=2&amp;lngCol=3&amp;titleCol=1&amp;popup=externalCsvPhoto"
+  xlink:href="./authoringLayers/local/csvLayer/csvXhr_r20.svg#csvPath=CSV_URL_HERE&amp;latCol=2&amp;lngCol=3&amp;titleCol=1&amp;imageCol=4&amp;descriptionCol=5&amp;popup=externalCsvPhoto"
 />

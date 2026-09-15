@@ -221,7 +221,7 @@
   y="-30000"
   width="60000"
   height="60000"
-  xlink:href="./authoringLayers/local/csvLayer/csvXhr_r20.svg#csvPath=https://script.google.com/macros/s/AKfycbyAD-xMVje_lJL7452V7wdcMv15bphid722XzmLHwakuDT0ZeHd4SV83y5ezzdp6FTQ/exec&amp;latCol=2&amp;lngCol=3&amp;titleCol=1&amp;popup=externalCsvPhoto"
+  xlink:href="./authoringLayers/local/csvLayer/csvXhr_r20.svg#csvPath=/api/private-sheet-csv&amp;latCol=2&amp;lngCol=3&amp;titleCol=1&amp;popup=externalCsvPhoto"
 />
 <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/mhlw_Kayoinoba/kayoinoba.svg"  class="POI"  title="厚労省 通いの場 マップ"  visibility="hidden"/>
 <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/accessibility/accessibilityInformationJR/accessibilityInformationJR.svg"  class="POI"  title="鉄道施設に関するバリアフリー情報（JR）"  visibility="hidden"/>

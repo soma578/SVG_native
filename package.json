@@ -9,9 +9,10 @@
     "prebuild": "npm run assets:prepare",
     "build": "next build",
     "start": "next start",
-    "test": "node svgmapAppLayers/authoringLayers/local/csvLayer/externalCsvLayer.test.mjs && node scripts/verify-svg3-map-assets.mjs && node scripts/verify-team-activity-publisher.mjs"
+    "test": "node svgmapAppLayers/authoringLayers/local/csvLayer/externalCsvLayer.test.mjs && node scripts/verify-svg3-map-assets.mjs && node scripts/verify-team-activity-publisher.mjs && node scripts/verify-private-sheet-csv.mjs"
   },
   "dependencies": {
+    "google-auth-library": "^11.0.2",
     "next": "^16.2.1",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"

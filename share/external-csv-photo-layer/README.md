@@ -22,7 +22,19 @@
 
 `csvXhr_r20.svg`、`CsvMapper.js`、本家のCSV解析・QTCT・ピン描画処理は、この写真対応のためには変更していません。写真popupも `popup=externalCsvPhoto` がない他のCSVレイヤーには適用されません。
 
+列名や列順が異なるCSVでは、`Container.svg` のハッシュに0始まりの列番号を指定します。
+地点名・座標は本家の `titleCol`・`latCol`・`lngCol`、写真・説明はこの拡張の
+`imageCol`・`descriptionCol` を使用します。後者を省略した場合だけ従来どおり
+`imageUrl`・`description` というヘッダー名を参照します。ほかの列は「CSV属性」にそのまま残ります。
+実CSVや実URLを共有する必要はありません。列番号とURLは利用者が設置先で書き換えられます。
+ただし、`Container.svg` に書いたURLとブラウザへ送るCSV内容は地図利用者から見えます。
+
 写真拡張は、通常のHTTPS画像URLを直接表示します。`https://drive.google.com/file/d/FILE_ID/view` と `https://drive.google.com/open?id=FILE_ID` はDrive共有ページとして識別し、File IDと任意の `resourcekey` を画像取得URLへ引き継ぎます。共有ページURLをそのまま `<img>` に指定しません。Next.js APIがあればまず `/api/drive-image` を使い、失敗時にはDriveのthumbnail URLを試します。それも失敗した場合は「画像を表示できません」と、元の共有URLを開くリンクを表示します。Drive画像の取得可否は、ファイルの公開権限とGoogle側の配信状態に依存します。
+
+SVG3本体では、非公開Sheet向けに別途 `/api/private-sheet-csv` と認証付き
+`/api/private-sheet-image` を追加しています。この共有パッケージのpopupは、
+そのAPIが返す署名付き写真URLも表示し、失敗時には元のDrive共有リンクを残します。
+非公開Sheet APIとサービスアカウントの設定一式はこの共有パッケージには同梱していません。
 
 CSV由来の文字列はDOMの `textContent` で表示します。画像URLはURLとして検証し、通常はHTTPSのみ許可します（HTTPは明示的なローカル開発環境のみ）。`javascript:`、`data:`、`file:`、`blob:` は画像URLとして使用しません。Drive専用処理は `drive.google.com` の完全一致だけを対象にします。
 

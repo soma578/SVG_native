@@ -4,6 +4,7 @@ import { GET } from '../app/api/private-sheet-csv/route.js'
 import { buildPrivateDriveImageUrl, parseDrivePhotoUrl, verifyPrivateDriveImageRequest } from '../app/api/private-sheet-csv/drive-photo.js'
 import { GET as GET_IMAGE } from '../app/api/private-sheet-image/route.js'
 import { safeGoogleFailure, safeNormalizationFailure } from '../app/api/private-sheet-csv/diagnostics.js'
+import { GoogleAuth } from 'google-auth-library'
 
 const map = parseColumnMap('{"id":0,"title":3,"lat":1,"lon":2,"imageUrl":5,"description":4}')
 const csv = normalizeSheetValues([
@@ -90,6 +91,57 @@ assert.equal(safeNormalizationFailure(new Error('Missing title or invalid coordi
 assert.equal(safeNormalizationFailure(new Error('https://private.example.com/secret')),
   'Unexpected CSV normalization error')
 
+// A signed /view photo still renders when Drive API access is unavailable but
+// the photo itself is link-shared. Stub the Google and thumbnail transports so
+// this regression check never needs a real service account or a real photo.
+const originalCredentialsJson = process.env.SVG3_GOOGLE_SERVICE_ACCOUNT_JSON
+const originalGetClient = GoogleAuth.prototype.getClient
+const originalFetch = globalThis.fetch
+const originalWarn = console.warn
+const originalError = console.error
+try {
+  process.env.SVG3_GOOGLE_SERVICE_ACCOUNT_JSON = JSON.stringify({
+    type: 'service_account', client_email: 'photo-test@example.com', private_key: signingKey,
+  })
+  GoogleAuth.prototype.getClient = async () => { throw new Error('Drive API unavailable in test') }
+  const requestedHosts = []
+  globalThis.fetch = async (url) => {
+    const host = new URL(url).hostname
+    requestedHosts.push(host)
+    if (host === 'drive.google.com') return new Response(null, {
+      status: 302,
+      headers: { Location: 'https://lh3.googleusercontent.com/d/ABC123=w1600' },
+    })
+    if (host === 'lh3.googleusercontent.com') return new Response(
+      Uint8Array.from([0xff, 0xd8, 0xff, 0xd9]),
+      { headers: { 'Content-Type': 'image/jpeg' } },
+    )
+    throw new Error('Untrusted thumbnail host was fetched')
+  }
+  console.warn = () => {}
+  console.error = () => {}
+  const imageResponse = await GET_IMAGE(new Request(privateUrl.href))
+  assert.equal(imageResponse.status, 200)
+  assert.equal(imageResponse.headers.get('content-type'), 'image/jpeg')
+  assert.deepEqual(requestedHosts, ['drive.google.com', 'lh3.googleusercontent.com'])
+  assert.equal((await imageResponse.arrayBuffer()).byteLength, 4)
+
+  globalThis.fetch = async (url) => {
+    requestedHosts.push(new URL(url).hostname)
+    return new Response(null, { status: 302, headers: { Location: 'https://attacker.example/photo.jpg' } })
+  }
+  const failedResponse = await GET_IMAGE(new Request(privateUrl.href))
+  assert.equal(failedResponse.status, 502)
+  assert(!requestedHosts.includes('attacker.example'))
+} finally {
+  if (originalCredentialsJson === undefined) delete process.env.SVG3_GOOGLE_SERVICE_ACCOUNT_JSON
+  else process.env.SVG3_GOOGLE_SERVICE_ACCOUNT_JSON = originalCredentialsJson
+  GoogleAuth.prototype.getClient = originalGetClient
+  globalThis.fetch = originalFetch
+  console.warn = originalWarn
+  console.error = originalError
+}
+
 if (!process.env.SVG3_GOOGLE_SERVICE_ACCOUNT_JSON) {
   const response = await GET()
   assert.equal(response.status, 503)
@@ -98,4 +150,4 @@ if (!process.env.SVG3_GOOGLE_SERVICE_ACCOUNT_JSON) {
   assert.equal(imageResponse.status, 503)
 }
 
-console.log('[private-sheet-csv] exact Sheet columns, invalid-row skipping, signed Drive photos, CSV escaping, and safe diagnostics passed')
+console.log('[private-sheet-csv] exact Sheet columns, invalid-row skipping, signed Drive photos with shared fallback, CSV escaping, and safe diagnostics passed')

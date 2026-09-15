@@ -45,6 +45,11 @@ Google Cloud側で**Drive APIも有効化**し、写真ファイル（または�
 画像APIが受け付けるのはJPEG/PNG/WebP/GIF/AVIF。Drive APIが返す短寿命の
 `thumbnailLink` を認証付きで取得し、なければ元画像を取得する。
 Vercel応答上限のため、配信する画像は4MB以下に制限する。
+認証付きDrive APIが失敗した場合だけ、署名済み写真IDについて
+`drive.google.com/thumbnail` を匿名のリンク共有写真向けに試す。
+これはGoogle Drive APIの恒久的な画像配信仕様ではないため、
+非公開写真では引き続きサービスアカウントへの閲覧権限が必要。
+画像取得がすべて失敗した場合はpopupの説明と元Drive共有リンクを残す。
 
 **アクセス範囲:** 現在確認したVercelデプロイでは、地図・静的レイヤー・APIが
 未ログイン時にSSOへリダイレクトされる。この保護を外すと

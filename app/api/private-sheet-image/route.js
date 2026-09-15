@@ -46,6 +46,46 @@ async function readBrowserImage(response, expectedType = null) {
   return { body: Buffer.concat(chunks), mimeType: IMAGE_TYPES.has(mimeType) ? mimeType : expectedType }
 }
 
+function imageResponse(image) {
+  return new Response(image.body, {
+    headers: { ...privateHeaders, 'Content-Type': image.mimeType,
+      'Content-Length': String(image.body.byteLength) },
+  })
+}
+
+async function trySharedThumbnail(fileId, resourceKey) {
+  // Best-effort fallback for a Drive photo explicitly shared for link viewing.
+  // The URL is built from validated tokens after our signed-route check; no
+  // arbitrary CSV URL is fetched by this endpoint.
+  try {
+    const url = new URL('https://drive.google.com/thumbnail')
+    url.searchParams.set('id', fileId)
+    url.searchParams.set('sz', 'w1600')
+    if (resourceKey) url.searchParams.set('resourcekey', resourceKey)
+    let currentUrl = url
+    let response = null
+    for (let redirects = 0; redirects < 3; redirects++) {
+      response = await fetch(currentUrl, {
+        cache: 'no-store', redirect: 'manual', headers: { Accept: 'image/*' },
+      })
+      if (response.status < 300 || response.status >= 400) break
+      const location = response.headers.get('location')
+      const nextUrl = location ? isTrustedThumbnailUrl(new URL(location, currentUrl).href) : null
+      if (!nextUrl) return null
+      currentUrl = nextUrl
+    }
+    if (!response || (response.status >= 300 && response.status < 400)) return null
+    const mimeType = (response.headers.get('content-type') || '').split(';')[0].toLowerCase()
+    if (!IMAGE_TYPES.has(mimeType)) return null
+    const image = await readBrowserImage(response, mimeType)
+    if (!image) return null
+    console.warn('Private Drive image used a link-shared thumbnail fallback')
+    return imageResponse(image)
+  } catch {
+    return null
+  }
+}
+
 export async function GET(request) {
   const requestUrl = new URL(request.url)
   const fileId = requestUrl.searchParams.get('id')
@@ -95,15 +135,14 @@ export async function GET(request) {
           cache: 'no-store',
         })
         const thumbnail = await readBrowserImage(thumbnailResponse, mimeType)
-        if (thumbnail) return new Response(thumbnail.body, {
-          headers: { ...privateHeaders, 'Content-Type': thumbnail.mimeType,
-            'Content-Length': String(thumbnail.body.byteLength) },
-        })
+        if (thumbnail) return imageResponse(thumbnail)
       } catch {
         // A missing thumbnail is not fatal; try the authenticated original.
       }
     }
     if (declaredSize > MAX_IMAGE_BYTES) {
+      const sharedThumbnail = await trySharedThumbnail(fileId, resourceKey)
+      if (sharedThumbnail) return sharedThumbnail
       return new Response('Drive image exceeds the delivery limit', { status: 413, headers: privateHeaders })
     }
     const mediaUrl = new URL(`https://www.googleapis.com/drive/v3/files/${fileId}`)
@@ -115,11 +154,17 @@ export async function GET(request) {
     })
     const image = await readBrowserImage(media, mimeType)
     if (!image) throw new Error('Drive returned no usable image media')
-    return new Response(image.body, {
-      headers: { ...privateHeaders, 'Content-Type': image.mimeType,
-        'Content-Length': String(image.body.byteLength) },
+    return imageResponse(image)
+  } catch (error) {
+    const sharedThumbnail = await trySharedThumbnail(fileId, resourceKey)
+    if (sharedThumbnail) return sharedThumbnail
+    const httpStatus = error?.response?.status
+    const googleStatus = error?.response?.data?.error?.status
+    console.error('Private Drive image fetch failed', {
+      httpStatus: Number.isInteger(httpStatus) ? httpStatus : null,
+      googleStatus: typeof googleStatus === 'string' && /^[A-Z_]{1,50}$/.test(googleStatus)
+        ? googleStatus : null,
     })
-  } catch {
     // Never expose credentials, private Drive IDs, or Google errors to the browser.
     return new Response('Private Drive image is unavailable', { status: 502, headers: privateHeaders })
   }

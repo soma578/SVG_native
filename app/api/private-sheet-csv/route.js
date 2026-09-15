@@ -1,6 +1,7 @@
 import { GoogleAuth } from 'google-auth-library'
 import { normalizeSheetValues, parseColumnMap, parseSpreadsheetId } from './normalize.js'
 import { buildPrivateDriveImageUrl } from './drive-photo.js'
+import { safeGoogleFailure, safeNormalizationFailure } from './diagnostics.js'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -33,24 +34,40 @@ export async function GET() {
     return new Response('Sheet credentials are not configured', { status: 503, headers: privateHeaders })
   }
 
+  let client
   try {
     const auth = new GoogleAuth({ credentials, scopes: [GOOGLE_SCOPE] })
-    const client = await auth.getClient()
-    const url = new URL(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}`)
-    url.searchParams.set('valueRenderOption', 'UNFORMATTED_VALUE')
-    const response = await client.request({ url: url.href, method: 'GET' })
-    const csv = normalizeSheetValues(response.data?.values, columns, {
-      transformImageUrl: (raw) => buildPrivateDriveImageUrl(raw, credentials.private_key) || raw,
-    })
-    if (Buffer.byteLength(csv, 'utf8') > MAX_CSV_BYTES) {
-      return new Response('Sheet is too large for this delivery method', { status: 413, headers: privateHeaders })
-    }
-    return new Response(csv, {
-      status: 200,
-      headers: { ...privateHeaders, 'Content-Type': 'text/csv; charset=utf-8' },
-    })
+    client = await auth.getClient()
   } catch {
-    // Do not send OAuth, Sheet API, or private URL details to the browser.
+    // Authentication errors can contain credential details; log the stage only.
+    console.error('Private Sheet authentication failed')
     return new Response('Private Sheet is unavailable', { status: 502, headers: privateHeaders })
   }
+
+  const url = new URL(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}`)
+  url.searchParams.set('valueRenderOption', 'UNFORMATTED_VALUE')
+  let response
+  try {
+    response = await client.request({ url: url.href, method: 'GET' })
+  } catch (error) {
+    console.error('Google Sheets GetValues failed', safeGoogleFailure(error, credentialsJson, credentials))
+    return new Response('Private Sheet is unavailable', { status: 502, headers: privateHeaders })
+  }
+
+  let csv
+  try {
+    csv = normalizeSheetValues(response.data?.values, columns, {
+      transformImageUrl: (raw) => buildPrivateDriveImageUrl(raw, credentials.private_key) || raw,
+    })
+  } catch (error) {
+    console.error('Private Sheet normalization failed', safeNormalizationFailure(error))
+    return new Response('Private Sheet data is invalid', { status: 502, headers: privateHeaders })
+  }
+  if (Buffer.byteLength(csv, 'utf8') > MAX_CSV_BYTES) {
+    return new Response('Sheet is too large for this delivery method', { status: 413, headers: privateHeaders })
+  }
+  return new Response(csv, {
+    status: 200,
+    headers: { ...privateHeaders, 'Content-Type': 'text/csv; charset=utf-8' },
+  })
 }

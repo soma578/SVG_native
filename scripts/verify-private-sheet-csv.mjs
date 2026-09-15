@@ -3,6 +3,7 @@ import { normalizeSheetValues, parseColumnMap, parseSpreadsheetId } from '../app
 import { GET } from '../app/api/private-sheet-csv/route.js'
 import { buildPrivateDriveImageUrl, parseDrivePhotoUrl, verifyPrivateDriveImageRequest } from '../app/api/private-sheet-csv/drive-photo.js'
 import { GET as GET_IMAGE } from '../app/api/private-sheet-image/route.js'
+import { safeGoogleFailure, safeNormalizationFailure } from '../app/api/private-sheet-csv/diagnostics.js'
 
 const map = parseColumnMap('{"id":0,"title":3,"lat":1,"lon":2,"imageUrl":5,"description":4}')
 const csv = normalizeSheetValues([
@@ -45,6 +46,34 @@ assert(currentCsv.includes('002,地点B,34.67,133.92,https://example.com/test.jp
 assert(!currentCsv.includes('2026-09-15'))
 assert.throws(() => parseColumnMap('{"title":2,"lat":7,"lon":8,"descriptionColumns":[3,-1,5,6]}'))
 
+const fakeCredentials = {
+  client_email: 'secret@example.com',
+  private_key: '-----BEGIN PRIVATE KEY-----\nTEST_SECRET\n-----END PRIVATE KEY-----',
+}
+const fakeCredentialsJson = JSON.stringify(fakeCredentials)
+const diagnostic = safeGoogleFailure({ response: {
+  status: 403,
+  data: { error: {
+    status: 'PERMISSION_DENIED',
+    message: `The caller does not have permission. Bearer ya29.TEST_TOKEN ${fakeCredentials.client_email} ${fakeCredentials.private_key}`,
+  } },
+} }, fakeCredentialsJson, fakeCredentials)
+assert.equal(diagnostic.httpStatus, 403)
+assert.equal(diagnostic.googleStatus, 'PERMISSION_DENIED')
+assert.match(diagnostic.googleMessage, /The caller does not have permission/)
+assert(!JSON.stringify(diagnostic).includes('TEST_SECRET'))
+assert(!JSON.stringify(diagnostic).includes('TEST_TOKEN'))
+assert(!JSON.stringify(diagnostic).includes(fakeCredentials.client_email))
+const escapedDiagnostic = safeGoogleFailure({ response: {
+  status: 400,
+  data: { error: { status: 'INVALID_ARGUMENT', message: JSON.stringify(fakeCredentials.private_key) } },
+} }, fakeCredentialsJson, fakeCredentials)
+assert(!JSON.stringify(escapedDiagnostic).includes('TEST_SECRET'))
+assert.equal(safeNormalizationFailure(new Error('Missing title or invalid coordinates at row 12')),
+  'Missing title or invalid coordinates at row 12')
+assert.equal(safeNormalizationFailure(new Error('https://private.example.com/secret')),
+  'Unexpected CSV normalization error')
+
 if (!process.env.SVG3_GOOGLE_SERVICE_ACCOUNT_JSON) {
   const response = await GET()
   assert.equal(response.status, 503)
@@ -53,4 +82,4 @@ if (!process.env.SVG3_GOOGLE_SERVICE_ACCOUNT_JSON) {
   assert.equal(imageResponse.status, 503)
 }
 
-console.log('[private-sheet-csv] exact Sheet columns, descriptions, signed Drive photos, URL guards, CSV escaping, and missing-config guard passed')
+console.log('[private-sheet-csv] exact Sheet columns, signed Drive photos, CSV escaping, safe diagnostic redaction, and missing-config guard passed')

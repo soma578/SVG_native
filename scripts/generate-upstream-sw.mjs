@@ -43,7 +43,7 @@ const isShellAsset = (relative) => {
 
 const sourceFiles = walk(root).filter(isShellAsset).sort()
 const localShell = sourceFiles.map((relative) => relative === 'index.html' ? '/svgmap.html' : `/${relative}`)
-localShell.push('/layerListStyle.css', '/svgmap-bootstrap.js')
+localShell.push('/layerListStyle.css', '/svgmap-bootstrap.js', '/customShowPoiProperty.js')
 const shell = [...new Set([...localShell, ...externalShell])]
 
 const hash = crypto.createHash('sha256')
@@ -52,7 +52,11 @@ for (const relative of sourceFiles) {
   hash.update(relative)
   hash.update(fs.readFileSync(path.join(root, relative)))
 }
-for (const relative of ['public/layerListStyle.css', 'public/svgmap-bootstrap.js']) {
+for (const relative of [
+  'public/layerListStyle.css',
+  'public/svgmap-bootstrap.js',
+  'public/customShowPoiProperty.js',
+]) {
   hash.update(relative)
   hash.update(fs.readFileSync(path.join(root, relative)))
 }
@@ -200,10 +204,13 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Restricted Sheet data and its authenticated Drive images must not persist
-  // in the browser cache or replay after a user's Vercel SSO session ends.
+  // API responses with private or live upstream data must never enter the
+  // stale-while-revalidate runtime cache. The CORS relay sets its own upstream
+  // cache policy and must always reach the server-side allowlist check.
   if (url.origin === self.location.origin &&
-    (url.pathname === '/api/private-sheet-csv' || url.pathname === '/api/private-sheet-image')) {
+    (url.pathname === '/api/private-sheet-csv'
+      || url.pathname === '/api/private-sheet-image'
+      || url.pathname === '/api/cors-proxy')) {
     event.respondWith(fetch(request));
     return;
   }

@@ -6,6 +6,11 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const publicDir = path.join(root, 'public')
 const markerPath = path.join(publicDir, '.svgmap-generated-assets.json')
 const markerName = 'scripts/prepare-public-assets.mjs'
+const excludedSourceRoots = [
+  path.join(root, 'svgmapAppLayers', 'authoringLayers', 'bbs'),
+]
+const remoteLayerLib = 'https://cdn.jsdelivr.net/gh/svgmap/svgmapjs@latest/svgMapLayerLib.js'
+const localLayerLib = '/svgmapjs/svgMapLayerLib.js'
 const assets = [
   ['svgmap.html', 'index.html'],
   ['svgmapjs', 'svgmapjs'],
@@ -15,6 +20,29 @@ const assets = [
 ]
 
 fs.mkdirSync(publicDir, { recursive: true })
+
+const isExcludedSource = (entry) => {
+  const absolute = path.resolve(entry)
+  return excludedSourceRoots.some((excluded) =>
+    absolute === excluded || absolute.startsWith(`${excluded}${path.sep}`))
+}
+
+function localizeLayerLibrary(directory) {
+  let replacements = 0
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const filename = path.join(directory, entry.name)
+    if (entry.isDirectory()) {
+      replacements += localizeLayerLibrary(filename)
+      continue
+    }
+    if (!entry.isFile() || !/\.(?:html|js|svg)$/.test(entry.name)) continue
+    const source = fs.readFileSync(filename, 'utf8')
+    if (!source.includes(remoteLayerLib)) continue
+    fs.writeFileSync(filename, source.replaceAll(remoteLayerLib, localLayerLib))
+    replacements++
+  }
+  return replacements
+}
 
 let managed = false
 if (fs.existsSync(markerPath)) {
@@ -62,8 +90,13 @@ for (const [destName, sourceName] of assets) {
       recursive: true,
       dereference: true,
       force: true,
-      filter: (entry) => !['.git', '.next', 'node_modules'].includes(path.basename(entry)),
+      filter: (entry) => !isExcludedSource(entry)
+        && !['.git', '.next', 'node_modules'].includes(path.basename(entry)),
     })
+    if (destName === 'svgmapAppLayers') {
+      const replacements = localizeLayerLibrary(destination)
+      console.log(`[assets] localized svgMapLayerLib.js in ${replacements} AppLayer files`)
+    }
   } else {
     fs.copyFileSync(source, destination)
   }

@@ -11,6 +11,7 @@
 <!-- 本家デモと同じGIS・SVGMap API構成。SVGMap本体だけローカル資産を読む。 -->
 <script type="text/javascript" src="https://unpkg.com/jsts@1.6.1/dist/jsts.min.js"></script>
 <script type="module" src="/svgmap-bootstrap.js"></script>
+<script src="/customShowPoiProperty.js" defer></script>
 
 <body bgcolor="#ffffff" style="overflow:hidden;">
   <div id="mapcanvas" data-src="/svgmapAppLayers/Container.svg"></div>
@@ -26,6 +27,9 @@
     <table style="right:3px;top:20px;position:absolute;font-size:12px;color:brown">
       <tbody><tr><td>Lat,Lng:</td><td id="centerPos"></td></tr></tbody>
     </table>
+
+    <font id="vScale" size="-2" color="brown" style="left:5px;bottom:37px;position:absolute;"></font>
+    <span id="globalMessage" style="left:30px;top:3px;position:absolute;font-size:12px;"></span>
 
     <font id="noticeText" size="-2" color="black" style="left:3px;bottom:3px;position:absolute;background-color:rgba(0,200,200,0.5)">Notice: This page is provided solely for technical preview of <a href="https://svgmap.org/" target="_blank" rel="noopener noreferrer">SVGMap</a> technology. The originator of this page assumes no responsibility for any damages resulting from the use of the information on each layer displayed.</font>
 

@@ -9,7 +9,8 @@
     "prebuild": "npm run assets:prepare",
     "build": "next build",
     "start": "next start",
-    "test": "node svgmapAppLayers/authoringLayers/local/csvLayer/externalCsvLayer.test.mjs && node scripts/verify-svg3-map-assets.mjs && node scripts/verify-team-activity-publisher.mjs && node scripts/verify-private-sheet-csv.mjs"
+    "test": "node svgmapAppLayers/authoringLayers/local/csvLayer/externalCsvLayer.test.mjs && node scripts/verify-svg3-map-assets.mjs && node scripts/verify-team-activity-publisher.mjs && node scripts/verify-private-sheet-csv.mjs && node scripts/verify-cors-proxy.mjs && node scripts/verify-host-delivery.mjs",
+    "audit:applayers": "node scripts/audit-applayer-dependencies.mjs"
   },
   "dependencies": {
     "google-auth-library": "^11.0.2",

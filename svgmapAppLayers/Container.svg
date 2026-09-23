@@ -227,7 +227,7 @@
 <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/accessibility/accessibilityInformationJR/accessibilityInformationJR.svg"  class="POI"  title="鉄道施設に関するバリアフリー情報（JR）"  visibility="hidden"/>
 <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/iot100WeatherBox/iot100WeatherBox.svg"  class="POI"  title="IoT百葉箱"  visibility="hidden"/>
 <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/soramamekun/soramamekun.svg"  class="POI clickable"  title="大気汚染(そらまめくん) 環境省"  visibility="hidden"/>
-<animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/maff/maff.svg"  class="POI clickable"  title="eMAFF農地情報"  visibility="hidden"/>
+<animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/maff/maff.svg"  data-special-server-required="true" class="POI clickable"  title="eMAFF農地情報"  visibility="hidden"/>
 <animation xlink:href="./appLayers/multiCsvView/multiCsvView.svg" title="OpenStreetMap各種ポイント情報" x="-30000" y="-30000" width="60000" height="60000" class="POI" opacity="0.6" visibility="hidden"/>
 <animation xlink:href="./appLayers/npaGoJp/ta.svg" title="警察庁_交通事故データ" x="-30000" y="-30000" width="60000" height="60000" class="POI" opacity="0.6" visibility="hidden"/>
 <animation xlink:href="./appLayers/mhlw_IryouNet/IryouNetPoi.svg" title="厚労省 病院・診療所・薬局等" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" class="POI" opacity="0.6" visibility="hidden"/><!-- #HOSPITAL など大文字でカテゴリ名入れるとカテゴリ固定レイヤ化可能-->

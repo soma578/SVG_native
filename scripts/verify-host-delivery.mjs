@@ -37,15 +37,32 @@ assert(/title="海底ケーブル\(海しる\)"[^>]*data-external-api-changed/.t
   'Retired MSIL layers must be identified as an external API change')
 assert(/title="酸素濃縮装置 最新ログ"[^>]*visibility="hidden"/.test(container),
   'The sanitized oxygen-device snapshot must be registered as a hidden-by-default layer')
+for (const title of [
+  '外部CSV現地情報',
+  '酸素濃縮装置 最新ログ',
+  '洪水・気象警報(岡山大SVG3)',
+  'L4 ハザード(岡山大SVG3)',
+  'L2 避難所',
+  '全国河川監視カメラ',
+  'L3 チーム活動',
+]) {
+  const animation = [...container.matchAll(/<animation\b[^>]*>/g)]
+    .map((match) => match[0])
+    .find((tag) => tag.includes(`title="${title}"`))
+  assert(animation?.includes('class="岡山大学'), `${title} must be listed under 岡山大学`)
+}
 const oxygenLayer = fs.readFileSync('svgmapAppLayers/appLayers/oxygenDeviceLog/oxygenDeviceLog.js', 'utf8')
 const oxygenSvg = fs.readFileSync('svgmapAppLayers/appLayers/oxygenDeviceLog/oxygenDeviceLog.svg', 'utf8')
+const oxygenIcons = fs.readdirSync('svgmapAppLayers/appLayers/oxygenDeviceLog/icons')
+  .map((name) => fs.readFileSync(`svgmapAppLayers/appLayers/oxygenDeviceLog/icons/${name}`, 'utf8'))
 assert(oxygenLayer.includes("from '../svg3-bosai/representative-pins/propertyModal.js'"),
   'The oxygen-device layer must use the shared SVG3 property modal')
 assert(oxygenLayer.includes("data-layer-id', 'oxygenDeviceLog'")
   && oxygenSvg.includes('transform="matrix(100,0,0,-100,0,0)"')
   && oxygenSvg.includes('x="-13" y="-13" width="26" height="26"')
   && !oxygenLayer.includes('hilightStrokeStyle')
-  && oxygenLayer.includes('svg3-property-webcam-compact'),
+  && oxygenLayer.includes('svg3-property-webcam-compact')
+  && oxygenIcons.every((icon) => !icon.includes('<text') && icon.includes('r="10.5"')),
   'The oxygen-device POIs and property card must follow the webcam visual and interaction contract')
 
 console.log('[host-delivery] SW/cache invalidation, same-origin bypass, BBS exclusion, local library, safe POI/UI hooks, custom layers, and backend state passed')

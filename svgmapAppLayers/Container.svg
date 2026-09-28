@@ -211,24 +211,9 @@
 <animation x="-30000" y="-30000" width="60000" height="60000" xlink:href="./appLayers/publicTransportation/odptRealtimeTracking/odptBusLoc.svg" title="公共交通ロケーション" opacity="0.75" class="モビリティ clickable" visibility="hidden"/>
   
 <!-- その他政府/民間 アプリレイヤー -->
-<animation
-  id="external-csv-photo-layer"
-  title="外部CSV現地情報"
-  class="CSV clickable"
-  visibility="visible"
-  opacity="1"
-  x="-30000"
-  y="-30000"
-  width="60000"
-  height="60000"
-  xlink:href="./authoringLayers/local/csvLayer/csvXhr_r20.svg#csvPath=/api/private-sheet-csv&amp;latCol=2&amp;lngCol=3&amp;titleCol=1&amp;popup=externalCsvPhoto"
-/>
 <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/mhlw_Kayoinoba/kayoinoba.svg"  class="POI"  title="厚労省 通いの場 マップ"  visibility="hidden"/>
 <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/accessibility/accessibilityInformationJR/accessibilityInformationJR.svg"  class="POI"  title="鉄道施設に関するバリアフリー情報（JR）"  visibility="hidden"/>
   <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/iot100WeatherBox/iot100WeatherBox.svg"  class="POI"  title="IoT百葉箱"  visibility="hidden"/>
-  <animation x="-30000" y="-30000" width="60000" height="60000"
-             xlink:href="./appLayers/oxygenDeviceLog/oxygenDeviceLog.svg"
-             class="POI clickable" title="酸素濃縮装置 最新ログ" visibility="hidden" opacity="1"/>
   <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/soramamekun/soramamekun.svg"  class="POI clickable"  title="大気汚染(そらまめくん) 環境省"  visibility="hidden"/>
 <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/maff/maff.svg" class="POI clickable"  title="eMAFF農地情報"  visibility="hidden"/>
 <animation xlink:href="./appLayers/multiCsvView/multiCsvView.svg" title="OpenStreetMap各種ポイント情報" x="-30000" y="-30000" width="60000" height="60000" class="POI" opacity="0.6" visibility="hidden"/>
@@ -240,19 +225,31 @@
 <animation xlink:href="./appLayers/geminiSearchLayers/geminiBYOKlayerSearch.svg" title="AIレイヤー検索 by Gemini" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" class="レイヤー検索" opacity="0.6" visibility="hidden"/>
 <animation xlink:href="./appLayers/layer-recommender/recommender.svg" title="ローカルAIレイヤー検索" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" class="レイヤー検索" opacity="0.6" visibility="hidden"/>
 
+  <!-- 岡山大学で追加・管理するレイヤー。新規レイヤーは原則このグループへ追加する。 -->
+  <animation
+             id="external-csv-photo-layer"
+             title="外部CSV現地情報"
+             class="岡山大学 clickable"
+             visibility="visible"
+             opacity="1"
+             x="-30000" y="-30000" width="60000" height="60000"
+             xlink:href="./authoringLayers/local/csvLayer/csvXhr_r20.svg#csvPath=/api/private-sheet-csv&amp;latCol=2&amp;lngCol=3&amp;titleCol=1&amp;popup=externalCsvPhoto" />
+  <animation x="-30000" y="-30000" width="60000" height="60000"
+             xlink:href="./appLayers/oxygenDeviceLog/oxygenDeviceLog.svg"
+             class="岡山大学 clickable" title="酸素濃縮装置 最新ログ" visibility="hidden" opacity="1" />
   <animation x="123" y="-46" width="22" height="22"
              xlink:href="./appLayers/svg3-bosai/flood-warning/floodWarningLayer.svg"
-             title="洪水・気象警報(岡山大SVG3)" class="防災情報" visibility="hidden" opacity="1" />
+             title="洪水・気象警報(岡山大SVG3)" class="岡山大学" visibility="hidden" opacity="1" />
   <animation x="123" y="-46" width="22" height="22"
              xlink:href="./appLayers/svg3-bosai/hazard/hazardLayer.svg"
-             title="L4 ハザード(岡山大SVG3)" class="防災情報" visibility="hidden" opacity="1" />
+             title="L4 ハザード(岡山大SVG3)" class="岡山大学" visibility="hidden" opacity="1" />
   <animation x="123" y="-46" width="22" height="22"
              xlink:href="./appLayers/svg3-bosai/evacuation/map/layers/portable/evacuation/evacuationLayer.svg#summary=../../../data/qtct/evacuation/summary.json&amp;data=../../../data/qtct/evacuation/detail-index.json&amp;layer=evacuation"
-             title="L2 避難所" class="防災情報" visibility="hidden" opacity="1" />
+             title="L2 避難所" class="岡山大学" visibility="hidden" opacity="1" />
   <animation x="123" y="-46" width="22" height="22"
              xlink:href="./appLayers/svg3-bosai/japan-river-webcams/map/layers/portable/japan-river-webcams/webcamLayer.svg#summary=../../../data/qtct/japanRiverWebcam/summary.json&amp;data=../../../data/qtct/japanRiverWebcam/detail-index.json&amp;layer=japanRiverWebcam"
-             title="全国河川監視カメラ" class="防災情報" visibility="hidden" opacity="1" />
+             title="全国河川監視カメラ" class="岡山大学" visibility="hidden" opacity="1" />
   <animation x="123" y="-46" width="22" height="22"
              xlink:href="./appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/teamActivityLayer.svg#summary=../../../data/qtct/teamActivity/summary.json&amp;data=../../../data/qtct/teamActivity/detail-index.json&amp;sourceCsv=./current.csv&amp;districtSvgUrlTemplate=/map/data/districts/{recordRegionId}/districts-svg/{code}.svg&amp;layer=teamActivity"
-             title="L3 チーム活動" class="防災情報" visibility="hidden" opacity="1" />
+             title="L3 チーム活動" class="岡山大学" visibility="hidden" opacity="1" />
 </svg>

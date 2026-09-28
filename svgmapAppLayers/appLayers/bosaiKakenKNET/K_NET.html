@@ -46,7 +46,7 @@
 // 2026/05/12 接続先のシステム更改に対応　API変更および、CSRF対策のためにproxyを構築
 
 // プロキシのパス
-var PROXY_URL =".";
+var PROXY_URL ="/api/knet";
 var GET_TOKENS_URL, GET_DATA_URL;
 
 // API
@@ -58,8 +58,8 @@ addEventListener("layerWebAppReady",function(){
 	if ( svgImageProps.hash.indexOf("proxy=")>0){
 		PROXY_URL = svgImageProps.hash.substring(svgImageProps.hash.indexOf("proxy=")+6);
 	}
-	GET_TOKENS_URL = PROXY_URL + "/getTokens.php";
-	GET_DATA_URL = PROXY_URL + "/getData.php";
+	GET_TOKENS_URL = PROXY_URL + "/tokens";
+	GET_DATA_URL = PROXY_URL + "/data";
 	
 	initEqYMsel();
 	init();

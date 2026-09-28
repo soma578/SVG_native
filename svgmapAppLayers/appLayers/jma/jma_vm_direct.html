@@ -107,6 +107,10 @@ function riverInitial(){
 // データセットごとに、結局スタイリングはカスタムで行わないとならないので・・・
 function styling_amds_rain10m(json){
 	console.log("do styling for amds_rain10m");
+	if (!json || !Array.isArray(json.features)) {
+		console.warn("アメダス10分雨量データがないため描画をスキップします");
+		return;
+	}
 	for ( var i = 0 ; i < json.features.length ; i++ ){
 		var ft = json.features[i];
 		var rf = Number(ft.properties.rain10m)

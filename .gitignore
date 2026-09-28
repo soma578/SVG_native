@@ -11,3 +11,11 @@ public/svgmapAppLayers/
 public/map/
 public/sw.js
 .submodule-git-backup/
+artifacts/applayer-audit/
+test-results/
+playwright-report/
+
+# Local device-log imports may contain subscriber/customer identifiers. Only the
+# sanitized AppLayer snapshot is publishable.
+/最新ログ(*).csv
+/最新ログ(*).csv:Zone.Identifier

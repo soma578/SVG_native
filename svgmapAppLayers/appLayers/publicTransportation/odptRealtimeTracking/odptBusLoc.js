@@ -396,7 +396,10 @@ async function refreshSelectedData() {
 }
 
 async function fetchRealtimeFeed(source, signal) {
-	const response = await fetch(source.endpoint, { cache: "no-store", signal });
+	const endpoint = typeof svgMap !== "undefined" && svgMap.getCORSURL
+		? svgMap.getCORSURL(source.endpoint)
+		: source.endpoint;
+	const response = await fetch(endpoint, { cache: "no-store", signal });
 	if (!response.ok) {
 		throw new Error(response.status + " " + response.statusText);
 	}

@@ -2,7 +2,7 @@ const module = await import('/svgmapjs/SVGMapLv0.1_r18module.js')
 window.svgMap = module.svgMap
 const { CorsProxy } = await import('/svgmapjs/CorsProxyModule.js')
 const corsProxy = new CorsProxy()
-corsProxy.setService('/api/cors-proxy?url=', null, true, true)
+corsProxy.setService('/api/cors-proxy?url=', [location.origin], true, true)
 window.corsProxy = corsProxy
 window.svgMap.setProxyURLFactory(null, null, null, corsProxy.getURLfunction(), true)
 if (window.svgMap.setDefaultHilightStyle) {

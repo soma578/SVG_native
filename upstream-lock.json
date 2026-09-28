@@ -1,19 +1,25 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "recordedAt": "2026-09-24",
   "components": {
     "svgmapjs": {
       "repository": "https://github.com/svgmap/svgmapjs",
-      "localImportCommit": "894b122ea8bdaf201aa07d474530860b23a1a4ad",
-      "snapshotTree": "64bc7541fca53861b89ee2ca9f34b9792c67b754",
-      "upstreamRevision": null
+      "upstreamCommit": null,
+      "snapshotFingerprint": {
+        "algorithm": "git-tree-sha1",
+        "value": "64bc7541fca53861b89ee2ca9f34b9792c67b754"
+      },
+      "snapshotStoredInRepositoryCommit": "894b122ea8bdaf201aa07d474530860b23a1a4ad"
     },
     "svgmapAppLayers": {
       "repository": "https://github.com/svgmap/svgmapAppLayers",
-      "localImportCommit": "894b122ea8bdaf201aa07d474530860b23a1a4ad",
-      "snapshotTree": "02d667cc43f1d505cfbdec57af35673c879b256f",
-      "upstreamRevision": null
+      "upstreamCommit": null,
+      "snapshotFingerprint": {
+        "algorithm": "git-tree-sha1",
+        "value": "02d667cc43f1d505cfbdec57af35673c879b256f"
+      },
+      "snapshotStoredInRepositoryCommit": "894b122ea8bdaf201aa07d474530860b23a1a4ad"
     }
   },
-  "note": "The original upstream commit IDs were not recorded at import time. The local Git tree IDs pin the imported snapshots exactly; populate upstreamRevision on the next verified sync."
+  "note": "The original upstream commit IDs were not recorded at import time. A local tree ID is only a snapshot fingerprint and may not be reachable in another clone; record upstreamCommit on the next verified sync."
 }

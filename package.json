@@ -9,13 +9,19 @@
     "prebuild": "npm run assets:prepare",
     "build": "next build",
     "start": "next start",
-    "test": "node svgmapAppLayers/authoringLayers/local/csvLayer/externalCsvLayer.test.mjs && node scripts/verify-svg3-map-assets.mjs && node scripts/verify-team-activity-publisher.mjs && node scripts/verify-private-sheet-csv.mjs && node scripts/verify-cors-proxy.mjs && node scripts/verify-host-delivery.mjs",
-    "audit:applayers": "node scripts/audit-applayer-dependencies.mjs"
+    "test": "node svgmapAppLayers/authoringLayers/local/csvLayer/externalCsvLayer.test.mjs && node scripts/verify-svg3-map-assets.mjs && node scripts/verify-team-activity-publisher.mjs && node scripts/verify-private-sheet-csv.mjs && node scripts/import-oxygen-device-log.mjs --check && node scripts/verify-cors-proxy.mjs && node scripts/verify-fixed-relays.mjs && node scripts/verify-host-delivery.mjs",
+    "data:oxygen-log": "node scripts/import-oxygen-device-log.mjs",
+    "test:oxygen-log": "node scripts/import-oxygen-device-log.mjs --check",
+    "audit:applayers": "node scripts/audit-applayer-dependencies.mjs",
+    "audit:applayers:browser": "playwright test tests/applayer-audit.spec.mjs"
   },
   "dependencies": {
     "google-auth-library": "^11.0.2",
     "next": "^16.2.1",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
   }
 }

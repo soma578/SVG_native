@@ -527,7 +527,7 @@ var dynamicWebTile = function(){
 		return new Promise(function(okCallback, ngCallback) {
 			(function(url, callback){
 				var http = new XMLHttpRequest();
-				http.open('HEAD', url);
+				http.open('HEAD', svgMap.getCORSURL(url));
 				http.onreadystatechange = function() {
 					if (this.readyState == this.DONE) {
 						callback(this.status != 404);

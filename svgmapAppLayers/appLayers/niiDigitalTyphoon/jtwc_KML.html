@@ -7,9 +7,8 @@
 <script src='togeojson.js'></script>
 
 <script type="module">
-import {unzip, HTTPRangeReader} from './unzipit.module.js';
+import {unzip} from './unzipit.module.js';
 window.unzip = unzip;
-window.HTTPRangeReader = HTTPRangeReader;
 </script>
 
 <!-- <script src="kml2svgMap.js"></script> -->
@@ -76,8 +75,11 @@ function fixStyle(){
 }
 
 async function getKml( href ){
-	const reader = new HTTPRangeReader(href);
-	var zipArchive =await unzip(reader);
+	const response = await fetch(svgMap.getCORSURL(href));
+	if (!response.ok) {
+		throw new Error(`JTWC KMZ fetch failed (${response.status}): ${href}`);
+	}
+	var zipArchive = await unzip(await response.arrayBuffer());
 	//console.log (zipArchive);
 	var kmlPath;
 	for (var fn in zipArchive.entries){
@@ -96,7 +98,12 @@ async function getKml( href ){
 
 
 async function loadIndex(){
-	var txt = await(await fetch("https://www.metoc.navy.mil/jtwc/rss/jtwc.rss?"+(new Date().getTime()))).text();
+	var indexUrl = "https://www.metoc.navy.mil/jtwc/rss/jtwc.rss?"+(new Date().getTime());
+	var response = await fetch(svgMap.getCORSURL(indexUrl));
+	if (!response.ok) {
+		throw new Error(`JTWC RSS fetch failed (${response.status})`);
+	}
+	var txt = await response.text();
 	const dom = parser.parseFromString(txt, "application/xml");
 	console.log(dom);
 	

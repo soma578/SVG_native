@@ -501,6 +501,10 @@ function initSlmcs(){
 		opt.setAttribute("data-txtmsg",jmaSlmcsProps.catsExp[i]);
 		slmcsSel.appendChild(opt);
 	}
+	// This archived 2021 dataset predates the linear precipitation-zone
+	// GeoJSON feed. Keep that optional overlay off instead of querying the
+	// current JMA endpoint with an archival timestamp.
+	slmcsSel.value = "none";
 	jmaSlmcsProps.active = slmcsSel.options[slmcsSel.selectedIndex].value;
 }
 

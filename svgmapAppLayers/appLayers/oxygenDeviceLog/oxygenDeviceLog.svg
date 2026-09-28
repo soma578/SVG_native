@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="-180 -90 360 180"
+     data-controller="oxygenDeviceLog.html#exec=appearOnLayerLoad&amp;requiredHeight=570"
+     property="装置ID,機種番号,日時,イベント内容,設定流量,実流量,酸素濃度,装置状態,受信強度,バッテリー電圧">
+  <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(1,0,0,-1,0,0)"/>
+  <defs>
+    <g id="event-periodic"><circle cx="0" cy="0" r="7" fill="#16857b" stroke="#fff" stroke-width="2"/></g>
+    <g id="event-power-off"><circle cx="0" cy="0" r="7" fill="#c62828" stroke="#fff" stroke-width="2"/><path d="M0,-4V1" stroke="#fff" stroke-width="2"/><circle cx="0" cy="3.5" r="1.1" fill="#fff"/></g>
+    <g id="event-stopped"><circle cx="0" cy="0" r="7" fill="#e07a16" stroke="#fff" stroke-width="2"/><rect x="-3" y="-3" width="6" height="6" fill="#fff"/></g>
+    <g id="event-maintenance"><circle cx="0" cy="0" r="7" fill="#7048a8" stroke="#fff" stroke-width="2"/><path d="M-3,0H3M0,-3V3" stroke="#fff" stroke-width="1.8"/></g>
+    <g id="event-other"><circle cx="0" cy="0" r="7" fill="#64748b" stroke="#fff" stroke-width="2"/></g>
+  </defs>
+  <g id="devicePoints"/>
+</svg>

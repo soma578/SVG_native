@@ -34,6 +34,9 @@ const isShellAsset = (relative) => {
   if (relative.startsWith('svgmapAppLayers/authoringLayers/local/csvLayer/')) {
     return /\.(js|html|xhtml|svg|css|png)$/.test(relative) && !relative.endsWith('.test.mjs')
   }
+  if (relative.startsWith('svgmapAppLayers/appLayers/oxygenDeviceLog/')) {
+    return /\.(js|html|svg|csv)$/.test(relative)
+  }
   if (!relative.startsWith('svgmapAppLayers/appLayers/svg3-bosai/')) return false
   if (/\/map\/data\//.test(relative)) return false
   if (/\/hazard\/(pref|districts)\//.test(relative)) return false
@@ -48,6 +51,7 @@ const shell = [...new Set([...localShell, ...externalShell])]
 
 const hash = crypto.createHash('sha256')
 hash.update(fs.readFileSync(fileURLToPath(import.meta.url)))
+hash.update(fs.readFileSync(path.join(root, 'scripts/prepare-public-assets.mjs')))
 for (const relative of sourceFiles) {
   hash.update(relative)
   hash.update(fs.readFileSync(path.join(root, relative)))

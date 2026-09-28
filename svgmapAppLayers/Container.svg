@@ -66,12 +66,12 @@
 
 <!-- 海しる系 -->
 <animation class="MARINE" title="衛星画像(海しる)" xlink:href="./appLayers/msil/dynamicWebTile.svg#globe&amp;baseURL=none&amp;zmax=11" data-controller="msil_jma.html#exec=appearOnLayerLoad&amp;requiredWidth=400" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.4"/> 
-<animation class="MARINE" title="海底ケーブル(海しる)" xlink:href="./appLayers/msil/msilLayer.svg#layerName0=Infrastructure&amp;layerName1=show:3" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
-<animation class="MARINE" title="漁港(海しる)" xlink:href="./appLayers/msil/msilLayer.svg#layerName0=Maritime&amp;layerName1=show:32" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
-<animation class="MARINE" title="等深線(海しる)" xlink:href="./appLayers/msil/msilLayer.svg#layerName0=TopographyAndGeology&amp;layerName1=show:1" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
-<animation class="MARINE" title="天気図４８時間予想(海しる)" xlink:href="./appLayers/msil/msilImageLayer.svg#layerName=WeatherImg10&amp;time=false" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
-<animation class="MARINE" title="天気図２４時間予想(海しる)" xlink:href="./appLayers/msil/msilImageLayer.svg#layerName=WeatherImg9&amp;time=false" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
-<animation class="MARINE" title="天気図現況(海しる)" xlink:href="./appLayers/msil/msilImageLayer.svg" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
+<animation class="MARINE" title="海底ケーブル(海しる)" xlink:href="./appLayers/msil/msilLayer.svg#layerName0=Infrastructure&amp;layerName1=show:3" data-external-api-changed="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
+<animation class="MARINE" title="漁港(海しる)" xlink:href="./appLayers/msil/msilLayer.svg#layerName0=Maritime&amp;layerName1=show:32" data-external-api-changed="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
+<animation class="MARINE" title="等深線(海しる)" xlink:href="./appLayers/msil/msilLayer.svg#layerName0=TopographyAndGeology&amp;layerName1=show:1" data-external-api-changed="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
+<animation class="MARINE" title="天気図４８時間予想(海しる)" xlink:href="./appLayers/msil/msilImageLayer.svg#layerName=WeatherImg10&amp;time=false" data-external-api-changed="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
+<animation class="MARINE" title="天気図２４時間予想(海しる)" xlink:href="./appLayers/msil/msilImageLayer.svg#layerName=WeatherImg9&amp;time=false" data-external-api-changed="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
+<animation class="MARINE" title="天気図現況(海しる)" xlink:href="./appLayers/msil/msilImageLayer.svg" data-external-api-changed="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" />
 
 <animation class="インフラ情報" title="starlinkUnofficialGS" xlink:href="./appLayers/starlinkUnofficialGS/test.svg" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.6" data-controller="../info.html" />
 <animation x="-30000" y="-30000" width="60000" height="60000" xlink:href="./appLayers/openinframap/openinframap.svg" title="Open Infrastructure Map" class="インフラ情報 clickable" visibility="hidden"/>
@@ -131,7 +131,7 @@
 <animation x="-30000" y="-30000" width="60000" height="60000" xlink:href="./authoringLayers/local/csvLayer/csvXhr_r20.svg#csvPath=https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.csv&amp;latCol=1&amp;lngCol=2&amp;titleCol=0&amp;variableIcon=4,3,4,5,6" title="地震 ALL 過去1週間(USGS)" class="地震・火山" visibility="hidden" opacity="0.7"/> 
 <animation x="-30000" y="-30000" width="60000" height="60000" xlink:href="./appLayers/usgsEq/usgsEarthquake.svg" title="全球地震情報(USGS)" class="地震・火山 clickable" visibility="hidden" opacity="0.7"/> 
 
-<animation x="-30000" y="-30000" width="60000" height="60000" xlink:href="./appLayers/bosaiKakenKNET/K_NET.svg" title="K-NET地震情報(防災科研)" data-special-server-required="true" class="地震・火山 clickable" visibility="hidden" opacity="0.7"/> 
+<animation x="-30000" y="-30000" width="60000" height="60000" xlink:href="./appLayers/bosaiKakenKNET/K_NET.svg" title="K-NET地震情報(防災科研)" class="地震・火山 clickable" visibility="hidden" opacity="0.7"/>
 <animation class="地震・火山 clickable" title="津波情報(JMA)" xlink:href="./appLayers/jma/tsunami/tsunami.svg" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.7"/> 
 <animation class="地震・火山 clickable" title="過去の地震データベース(JMA)" xlink:href="./appLayers/jma/eq/quakeRecord.svg" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.7"/> 
 <animation class="地震・火山 clickable" title="地震情報(JMA)" xlink:href="./appLayers/jma/eq/quake.svg" x="-30000" y="-30000" width="60000" height="60000" visibility="hidden" opacity="0.7"/> 
@@ -225,9 +225,12 @@
 />
 <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/mhlw_Kayoinoba/kayoinoba.svg"  class="POI"  title="厚労省 通いの場 マップ"  visibility="hidden"/>
 <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/accessibility/accessibilityInformationJR/accessibilityInformationJR.svg"  class="POI"  title="鉄道施設に関するバリアフリー情報（JR）"  visibility="hidden"/>
-<animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/iot100WeatherBox/iot100WeatherBox.svg"  class="POI"  title="IoT百葉箱"  visibility="hidden"/>
-<animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/soramamekun/soramamekun.svg"  class="POI clickable"  title="大気汚染(そらまめくん) 環境省"  visibility="hidden"/>
-<animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/maff/maff.svg"  data-special-server-required="true" class="POI clickable"  title="eMAFF農地情報"  visibility="hidden"/>
+  <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/iot100WeatherBox/iot100WeatherBox.svg"  class="POI"  title="IoT百葉箱"  visibility="hidden"/>
+  <animation x="-30000" y="-30000" width="60000" height="60000"
+             xlink:href="./appLayers/oxygenDeviceLog/oxygenDeviceLog.svg"
+             class="POI clickable" title="酸素濃縮装置 最新ログ" visibility="hidden" opacity="1"/>
+  <animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/soramamekun/soramamekun.svg"  class="POI clickable"  title="大気汚染(そらまめくん) 環境省"  visibility="hidden"/>
+<animation  x="-30000"  y="-30000"  width="60000"  height="60000"  xlink:href="./appLayers/maff/maff.svg" class="POI clickable"  title="eMAFF農地情報"  visibility="hidden"/>
 <animation xlink:href="./appLayers/multiCsvView/multiCsvView.svg" title="OpenStreetMap各種ポイント情報" x="-30000" y="-30000" width="60000" height="60000" class="POI" opacity="0.6" visibility="hidden"/>
 <animation xlink:href="./appLayers/npaGoJp/ta.svg" title="警察庁_交通事故データ" x="-30000" y="-30000" width="60000" height="60000" class="POI" opacity="0.6" visibility="hidden"/>
 <animation xlink:href="./appLayers/mhlw_IryouNet/IryouNetPoi.svg" title="厚労省 病院・診療所・薬局等" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" class="POI" opacity="0.6" visibility="hidden"/><!-- #HOSPITAL など大文字でカテゴリ名入れるとカテゴリ固定レイヤ化可能-->

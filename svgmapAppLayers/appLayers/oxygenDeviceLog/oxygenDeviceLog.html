@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>酸素濃縮装置 最新ログ</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; }
+    body { margin: 8px; color: #1f2937; font-size: 13px; line-height: 1.45; }
+    h1 { margin: 0 0 5px; font-size: 17px; }
+    p { margin: 5px 0; }
+    .csv-manager { display: grid; gap: 6px; margin: 8px 0; padding: 8px; border: 1px solid #b9d4d0; border-radius: 7px; background: #f2fbf9; }
+    .actions { display: flex; flex-wrap: wrap; gap: 6px; }
+    button, .file-button { padding: 5px 9px; border: 1px solid #8faeaa; border-radius: 6px; background: #fff; color: inherit; cursor: pointer; font: inherit; }
+    button:disabled { cursor: not-allowed; opacity: .55; }
+    input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 8px; margin: 9px 0; }
+    label { white-space: nowrap; }
+    .dot { display: inline-block; width: 11px; height: 11px; margin: 0 4px; border: 1px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px #64748b; vertical-align: -1px; }
+    .periodic { background: #16857b; } .off { background: #c62828; }
+    .stopped { background: #e07a16; } .maintenance { background: #7048a8; }
+    .status { margin: 8px 0; padding: 7px 9px; border-left: 4px solid #16857b; background: #edf8f6; }
+    .status.error { border-color: #b91c1c; background: #fef2f2; color: #7f1d1d; }
+    .notice { padding: 7px 9px; background: #f8fafc; border-left: 3px solid #64748b; font-size: 11px; }
+    #csvStatus[data-error="true"] { color: #b91c1c; white-space: pre-line; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/gh/svgmap/svgmapjs@latest/svgMapLayerLib.js"></script>
+  <script type="module" src="./oxygenDeviceLog.js"></script>
+</head>
+<body>
+  <h1>酸素濃縮装置 最新ログ</h1>
+  <section class="csv-manager" aria-label="酸素濃縮装置CSV管理">
+    <strong>ログCSVの更新</strong>
+    <span>logpotの元CSV（CP932）または公開用CSVを選択できます。</span>
+    <div class="actions">
+      <label class="file-button" for="csvFile">CSVを差し替え</label>
+      <input id="csvFile" type="file" accept=".csv,text/csv">
+      <button id="restoreButton" type="button">配信中データに戻す</button>
+      <button id="downloadButton" type="button" disabled>公開用CSVを保存</button>
+      <button id="writeProjectButton" type="button" disabled>プロジェクトへ書き出す</button>
+    </div>
+    <output id="csvStatus">配信中のCSVを読み込んでいます</output>
+  </section>
+  <div class="filters">
+    <label><input class="eventFilter" type="checkbox" value="定期送信" checked><span class="dot periodic"></span>定期送信</label>
+    <label><input class="eventFilter" type="checkbox" value="主電源OFF" checked><span class="dot off"></span>主電源OFF</label>
+    <label><input class="eventFilter" type="checkbox" value="運転停止" checked><span class="dot stopped"></span>運転停止</label>
+    <label><input class="eventFilter" type="checkbox" value="ディーラーメンテナンス" checked><span class="dot maintenance"></span>メンテナンス</label>
+  </div>
+  <button id="reloadButton" type="button">再読み込み</button>
+  <div id="statusMessage" class="status" role="status" aria-live="polite">読み込み待ち</div>
+  <p>表示 <strong id="visibleCount">-</strong>件 ／ 全 <strong id="totalCount">-</strong>件　最新受信: <span id="latestAt">-</span></p>
+  <p class="notice">選択したCSVはこのブラウザに保持されます。「プロジェクトへ書き出す」で公開用ファイルを更新できます（公開サイトへの反映には再デプロイが必要です）。IMSI、データ先コード、装置ユーザー情報は自動的に除外します。</p>
+</body>
+</html>

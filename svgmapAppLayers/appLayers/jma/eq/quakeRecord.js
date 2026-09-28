@@ -10,7 +10,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 //var APIURI = "https://www.data.jma.go.jp/svd/eqdb/data/shindo/api/api.php";
-var APIURI = "https://www.data.jma.go.jp/eqdb/data/shindo/api/"; // update 2025/4
+var APIURI = "/api/jma-earthquake"; // fixed upstream relay on the host
 //1919/1/1-
 
 var yearSel , monthSel, eqSel, maxiSel;

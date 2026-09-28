@@ -70,7 +70,7 @@
 		
 		console.log("docPath:",docPath, "  docDir:",docDir,"  canvasSize:",canvasSize,"  geoViewBox:",geoViewBox);
 		
-		loadJSONpost( "https://www.msil.go.jp/msilwebtoken/api/token/new" , handleResult);
+		loadJSONpost( "/api/msil-token" , handleResult);
 		//loadJSONpostByFetch( "https://www.msil.go.jp/msilwebtoken/api/token/new");
 		
 	}

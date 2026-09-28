@@ -1,0 +1,24 @@
+{
+  "警察庁_交通事故データ": {
+    "frameUrlIncludes": "/appLayers/npaGoJp/ta.html",
+    "actions": [
+      {
+        "type": "check",
+        "selector": "#inp_2024",
+        "timeoutMs": 15000
+      }
+    ]
+  },
+  "eMAFF農地情報": {
+    "frameUrlIncludes": "/appLayers/maff/maff.html",
+    "actions": [
+      {
+        "type": "viewport",
+        "lat": 35.681,
+        "lng": 139.767,
+        "latSpan": 0.04,
+        "lngSpan": 0.04
+      }
+    ]
+  }
+}

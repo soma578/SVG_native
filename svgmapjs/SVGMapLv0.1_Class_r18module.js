@@ -1543,19 +1543,24 @@ class SvgMap {
 							// POIもベクタとして描画しない
 						} else {
 							// 作成した要素を実際に追加する
-							if (beforeElem) {
+							if (beforeElem && beforeElem.parentNode == parentElem) {
 								// SVGのデータ順序の通りにhtmlのimg要素を設置する処理
 								// 一つ前のもののあとに入れる
 								parentElem.insertBefore(img, beforeElem.nextSibling);
 							} else {
 								if (parentElem.hasChildNodes()) {
 									// 子要素がある場合は最初のspan要素の直前に挿入する？
-									var childSpans = parentElem.getElementsByTagName("div");
-									if (childSpans) {
-										parentElem.insertBefore(img, childSpans.item(0));
-									} else {
-										parentElem.insertBefore(img, parentElem.lastChild);
-									}
+									// A concurrent render may already have detached beforeElem.
+									// Also, getElementsByTagName() returns nested divs. Such a
+									// descendant is not a valid insertBefore reference for
+									// parentElem and caused intermittent NotFoundError while
+									// switching AppLayers during an active render.
+									var directChildDiv = Array.from(parentElem.children).find(
+										function (child) {
+											return child.tagName.toLowerCase() == "div";
+										},
+									);
+									parentElem.insertBefore(img, directChildDiv || null);
 								} else {
 									parentElem.appendChild(img);
 								}

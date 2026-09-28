@@ -43,7 +43,9 @@ assert(oxygenLayer.includes("from '../svg3-bosai/representative-pins/propertyMod
   'The oxygen-device layer must use the shared SVG3 property modal')
 assert(oxygenLayer.includes("data-layer-id', 'oxygenDeviceLog'")
   && oxygenSvg.includes('transform="matrix(100,0,0,-100,0,0)"')
-  && oxygenSvg.includes('r="12"'),
-  'The oxygen-device POIs must follow the representative-pin metadata and 26px coordinate contract')
+  && oxygenSvg.includes('x="-13" y="-13" width="26" height="26"')
+  && !oxygenLayer.includes('hilightStrokeStyle')
+  && oxygenLayer.includes('svg3-property-webcam-compact'),
+  'The oxygen-device POIs and property card must follow the webcam visual and interaction contract')
 
 console.log('[host-delivery] SW/cache invalidation, same-origin bypass, BBS exclusion, local library, safe POI/UI hooks, custom layers, and backend state passed')

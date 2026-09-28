@@ -37,7 +37,6 @@ let initialized = false
 let records = []
 let svgMap
 let svgImage
-let svgImageProps
 let layerID
 let currentCsvText = ''
 
@@ -46,7 +45,7 @@ window.addEventListener('layerWebAppReady', initialize)
 async function initialize() {
   if (initialized) return
   initialized = true
-  ;({ svgMap, svgImage, svgImageProps, layerID } = window)
+  ;({ svgMap, svgImage, layerID } = window)
   ui.reload.addEventListener('click', loadData)
   ui.filters.forEach((filter) => filter.addEventListener('change', draw))
   ui.csvFile.addEventListener('change', importCsv)
@@ -78,7 +77,7 @@ function configureDetails() {
     const rows = fields.filter(([, value]) => value !== '' && value != null)
       .map(([name, value]) => `<div class="svg3-property-row"><dt>${escapeHtml(name)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')
     showPropertyModal(`
-      <article class="svg3-property svg3-property-team">
+      <article class="svg3-property svg3-property-evacuation svg3-property-webcam-compact">
         <header class="svg3-property-header">
           <p class="svg3-property-kind">酸素濃縮装置</p>
           <h2 class="svg3-property-title">${escapeHtml(record['装置ID'])}</h2>
@@ -88,7 +87,6 @@ function configureDetails() {
       </article>
     `, { attribution: { label: 'logpot提供CSV' } })
   }, layerID)
-  svgImageProps.isClickable = { value: true, hilightStrokeStyle: { stroke: '#facc15', 'stroke-width': 5 } }
 }
 
 async function loadData() {

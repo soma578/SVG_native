@@ -3,6 +3,7 @@ import {
   normalizeOxygenDeviceCsvBytes,
   normalizeOxygenDeviceCsvText,
 } from './oxygenDeviceCsv.js'
+import { showPropertyModal } from '../svg3-bosai/representative-pins/propertyModal.js'
 
 const ui = {
   reload: document.getElementById('reloadButton'),
@@ -23,6 +24,13 @@ const ICONS = new Map([
   ['主電源OFF', '#event-power-off'],
   ['運転停止', '#event-stopped'],
   ['ディーラーメンテナンス', '#event-maintenance'],
+])
+
+const EVENT_LABELS = new Map([
+  ['定期送信', '定期送信'],
+  ['主電源OFF', '主電源OFF'],
+  ['運転停止', '運転停止'],
+  ['ディーラーメンテナンス', 'メンテナンス中'],
 ])
 
 let initialized = false
@@ -68,8 +76,17 @@ function configureDetails() {
       ['基地局キャリア', record['IoT基地局キャリア']], ['周波数帯', record['周波数帯']],
     ]
     const rows = fields.filter(([, value]) => value !== '' && value != null)
-      .map(([name, value]) => `<tr><th style="text-align:left;padding:4px 8px;border-bottom:1px solid #ddd">${escapeHtml(name)}</th><td style="padding:4px 8px;border-bottom:1px solid #ddd">${escapeHtml(value)}</td></tr>`).join('')
-    svgMap.showModal(`<h3>${escapeHtml(record['装置ID'])}</h3><table style="border-collapse:collapse;width:100%">${rows}</table>`, 540, 560)
+      .map(([name, value]) => `<div class="svg3-property-row"><dt>${escapeHtml(name)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')
+    showPropertyModal(`
+      <article class="svg3-property svg3-property-team">
+        <header class="svg3-property-header">
+          <p class="svg3-property-kind">酸素濃縮装置</p>
+          <h2 class="svg3-property-title">${escapeHtml(record['装置ID'])}</h2>
+          <div class="svg3-property-status"><span class="svg3-property-dot"></span><span>${escapeHtml(EVENT_LABELS.get(record['イベント内容']) || record['イベント内容'] || '状態不明')}</span></div>
+        </header>
+        <dl class="svg3-property-body">${rows}</dl>
+      </article>
+    `, { attribution: { label: 'logpot提供CSV' } })
   }, layerID)
   svgImageProps.isClickable = { value: true, hilightStrokeStyle: { stroke: '#facc15', 'stroke-width': 5 } }
 }
@@ -194,9 +211,16 @@ function draw() {
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) return
     const marker = svgImage.createElement('use')
     marker.setAttribute('xlink:href', ICONS.get(record['イベント内容']) || '#event-other')
-    marker.setAttribute('transform', `ref(svg,${lng},${-lat})`)
+    marker.setAttribute('transform', `ref(svg,${(lng * 100).toFixed(5)},${(-lat * 100).toFixed(5)})`)
     marker.setAttribute('data-record-index', String(index))
+    marker.setAttribute('data-feature-id', record['装置ID'])
+    marker.setAttribute('data-layer-id', 'oxygenDeviceLog')
+    marker.setAttribute('data-kind', 'poi')
+    marker.setAttribute('data-title', record['装置ID'])
+    marker.setAttribute('data-feature', JSON.stringify(record))
     marker.setAttribute('content', [record['装置ID'], record['機種番号'], record['日時'], record['イベント内容'], record['設定流量(L/min)'], record['実流量(L/min)'], record['酸素濃度(%)'], record['装置状態'], record.RSRP, record['バッテリー電圧(V)']].map(csvSafe).join(','))
+    marker.setAttribute('xlink:title', record['装置ID'])
+    marker.setAttribute('pointer-events', 'all')
     fragment.appendChild(marker)
     visible += 1
   })

@@ -61,4 +61,53 @@ for (const record of records) {
   assert(fs.existsSync(boundary), `Missing team activity boundary: ${boundary}`)
 }
 
-console.log(`[svg3-assets] ${hazardReferences} hazard references and ${records.length} team activity records resolved`)
+const portableRoot = path.join(root, 'svgmapAppLayers/appLayers/svg3-bosai')
+const evacuationPortable = path.join(portableRoot, 'evacuation/map/layers/portable')
+const webcamPortable = path.join(portableRoot, 'japan-river-webcams/map/layers/portable')
+for (const relative of [
+  'representative-pins/densityPointFormat.js',
+  'representative-pins/qtctFeatureEngine.js',
+  'representative-pins/representativePinsCore.js',
+  'representative-pins/runtimeCache.js',
+]) {
+  assert.equal(
+    fs.readFileSync(path.join(webcamPortable, relative), 'utf8'),
+    fs.readFileSync(path.join(evacuationPortable, relative), 'utf8'),
+    `Webcam runtime differs from evacuation: ${relative}`,
+  )
+}
+const evacuationPackage = JSON.parse(fs.readFileSync(path.join(evacuationPortable, 'evacuation/layer.package.json'), 'utf8'))
+const webcamPackage = JSON.parse(fs.readFileSync(path.join(webcamPortable, 'japan-river-webcams/layer.package.json'), 'utf8'))
+assert.deepEqual(evacuationPackage.data, webcamPackage.data, 'Evacuation QTCT injection contract differs from webcam')
+assert.deepEqual(evacuationPackage.runtimeDependencies, webcamPackage.runtimeDependencies,
+  'Evacuation runtime dependencies differ from webcam')
+const evacuationController = fs.readFileSync(path.join(evacuationPortable, 'evacuation/evacuationLayer.html'), 'utf8')
+const webcamController = fs.readFileSync(path.join(webcamPortable, 'japan-river-webcams/webcamLayer.html'), 'utf8')
+assert(/initRepresentativePinsLayer\(\{\s*mode: 'portable'/.test(evacuationController)
+  && !evacuationController.includes('createPortableNetworkClient'),
+  'Evacuation startup must follow the webcam representative-pins path')
+assert(/initRepresentativePinsLayer\(\{\s*mode: 'portable'/.test(webcamController),
+  'Webcam representative-pins baseline is unavailable')
+
+const qtctContract = (relative) => {
+  const directory = path.join(portableRoot, relative)
+  const summary = JSON.parse(fs.readFileSync(path.join(directory, 'summary.json'), 'utf8'))
+  const detailIndex = JSON.parse(fs.readFileSync(path.join(directory, 'detail-index.json'), 'utf8'))
+  const density = JSON.parse(fs.readFileSync(path.join(directory, 'density-points.json'), 'utf8'))
+  return {
+    summaryKeys: Object.keys(summary).sort(),
+    detailKeys: Object.keys(detailIndex).sort(),
+    densityKeys: Object.keys(density).sort(),
+    schemaVersion: summary.schemaVersion,
+    detailSchemaVersion: detailIndex.schemaVersion,
+    densitySchemaVersion: density.schemaVersion,
+    densityEncoding: density.encoding,
+  }
+}
+assert.deepEqual(
+  qtctContract('japan-river-webcams/map/data/qtct/japanRiverWebcam'),
+  qtctContract('evacuation/map/data/qtct/evacuation'),
+  'Webcam QTCT artifact contract differs from evacuation',
+)
+
+console.log(`[svg3-assets] ${hazardReferences} hazard references, ${records.length} team activity records, and evacuation-to-webcam QTCT parity resolved`)

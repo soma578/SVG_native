@@ -37,5 +37,13 @@ assert(/title="海底ケーブル\(海しる\)"[^>]*data-external-api-changed/.t
   'Retired MSIL layers must be identified as an external API change')
 assert(/title="酸素濃縮装置 最新ログ"[^>]*visibility="hidden"/.test(container),
   'The sanitized oxygen-device snapshot must be registered as a hidden-by-default layer')
+const oxygenLayer = fs.readFileSync('svgmapAppLayers/appLayers/oxygenDeviceLog/oxygenDeviceLog.js', 'utf8')
+const oxygenSvg = fs.readFileSync('svgmapAppLayers/appLayers/oxygenDeviceLog/oxygenDeviceLog.svg', 'utf8')
+assert(oxygenLayer.includes("from '../svg3-bosai/representative-pins/propertyModal.js'"),
+  'The oxygen-device layer must use the shared SVG3 property modal')
+assert(oxygenLayer.includes("data-layer-id', 'oxygenDeviceLog'")
+  && oxygenSvg.includes('transform="matrix(100,0,0,-100,0,0)"')
+  && oxygenSvg.includes('r="12"'),
+  'The oxygen-device POIs must follow the representative-pin metadata and 26px coordinate contract')
 
 console.log('[host-delivery] SW/cache invalidation, same-origin bypass, BBS exclusion, local library, safe POI/UI hooks, custom layers, and backend state passed')

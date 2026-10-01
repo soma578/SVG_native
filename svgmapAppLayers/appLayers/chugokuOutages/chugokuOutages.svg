@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="12800 -3700 720 550"
+     data-controller="chugokuOutages.html#exec=appearOnLayerLoad&amp;requiredHeight=440"
+     property="市区町村コード,発生日時,地域,停電戸数,対応状況,復旧見込み,停電理由">
+  <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)"/>
+  <defs>
+    <g id="outage-marker">
+      <circle cx="0" cy="0" r="12" fill="#d84315" stroke="#ffffff" stroke-width="3"/>
+      <path d="M2.2,-9 -5,1 -0.7,1 -3,9 5,0.1 0.7,0.1 Z" fill="#ffffff"/>
+    </g>
+  </defs>
+  <g id="outagePoints"/>
+</svg>

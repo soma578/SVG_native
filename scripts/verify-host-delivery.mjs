@@ -15,6 +15,11 @@ assert(swGenerator.includes("path.join(root, 'scripts/prepare-public-assets.mjs'
   'Changes to public-asset transforms must invalidate the Service Worker cache')
 assert(swGenerator.includes("svgmapAppLayers/appLayers/oxygenDeviceLog/"),
   'The fixed oxygen-device snapshot must be available from the offline shell')
+assert(swGenerator.includes("svgmapAppLayers/appLayers/chugokuOutages/")
+  && swGenerator.includes("url.pathname === '/api/chugoku-outages'"),
+  'The outage layer shell must be precached while its live API bypasses Service Worker caches')
+assert(swGenerator.includes("svgmapAppLayers/appLayers/okayamaLandslideCandidates/"),
+  'The Okayama landslide candidate snapshot must be available from the offline shell')
 assert(bootstrap.includes("[location.origin], true, true"),
   'Absolute same-origin URLs must bypass the CORS proxy')
 assert(core.includes('beforeElem && beforeElem.parentNode == parentElem')
@@ -40,6 +45,8 @@ assert(/title="酸素濃縮装置 最新ログ"[^>]*visibility="hidden"/.test(co
 for (const title of [
   '外部CSV現地情報',
   '酸素濃縮装置 最新ログ',
+  '中国電力 停電情報（岡山県）',
+  '岡山県 新たな土砂災害リスク箇所',
   '洪水・気象警報(岡山大SVG3)',
   'L4 ハザード(岡山大SVG3)',
   'L2 避難所',

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="12800 -3700 720 550"
+     data-controller="okayamaLandslideCandidates.html#exec=appearOnLayerLoad&amp;requiredHeight=490"
+     property="箇所番号,種別,位置,人家分類,情報時点">
+  <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)"/>
+  <defs>
+    <g id="candidate-steep"><circle cx="0" cy="0" r="5.5" fill="#8b5a2b" stroke="#ffffff" stroke-width="1.5"/></g>
+    <g id="candidate-debris"><circle cx="0" cy="0" r="5.5" fill="#1565a8" stroke="#ffffff" stroke-width="1.5"/></g>
+    <g id="candidate-mixed"><circle cx="0" cy="0" r="6.5" fill="#6b46a1" stroke="#ffffff" stroke-width="1.5"/></g>
+  </defs>
+  <g id="candidatePoints"/>
+</svg>

@@ -237,6 +237,12 @@
   <animation x="-30000" y="-30000" width="60000" height="60000"
              xlink:href="./appLayers/oxygenDeviceLog/oxygenDeviceLog.svg"
              class="岡山大学 clickable" title="酸素濃縮装置 最新ログ" visibility="hidden" opacity="1" />
+  <animation x="-30000" y="-30000" width="60000" height="60000"
+             xlink:href="./appLayers/chugokuOutages/chugokuOutages.svg"
+             class="岡山大学 clickable" title="中国電力 停電情報（岡山県）" visibility="hidden" opacity="1" />
+  <animation x="123" y="-46" width="22" height="22"
+             xlink:href="./appLayers/okayamaLandslideCandidates/okayamaLandslideCandidates.svg"
+             class="岡山大学 clickable" title="岡山県 新たな土砂災害リスク箇所" visibility="hidden" opacity="1" />
   <animation x="123" y="-46" width="22" height="22"
              xlink:href="./appLayers/svg3-bosai/flood-warning/floodWarningLayer.svg"
              title="洪水・気象警報(岡山大SVG3)" class="岡山大学" visibility="hidden" opacity="1" />

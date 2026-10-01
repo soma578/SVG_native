@@ -37,6 +37,12 @@ const isShellAsset = (relative) => {
   if (relative.startsWith('svgmapAppLayers/appLayers/oxygenDeviceLog/')) {
     return /\.(js|html|svg|csv)$/.test(relative)
   }
+  if (relative.startsWith('svgmapAppLayers/appLayers/chugokuOutages/')) {
+    return /\.(js|html|svg)$/.test(relative)
+  }
+  if (relative.startsWith('svgmapAppLayers/appLayers/okayamaLandslideCandidates/')) {
+    return /\.(js|html|svg|json)$/.test(relative)
+  }
   if (!relative.startsWith('svgmapAppLayers/appLayers/svg3-bosai/')) return false
   if (/\/map\/data\//.test(relative)) return false
   if (/\/hazard\/(pref|districts)\//.test(relative)) return false
@@ -214,7 +220,8 @@ self.addEventListener('fetch', (event) => {
   if (url.origin === self.location.origin &&
     (url.pathname === '/api/private-sheet-csv'
       || url.pathname === '/api/private-sheet-image'
-      || url.pathname === '/api/cors-proxy')) {
+      || url.pathname === '/api/cors-proxy'
+      || url.pathname === '/api/chugoku-outages')) {
     event.respondWith(fetch(request));
     return;
   }

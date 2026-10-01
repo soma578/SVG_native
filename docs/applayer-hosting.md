@@ -59,6 +59,23 @@ a promise that every copied layer works without host-side dependencies.
   only for that exact allowlisted hostname. Other proxy policies continue to
   use the standard Fetch transport.
 
+## Okayama managed data layers
+
+- `/api/chugoku-outages` reads only the official Okayama prefecture outage
+  page and its `33xxx` municipality-detail paths. It normalizes the current
+  events and keeps a four-minute warm-instance cache while all browser/CDN
+  response caches remain `no-store`.
+- Direct acquisition is the default. If the official server blocks Vercel
+  egress, set `CHUGOKU_OUTAGE_RELAY_URL` and
+  `CHUGOKU_OUTAGE_RELAY_TOKEN`. The relay must use a fixed approved IP, require
+  the bearer token, return raw HTML, and allow only the two path shapes shown
+  in `.env.example`; do not expose a general URL relay or this workstation.
+- The landslide candidate layer is a versioned snapshot, not a live scrape.
+  Run `npm run data:okayama-landslide` only when the prefecture updates the
+  data. The importer agrees to the official GIS terms, pages through both
+  candidate categories, and refuses to write unless the official totals are
+  exactly 16,794 steep-slope plus 2,868 debris-flow records.
+
 ## Auditing
 
 Run `npm run audit:applayers` after importing upstream changes. It inventories

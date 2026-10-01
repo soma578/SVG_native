@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>岡山県 新たな土砂災害リスク箇所</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; }
+    body { margin: 9px; color: #1f2937; font-size: 13px; line-height: 1.48; }
+    h1 { margin: 0 0 5px; font-size: 17px; }
+    p { margin: 6px 0; }
+    .filters { display: flex; flex-wrap: wrap; gap: 7px 14px; margin: 8px 0; }
+    .dot { display:inline-block; width:11px; height:11px; margin:0 4px; border:1px solid white; border-radius:50%; box-shadow:0 0 0 1px #64748b; vertical-align:-1px; }
+    .steep { background:#8b5a2b; } .debris { background:#1565a8; }
+    .status { margin: 8px 0; padding: 7px 9px; border-left: 4px solid #8b5a2b; background: #faf5ef; }
+    .status.error { border-color:#b91c1c; background:#fef2f2; color:#7f1d1d; }
+    .actions { display:flex; flex-wrap:wrap; gap:6px; }
+    a.button { padding:5px 9px; border:1px solid #a5b4c4; border-radius:6px; color:#24364b; text-decoration:none; }
+    .notice { padding:7px 9px; border-left:3px solid #b45309; background:#fffbeb; font-size:11px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/gh/svgmap/svgmapjs@latest/svgMapLayerLib.js"></script>
+  <script type="module" src="./okayamaLandslideCandidates.js"></script>
+</head>
+<body>
+  <h1>岡山県 新たな土砂災害リスク箇所</h1>
+  <p>高精度地形情報等から新たに抽出された候補箇所（令和7年度末時点）です。</p>
+  <div class="filters">
+    <label><input class="typeFilter" type="checkbox" value="急傾斜" checked><span class="dot steep"></span>急傾斜 16,794件</label>
+    <label><input class="typeFilter" type="checkbox" value="土石流" checked><span class="dot debris"></span>土石流 2,868件</label>
+  </div>
+  <div id="statusMessage" class="status" role="status" aria-live="polite">読み込み待ち</div>
+  <p>対象 <strong id="filteredCount">-</strong>件　現在の画面に描画 <strong id="visibleCount">-</strong>点</p>
+  <div class="actions">
+    <a class="button" href="https://www.pref.okayama.jp/page/1036031.html" target="_blank" rel="noopener noreferrer">岡山県の説明</a>
+    <a class="button" href="https://www.gis.pref.okayama.jp/pref-okayama/PositionSelect?mid=5002" target="_blank" rel="noopener noreferrer">公式GISで確認</a>
+  </div>
+  <p class="notice">既存の土砂災害警戒区域とは別の情報です。今後の基礎調査・指定の候補であり、公表により直ちに規制が発生するものではありません。点は各箇所の代表座標で、区域境界を示しません。</p>
+</body>
+</html>

@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>石川県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/17/flood.webp" xlink:href="../../hazard-overview/17/flood.webp"
-    x="13613.7217" y="-3796.1973" width="133.0076" height="200.1386"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/17/tsunami.webp" xlink:href="../../hazard-overview/17/tsunami.webp"
-    x="13613.7217" y="-3796.1973" width="133.0076" height="200.1386"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/17/landslide-warning.webp" xlink:href="../../hazard-overview/17/landslide-warning.webp"
-    x="13613.7217" y="-3796.1973" width="133.0076" height="200.1386"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/17/landslide-special.webp" xlink:href="../../hazard-overview/17/landslide-special.webp"
-    x="13613.7217" y="-3796.1973" width="133.0076" height="200.1386"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-17"
+    title="17 ハザード概要" href="../../hazard-vector-overview/pref/17.svg" xlink:href="../../hazard-vector-overview/pref/17.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-17201"
     title="金沢市" href="../districts/17/17201.svg" xlink:href="../districts/17/17201.svg"
     x="13655.04" y="-3667.39" width="26.68" height="33.58"

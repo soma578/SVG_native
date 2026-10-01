@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>福井県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/18/flood.webp" xlink:href="../../hazard-overview/18/flood.webp"
-    x="13535.48494" y="-3638.98106" width="157.20012" height="114.06112"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/18/tsunami.webp" xlink:href="../../hazard-overview/18/tsunami.webp"
-    x="13535.48494" y="-3638.98106" width="157.20012" height="114.06112"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/18/landslide-warning.webp" xlink:href="../../hazard-overview/18/landslide-warning.webp"
-    x="13535.48494" y="-3638.98106" width="157.20012" height="114.06112"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/18/landslide-special.webp" xlink:href="../../hazard-overview/18/landslide-special.webp"
-    x="13535.48494" y="-3638.98106" width="157.20012" height="114.06112"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-18"
+    title="18 ハザード概要" href="../../hazard-vector-overview/pref/18.svg" xlink:href="../../hazard-vector-overview/pref/18.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-18201"
     title="福井市" href="../districts/18/18201.svg" xlink:href="../districts/18/18201.svg"
     x="13596.5" y="-3617.3" width="50.21" height="25.25"

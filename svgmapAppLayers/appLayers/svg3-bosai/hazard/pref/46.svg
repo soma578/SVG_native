@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>鹿児島県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/46/flood.webp" xlink:href="../../hazard-overview/46/flood.webp"
-    x="12818.38602" y="-3251.82698" width="323.32196" height="571.09196"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/46/tsunami.webp" xlink:href="../../hazard-overview/46/tsunami.webp"
-    x="12818.38602" y="-3251.82698" width="323.32196" height="571.09196"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/46/landslide-warning.webp" xlink:href="../../hazard-overview/46/landslide-warning.webp"
-    x="12818.38602" y="-3251.82698" width="323.32196" height="571.09196"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/46/landslide-special.webp" xlink:href="../../hazard-overview/46/landslide-special.webp"
-    x="12818.38602" y="-3251.82698" width="323.32196" height="571.09196"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-46"
+    title="46 ハザード概要" href="../../hazard-vector-overview/pref/46.svg" xlink:href="../../hazard-vector-overview/pref/46.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-46201"
     title="鹿児島市" href="../districts/46/46201.svg" xlink:href="../districts/46/46201.svg"
     x="13038.67" y="-3175.25" width="34.31" height="45.92"

@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>岩手県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/03/flood.webp" xlink:href="../../hazard-overview/03/flood.webp"
-    x="14054.90832" y="-4055.42868" width="162.73836" height="191.07136"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/03/tsunami.webp" xlink:href="../../hazard-overview/03/tsunami.webp"
-    x="14054.90832" y="-4055.42868" width="162.73836" height="191.07136"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/03/landslide-warning.webp" xlink:href="../../hazard-overview/03/landslide-warning.webp"
-    x="14054.90832" y="-4055.42868" width="162.73836" height="191.07136"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/03/landslide-special.webp" xlink:href="../../hazard-overview/03/landslide-special.webp"
-    x="14054.90832" y="-4055.42868" width="162.73836" height="191.07136"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-03"
+    title="03 ハザード概要" href="../../hazard-vector-overview/pref/03.svg" xlink:href="../../hazard-vector-overview/pref/03.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-03201"
     title="盛岡市" href="../districts/03/03201.svg" xlink:href="../districts/03/03201.svg"
     x="14099.58" y="-3993.03" width="53.15" height="36.65"

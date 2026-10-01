@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>愛媛県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/38/flood.webp" xlink:href="../../hazard-overview/38/flood.webp"
-    x="13191.15784" y="-3440.49816" width="188.43832" height="161.04232"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/38/tsunami.webp" xlink:href="../../hazard-overview/38/tsunami.webp"
-    x="13191.15784" y="-3440.49816" width="188.43832" height="161.04232"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/38/landslide-warning.webp" xlink:href="../../hazard-overview/38/landslide-warning.webp"
-    x="13191.15784" y="-3440.49816" width="188.43832" height="161.04232"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/38/landslide-special.webp" xlink:href="../../hazard-overview/38/landslide-special.webp"
-    x="13191.15784" y="-3440.49816" width="188.43832" height="161.04232"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-38"
+    title="38 ハザード概要" href="../../hazard-vector-overview/pref/38.svg" xlink:href="../../hazard-vector-overview/pref/38.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-38201"
     title="松山市" href="../districts/38/38201.svg" xlink:href="../districts/38/38201.svg"
     x="13249.09" y="-3407.37" width="43.58" height="38.64"

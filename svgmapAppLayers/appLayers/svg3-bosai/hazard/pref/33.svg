@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>岡山県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/33/flood.webp" xlink:href="../../hazard-overview/33/flood.webp"
-    x="13317.95431" y="-3544.02869" width="132.10038" height="122.93438"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/33/tsunami.webp" xlink:href="../../hazard-overview/33/tsunami.webp"
-    x="13317.95431" y="-3544.02869" width="132.10038" height="122.93438"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/33/landslide-warning.webp" xlink:href="../../hazard-overview/33/landslide-warning.webp"
-    x="13317.95431" y="-3544.02869" width="132.10038" height="122.93438"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/33/landslide-special.webp" xlink:href="../../hazard-overview/33/landslide-special.webp"
-    x="13317.95431" y="-3544.02869" width="132.10038" height="122.93438"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-33"
+    title="33 ハザード概要" href="../../hazard-vector-overview/pref/33.svg" xlink:href="../../hazard-vector-overview/pref/33.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-33101"
     title="岡山市北区" href="../districts/33/33101.svg" xlink:href="../districts/33/33101.svg"
     x="13373.96" y="-3494.89" width="25.45" height="33.02"

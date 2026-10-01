@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>鳥取県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/31/flood.webp" xlink:href="../../hazard-overview/31/flood.webp"
-    x="13304.17234" y="-3570.89666" width="156.79732" height="74.56632"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/31/tsunami.webp" xlink:href="../../hazard-overview/31/tsunami.webp"
-    x="13304.17234" y="-3570.89666" width="156.79732" height="74.56632"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/31/landslide-warning.webp" xlink:href="../../hazard-overview/31/landslide-warning.webp"
-    x="13304.17234" y="-3570.89666" width="156.79732" height="74.56632"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/31/landslide-special.webp" xlink:href="../../hazard-overview/31/landslide-special.webp"
-    x="13304.17234" y="-3570.89666" width="156.79732" height="74.56632"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-31"
+    title="31 ハザード概要" href="../../hazard-vector-overview/pref/31.svg" xlink:href="../../hazard-vector-overview/pref/31.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-31201"
     title="鳥取市" href="../districts/31/31201.svg" xlink:href="../districts/31/31201.svg"
     x="13394.61" y="-3557.28" width="49.47" height="30.12"

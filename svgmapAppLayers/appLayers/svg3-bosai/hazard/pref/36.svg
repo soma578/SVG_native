@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>徳島県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/36/flood.webp" xlink:href="../../hazard-overview/36/flood.webp"
-    x="13357.29311" y="-3433.98389" width="133.62678" height="88.78078"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/36/tsunami.webp" xlink:href="../../hazard-overview/36/tsunami.webp"
-    x="13357.29311" y="-3433.98389" width="133.62678" height="88.78078"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/36/landslide-warning.webp" xlink:href="../../hazard-overview/36/landslide-warning.webp"
-    x="13357.29311" y="-3433.98389" width="133.62678" height="88.78078"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/36/landslide-special.webp" xlink:href="../../hazard-overview/36/landslide-special.webp"
-    x="13357.29311" y="-3433.98389" width="133.62678" height="88.78078"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-36"
+    title="36 ハザード概要" href="../../hazard-vector-overview/pref/36.svg" xlink:href="../../hazard-vector-overview/pref/36.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-36201"
     title="徳島市" href="../districts/36/36201.svg" xlink:href="../districts/36/36201.svg"
     x="13442.21" y="-3413.04" width="18.48" height="17.51"

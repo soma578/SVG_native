@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>大阪府 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/27/flood.webp" xlink:href="../../hazard-overview/27/flood.webp"
-    x="13501.56168" y="-3512.76432" width="80.73564" height="93.22064"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/27/tsunami.webp" xlink:href="../../hazard-overview/27/tsunami.webp"
-    x="13501.56168" y="-3512.76432" width="80.73564" height="93.22064"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/27/landslide-warning.webp" xlink:href="../../hazard-overview/27/landslide-warning.webp"
-    x="13501.56168" y="-3512.76432" width="80.73564" height="93.22064"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/27/landslide-special.webp" xlink:href="../../hazard-overview/27/landslide-special.webp"
-    x="13501.56168" y="-3512.76432" width="80.73564" height="93.22064"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-27"
+    title="27 ハザード概要" href="../../hazard-vector-overview/pref/27.svg" xlink:href="../../hazard-vector-overview/pref/27.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-27102"
     title="大阪市 27102" href="../districts/27/27102.svg" xlink:href="../districts/27/27102.svg"
     x="13551.43" y="-3473.11" width="2.64" height="4.01"

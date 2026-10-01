@@ -47,6 +47,7 @@ const isShellAsset = (relative) => {
   if (/\/map\/data\//.test(relative)) return false
   if (/\/hazard\/(pref|districts)\//.test(relative)) return false
   if (/\/hazard-overview\//.test(relative)) return false
+  if (/\/hazard-vector-overview\//.test(relative)) return false
   return /\.(js|html|svg|json)$/.test(relative)
 }
 

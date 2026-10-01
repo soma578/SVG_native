@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>静岡県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/22/flood.webp" xlink:href="../../hazard-overview/22/flood.webp"
-    x="13737.00368" y="-3575.00332" width="191.05864" height="128.03464"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/22/tsunami.webp" xlink:href="../../hazard-overview/22/tsunami.webp"
-    x="13737.00368" y="-3575.00332" width="191.05864" height="128.03464"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/22/landslide-warning.webp" xlink:href="../../hazard-overview/22/landslide-warning.webp"
-    x="13737.00368" y="-3575.00332" width="191.05864" height="128.03464"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/22/landslide-special.webp" xlink:href="../../hazard-overview/22/landslide-special.webp"
-    x="13737.00368" y="-3575.00332" width="191.05864" height="128.03464"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-22"
+    title="22 ハザード概要" href="../../hazard-vector-overview/pref/22.svg" xlink:href="../../hazard-vector-overview/pref/22.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-22101"
     title="静岡市 22101" href="../districts/22/22101.svg" xlink:href="../districts/22/22101.svg"
     x="13808.29" y="-3564.6" width="35.41" height="69.65"

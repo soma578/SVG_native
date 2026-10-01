@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>山梨県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/19/flood.webp" xlink:href="../../hazard-overview/19/flood.webp"
-    x="13809.85228" y="-3605.33272" width="111.74944" height="96.65744"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/19/tsunami.webp" xlink:href="../../hazard-overview/19/tsunami.webp"
-    x="13809.85228" y="-3605.33272" width="111.74944" height="96.65744"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/19/landslide-warning.webp" xlink:href="../../hazard-overview/19/landslide-warning.webp"
-    x="13809.85228" y="-3605.33272" width="111.74944" height="96.65744"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/19/landslide-special.webp" xlink:href="../../hazard-overview/19/landslide-special.webp"
-    x="13809.85228" y="-3605.33272" width="111.74944" height="96.65744"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-19"
+    title="19 ハザード概要" href="../../hazard-vector-overview/pref/19.svg" xlink:href="../../hazard-vector-overview/pref/19.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-19201"
     title="甲府市" href="../districts/19/19201.svg" xlink:href="../districts/19/19201.svg"
     x="13852.32" y="-3587.58" width="13.82" height="37.4"

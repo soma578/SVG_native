@@ -1,0 +1,497 @@
+{
+  "schemaVersion": 1,
+  "kind": "svg3-hazard-quantized-vector-overviews",
+  "sourceHash": "45260271f5a9eed7369f8b1dfdae02988d886cb7d51c27c9d959005aa9bb7e94",
+  "levels": {
+    "national": {
+      "grid": 1.5,
+      "minimumArea": 2.25
+    },
+    "prefecture": {
+      "grid": 0.25,
+      "minimumArea": 0.0625
+    }
+  },
+  "files": {
+    "national.svg": {
+      "bytes": 316539,
+      "sha256": "e0e457943f83cb03ee2bbe9f6bc1c996a882ee21857cc0dc76715b7d1b2c7f7d",
+      "rings": {
+        "hazard-flood": 2033,
+        "hazard-tsunami-inundation": 776,
+        "hazard-landslide-warning": 1632,
+        "hazard-landslide-special": 104
+      }
+    },
+    "pref/01.svg": {
+      "bytes": 883200,
+      "sha256": "8b5da08f6867dda11c87a33ec9911914accd859f1df4a920e30c8a9627a7ab56",
+      "rings": {
+        "hazard-flood": 2914,
+        "hazard-tsunami-inundation": 2858,
+        "hazard-landslide-warning": 737,
+        "hazard-landslide-special": 68
+      }
+    },
+    "pref/02.svg": {
+      "bytes": 159867,
+      "sha256": "ea923e70d8fcb115906d2c7bbbfb460b96c8a1739877038cc643bc865eed82e2",
+      "rings": {
+        "hazard-flood": 0,
+        "hazard-tsunami-inundation": 707,
+        "hazard-landslide-warning": 697,
+        "hazard-landslide-special": 56
+      }
+    },
+    "pref/03.svg": {
+      "bytes": 177334,
+      "sha256": "c15adb0f7eab735900dc431d2135444872b5b68754a20549e160de2c3f2185a3",
+      "rings": {
+        "hazard-flood": 0,
+        "hazard-tsunami-inundation": 316,
+        "hazard-landslide-warning": 1681,
+        "hazard-landslide-special": 133
+      }
+    },
+    "pref/04.svg": {
+      "bytes": 218002,
+      "sha256": "340d685bcafe1f85ee05ccc3790a75fa0a6ae610eb54bdf0a5a01a499028d1eb",
+      "rings": {
+        "hazard-flood": 337,
+        "hazard-tsunami-inundation": 863,
+        "hazard-landslide-warning": 814,
+        "hazard-landslide-special": 43
+      }
+    },
+    "pref/05.svg": {
+      "bytes": 288309,
+      "sha256": "37d88da06b1e05721af47ebfb05a3c2fd1fbb7f33acf7af8f15c9f95ba258145",
+      "rings": {
+        "hazard-flood": 980,
+        "hazard-tsunami-inundation": 602,
+        "hazard-landslide-warning": 1021,
+        "hazard-landslide-special": 52
+      }
+    },
+    "pref/06.svg": {
+      "bytes": 306848,
+      "sha256": "ba7098b66c3e0321555cf5dd3d9606dafde00a244c324b1dc110def6ebb07114",
+      "rings": {
+        "hazard-flood": 1244,
+        "hazard-tsunami-inundation": 68,
+        "hazard-landslide-warning": 1511,
+        "hazard-landslide-special": 107
+      }
+    },
+    "pref/07.svg": {
+      "bytes": 231645,
+      "sha256": "d3537ba9dd48b37454cda549815dd530ae81b6f8b468f644688c54c89c83d112",
+      "rings": {
+        "hazard-flood": 597,
+        "hazard-tsunami-inundation": 374,
+        "hazard-landslide-warning": 1202,
+        "hazard-landslide-special": 77
+      }
+    },
+    "pref/08.svg": {
+      "bytes": 100525,
+      "sha256": "35ea86a419c78131f81efc175f33c1d67c9a8b880ef11b2d81ba7c496eb238fc",
+      "rings": {
+        "hazard-flood": 90,
+        "hazard-tsunami-inundation": 280,
+        "hazard-landslide-warning": 687,
+        "hazard-landslide-special": 67
+      }
+    },
+    "pref/09.svg": {
+      "bytes": 236840,
+      "sha256": "e75ed810f419998402802315abc9e1f9c826b6b9b75b8a81da4808d3dba52c9d",
+      "rings": {
+        "hazard-flood": 781,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 1280,
+        "hazard-landslide-special": 164
+      }
+    },
+    "pref/10.svg": {
+      "bytes": 192263,
+      "sha256": "3f05c137fcab81bda4f107b613174471542014789a57158fa00c467fbd8f3ffe",
+      "rings": {
+        "hazard-flood": 210,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 1747,
+        "hazard-landslide-special": 208
+      }
+    },
+    "pref/11.svg": {
+      "bytes": 200502,
+      "sha256": "802ffcb30b487d10032352c15b8b77c3f42eecdde64accf5224ec0eb97ee013d",
+      "rings": {
+        "hazard-flood": 1266,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 544,
+        "hazard-landslide-special": 48
+      }
+    },
+    "pref/12.svg": {
+      "bytes": 242171,
+      "sha256": "b7eef56084169a22f6de7c89cefafac9e5355498fd6f0f7321057ff986ba7f1f",
+      "rings": {
+        "hazard-flood": 869,
+        "hazard-tsunami-inundation": 680,
+        "hazard-landslide-warning": 189,
+        "hazard-landslide-special": 9
+      }
+    },
+    "pref/13.svg": {
+      "bytes": 91118,
+      "sha256": "190aa58e32d6e4e791256d83dbe231419d51bfb1e72198454344a3ab00823777",
+      "rings": {
+        "hazard-flood": 234,
+        "hazard-tsunami-inundation": 33,
+        "hazard-landslide-warning": 620,
+        "hazard-landslide-special": 146
+      }
+    },
+    "pref/14.svg": {
+      "bytes": 144761,
+      "sha256": "1b597d4a669de50e01784a6d46530b94bf49007e6592e16efac909d854c5f101",
+      "rings": {
+        "hazard-flood": 146,
+        "hazard-tsunami-inundation": 389,
+        "hazard-landslide-warning": 1062,
+        "hazard-landslide-special": 18
+      }
+    },
+    "pref/15.svg": {
+      "bytes": 587470,
+      "sha256": "740a3fcf0ecd7ac8061e06c4c6fe44a8d68c364d00f0ef55ea6768aebb366215",
+      "rings": {
+        "hazard-flood": 1824,
+        "hazard-tsunami-inundation": 492,
+        "hazard-landslide-warning": 3040,
+        "hazard-landslide-special": 154
+      }
+    },
+    "pref/16.svg": {
+      "bytes": 286923,
+      "sha256": "bf75cc73daaf09f7910dfa484d618fa3362bb15f8d2da039c74ab3e450a184d9",
+      "rings": {
+        "hazard-flood": 1098,
+        "hazard-tsunami-inundation": 66,
+        "hazard-landslide-warning": 1630,
+        "hazard-landslide-special": 107
+      }
+    },
+    "pref/17.svg": {
+      "bytes": 176573,
+      "sha256": "6678f947e677d6dff6f20c4772f3269021a2f771ec2a5600f77c37b93057ec43",
+      "rings": {
+        "hazard-flood": 520,
+        "hazard-tsunami-inundation": 171,
+        "hazard-landslide-warning": 1060,
+        "hazard-landslide-special": 90
+      }
+    },
+    "pref/18.svg": {
+      "bytes": 235251,
+      "sha256": "0a928eb7405e9cdd3fe09c658bc7f7b4641289a1fe10a76b1af80b10e8357fce",
+      "rings": {
+        "hazard-flood": 972,
+        "hazard-tsunami-inundation": 3,
+        "hazard-landslide-warning": 1375,
+        "hazard-landslide-special": 132
+      }
+    },
+    "pref/19.svg": {
+      "bytes": 182660,
+      "sha256": "9629f6e6a31a50253f0971c9f31d46030aa582f45671469fa9da543453352a3e",
+      "rings": {
+        "hazard-flood": 308,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 1409,
+        "hazard-landslide-special": 297
+      }
+    },
+    "pref/20.svg": {
+      "bytes": 656396,
+      "sha256": "01f20907fdd394ba485186c814d3adf98091b7f4d4c9c5c12eb5fabefcd6b9dc",
+      "rings": {
+        "hazard-flood": 837,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 5911,
+        "hazard-landslide-special": 660
+      }
+    },
+    "pref/21.svg": {
+      "bytes": 401725,
+      "sha256": "6179870e8c2f384a2eb9ea1ccdf3bcb339620c3a2d4bef791c8731ac2a3eeded",
+      "rings": {
+        "hazard-flood": 392,
+        "hazard-tsunami-inundation": 3,
+        "hazard-landslide-warning": 4069,
+        "hazard-landslide-special": 887
+      }
+    },
+    "pref/22.svg": {
+      "bytes": 375618,
+      "sha256": "63c6eb7b2f11e49a340e4f600703912dcc2c6c2b0ebc73cc3664dc63839bf944",
+      "rings": {
+        "hazard-flood": 1307,
+        "hazard-tsunami-inundation": 3,
+        "hazard-landslide-warning": 2189,
+        "hazard-landslide-special": 305
+      }
+    },
+    "pref/23.svg": {
+      "bytes": 164041,
+      "sha256": "052a5a6cf4b4382c01c23a59c02f7a0364e2cb2a66e7ad8f761172dda979131f",
+      "rings": {
+        "hazard-flood": 0,
+        "hazard-tsunami-inundation": 1247,
+        "hazard-landslide-warning": 565,
+        "hazard-landslide-special": 64
+      }
+    },
+    "pref/24.svg": {
+      "bytes": 199239,
+      "sha256": "e1792f56ae53288b30eaa9e752822dd89d3d14ebe4f4c61c4dfc8e9305cb4eee",
+      "rings": {
+        "hazard-flood": 797,
+        "hazard-tsunami-inundation": 28,
+        "hazard-landslide-warning": 1098,
+        "hazard-landslide-special": 128
+      }
+    },
+    "pref/25.svg": {
+      "bytes": 173520,
+      "sha256": "487822aedd725588ae647f6bfea785a9404e44331d4dcd05fa4d524fe2e437a5",
+      "rings": {
+        "hazard-flood": 852,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 487,
+        "hazard-landslide-special": 6
+      }
+    },
+    "pref/26.svg": {
+      "bytes": 119859,
+      "sha256": "7e0cea8e8a6871b87b176225c6fc0fbb11ff51d14e5fa56ea2ad1eeb6da9436d",
+      "rings": {
+        "hazard-flood": 21,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 1624,
+        "hazard-landslide-special": 165
+      }
+    },
+    "pref/27.svg": {
+      "bytes": 225267,
+      "sha256": "84286c354037c7b91abdd57f3d3e74ae6f86e7e578eae930c2c76c2964a28ffd",
+      "rings": {
+        "hazard-flood": 821,
+        "hazard-tsunami-inundation": 323,
+        "hazard-landslide-warning": 621,
+        "hazard-landslide-special": 57
+      }
+    },
+    "pref/28.svg": {
+      "bytes": 255152,
+      "sha256": "2c5ce1badb4c260c9bbc4440f2b998c644e6eb2d7972b9fe1f8fb02b1cef75a1",
+      "rings": {
+        "hazard-flood": 321,
+        "hazard-tsunami-inundation": 3,
+        "hazard-landslide-warning": 3192,
+        "hazard-landslide-special": 75
+      }
+    },
+    "pref/29.svg": {
+      "bytes": 118981,
+      "sha256": "3cb0d58d9fb4b3892b44d3fe499ead191da06f16a2e467f9147adb5874497c06",
+      "rings": {
+        "hazard-flood": 0,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 1624,
+        "hazard-landslide-special": 106
+      }
+    },
+    "pref/30.svg": {
+      "bytes": 182028,
+      "sha256": "85dbb0ee71dc8fdf558fb6ad7a5955dced8cf31fd07a5a993ad0fa73169dc09d",
+      "rings": {
+        "hazard-flood": 322,
+        "hazard-tsunami-inundation": 433,
+        "hazard-landslide-warning": 1262,
+        "hazard-landslide-special": 146
+      }
+    },
+    "pref/31.svg": {
+      "bytes": 94074,
+      "sha256": "d2c4d152dc9acd852415dce14a3ffc9744e164006147ed807f0c0e8ae7d0c783",
+      "rings": {
+        "hazard-flood": 33,
+        "hazard-tsunami-inundation": 45,
+        "hazard-landslide-warning": 1107,
+        "hazard-landslide-special": 135
+      }
+    },
+    "pref/32.svg": {
+      "bytes": 162468,
+      "sha256": "4c2a40e86069535e3dce11c0b13cd26f708ec9ee09432211f523b7dae853c8a4",
+      "rings": {
+        "hazard-flood": 199,
+        "hazard-tsunami-inundation": 50,
+        "hazard-landslide-warning": 2030,
+        "hazard-landslide-special": 13
+      }
+    },
+    "pref/33.svg": {
+      "bytes": 324309,
+      "sha256": "bec999fa042fdc95d9ad9590e82f728dc70cd7ac7fb4ef68e89cf285426e0c44",
+      "rings": {
+        "hazard-flood": 639,
+        "hazard-tsunami-inundation": 413,
+        "hazard-landslide-warning": 2707,
+        "hazard-landslide-special": 15
+      }
+    },
+    "pref/34.svg": {
+      "bytes": 411798,
+      "sha256": "af85f03010361ffdf92bd19af5bbc0d6af4bff4ce300869804f15e7849a097af",
+      "rings": {
+        "hazard-flood": 517,
+        "hazard-tsunami-inundation": 5,
+        "hazard-landslide-warning": 4631,
+        "hazard-landslide-special": 230
+      }
+    },
+    "pref/35.svg": {
+      "bytes": 371055,
+      "sha256": "1907d1886f0319cd82d35102c349657f6f8929c75225d376b2b852227a7cbea4",
+      "rings": {
+        "hazard-flood": 272,
+        "hazard-tsunami-inundation": 321,
+        "hazard-landslide-warning": 4083,
+        "hazard-landslide-special": 223
+      }
+    },
+    "pref/36.svg": {
+      "bytes": 96004,
+      "sha256": "9e873d920842f6e72a202c0a95a80cfcb0bfe7ecc777acddede70fd7a62930e2",
+      "rings": {
+        "hazard-flood": 325,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 630,
+        "hazard-landslide-special": 89
+      }
+    },
+    "pref/37.svg": {
+      "bytes": 144756,
+      "sha256": "e793964fd8b9196dffd9e03c1e99343ac12d92129644c75676e13701ead57083",
+      "rings": {
+        "hazard-flood": 200,
+        "hazard-tsunami-inundation": 2,
+        "hazard-landslide-warning": 1463,
+        "hazard-landslide-special": 34
+      }
+    },
+    "pref/38.svg": {
+      "bytes": 140111,
+      "sha256": "0f7673310a2de5a88b7c8ce39aad1f4aff4ef7c74628b32f6580f1f21593b3ee",
+      "rings": {
+        "hazard-flood": 171,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 1487,
+        "hazard-landslide-special": 69
+      }
+    },
+    "pref/39.svg": {
+      "bytes": 83948,
+      "sha256": "2c6dc1fa1237e1c85b54e63d6c0f980ad45ece0159c8c13b23ed22596ba6fb58",
+      "rings": {
+        "hazard-flood": 30,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 1218,
+        "hazard-landslide-special": 0
+      }
+    },
+    "pref/40.svg": {
+      "bytes": 448269,
+      "sha256": "c3bc8bb53149f5bbc260d8f5efcea13dcd869235704c6bc6d187f36d6a46c9ad",
+      "rings": {
+        "hazard-flood": 1587,
+        "hazard-tsunami-inundation": 57,
+        "hazard-landslide-warning": 2368,
+        "hazard-landslide-special": 170
+      }
+    },
+    "pref/41.svg": {
+      "bytes": 242982,
+      "sha256": "7c63cfec5462c7718540ff1afcf588516814c025b154f3be2ca118c783e11f06",
+      "rings": {
+        "hazard-flood": 765,
+        "hazard-tsunami-inundation": 212,
+        "hazard-landslide-warning": 1252,
+        "hazard-landslide-special": 47
+      }
+    },
+    "pref/42.svg": {
+      "bytes": 100314,
+      "sha256": "cd74a839e85cf08d354684de3d1715792aec1eefb9075c2a5dad9c6fbe1ab514",
+      "rings": {
+        "hazard-flood": 86,
+        "hazard-tsunami-inundation": 2,
+        "hazard-landslide-warning": 1188,
+        "hazard-landslide-special": 100
+      }
+    },
+    "pref/43.svg": {
+      "bytes": 297281,
+      "sha256": "c810e7938d9215f59f5ef7cf3eea34d7f1f88c8f3b6f0eb8f13fafe465d6ee7e",
+      "rings": {
+        "hazard-flood": 742,
+        "hazard-tsunami-inundation": 212,
+        "hazard-landslide-warning": 2028,
+        "hazard-landslide-special": 292
+      }
+    },
+    "pref/44.svg": {
+      "bytes": 132716,
+      "sha256": "9f486e6b017333bc59601f5a572d7e709b241fce69416163dbca8acd59d0cf66",
+      "rings": {
+        "hazard-flood": 157,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 1597,
+        "hazard-landslide-special": 96
+      }
+    },
+    "pref/45.svg": {
+      "bytes": 160108,
+      "sha256": "c312b62de227a87d991d4ca4923c872e19558c39e8fc6d1babe83aecb9c197ba",
+      "rings": {
+        "hazard-flood": 370,
+        "hazard-tsunami-inundation": 419,
+        "hazard-landslide-warning": 814,
+        "hazard-landslide-special": 125
+      }
+    },
+    "pref/46.svg": {
+      "bytes": 297753,
+      "sha256": "8ac1e98b8bb5592158a59f2d006011424a39dad3438144bd83126bae7731dbfb",
+      "rings": {
+        "hazard-flood": 78,
+        "hazard-tsunami-inundation": 320,
+        "hazard-landslide-warning": 3236,
+        "hazard-landslide-special": 337
+      }
+    },
+    "pref/47.svg": {
+      "bytes": 16466,
+      "sha256": "21e097e0e0d578378abce05faa15c6e2a16fe9234109ccbf602bfc71ddddebc0",
+      "rings": {
+        "hazard-flood": 25,
+        "hazard-tsunami-inundation": 0,
+        "hazard-landslide-warning": 149,
+        "hazard-landslide-special": 0
+      }
+    }
+  }
+}

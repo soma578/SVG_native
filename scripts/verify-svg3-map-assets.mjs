@@ -6,6 +6,7 @@ import { parseTeamActivityCsv } from '../svgmapAppLayers/appLayers/svg3-bosai/te
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const sourceHazard = path.join(root, 'svgmapAppLayers/appLayers/svg3-bosai/hazard')
+const hazardVectorOverview = path.join(root, 'svgmapAppLayers/appLayers/svg3-bosai/hazard-vector-overview')
 const container = fs.readFileSync(path.join(root, 'svgmapAppLayers/Container.svg'), 'utf8')
 
 function* walk(directory) {
@@ -25,6 +26,12 @@ for (const filename of walk(sourceHazard)) {
   }
 }
 assert(hazardReferences > 1000, 'Hazard source references were not found')
+assert(fs.existsSync(path.join(hazardVectorOverview, 'national.svg')), 'Missing national vector hazard overview')
+assert.equal(
+  fs.readdirSync(path.join(hazardVectorOverview, 'pref')).filter((name) => /^\d{2}\.svg$/.test(name)).length,
+  47,
+  'Expected vector hazard overviews for all prefectures',
+)
 
 const teamLayerController = fs.readFileSync(path.join(root,
   'svgmapAppLayers/appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/teamActivityLayer.html'), 'utf8')

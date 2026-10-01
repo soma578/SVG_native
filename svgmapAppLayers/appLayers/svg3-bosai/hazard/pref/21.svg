@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>岐阜県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/21/flood.webp" xlink:href="../../hazard-overview/21/flood.webp"
-    x="13618.19148" y="-3655.93752" width="156.54504" height="151.99504"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/21/tsunami.webp" xlink:href="../../hazard-overview/21/tsunami.webp"
-    x="13618.19148" y="-3655.93752" width="156.54504" height="151.99504"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/21/landslide-warning.webp" xlink:href="../../hazard-overview/21/landslide-warning.webp"
-    x="13618.19148" y="-3655.93752" width="156.54504" height="151.99504"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/21/landslide-special.webp" xlink:href="../../hazard-overview/21/landslide-special.webp"
-    x="13618.19148" y="-3655.93752" width="156.54504" height="151.99504"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-21"
+    title="21 ハザード概要" href="../../hazard-vector-overview/pref/21.svg" xlink:href="../../hazard-vector-overview/pref/21.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-21201"
     title="岐阜市" href="../districts/21/21201.svg" xlink:href="../districts/21/21201.svg"
     x="13667.84" y="-3554.31" width="20.78" height="19.17"

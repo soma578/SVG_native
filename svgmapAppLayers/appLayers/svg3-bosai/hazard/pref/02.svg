@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>青森県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/02/flood.webp" xlink:href="../../hazard-overview/02/flood.webp"
-    x="13975.20547" y="-4166.36353" width="203.89206" height="155.35906"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/02/tsunami.webp" xlink:href="../../hazard-overview/02/tsunami.webp"
-    x="13975.20547" y="-4166.36353" width="203.89206" height="155.35906"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/02/landslide-warning.webp" xlink:href="../../hazard-overview/02/landslide-warning.webp"
-    x="13975.20547" y="-4166.36353" width="203.89206" height="155.35906"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/02/landslide-special.webp" xlink:href="../../hazard-overview/02/landslide-special.webp"
-    x="13975.20547" y="-4166.36353" width="203.89206" height="155.35906"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-02"
+    title="02 ハザード概要" href="../../hazard-vector-overview/pref/02.svg" xlink:href="../../hazard-vector-overview/pref/02.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-02201"
     title="青森市" href="../districts/02/02201.svg" xlink:href="../districts/02/02201.svg"
     x="14052.03" y="-4097.03" width="46.06" height="36.44"

@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>島根県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/32/flood.webp" xlink:href="../../hazard-overview/32/flood.webp"
-    x="13152.67547" y="-3738.41653" width="200.03306" height="322.29406"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/32/tsunami.webp" xlink:href="../../hazard-overview/32/tsunami.webp"
-    x="13152.67547" y="-3738.41653" width="200.03306" height="322.29406"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/32/landslide-warning.webp" xlink:href="../../hazard-overview/32/landslide-warning.webp"
-    x="13152.67547" y="-3738.41653" width="200.03306" height="322.29406"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/32/landslide-special.webp" xlink:href="../../hazard-overview/32/landslide-special.webp"
-    x="13152.67547" y="-3738.41653" width="200.03306" height="322.29406"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-32"
+    title="32 ハザード概要" href="../../hazard-vector-overview/pref/32.svg" xlink:href="../../hazard-vector-overview/pref/32.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-32201"
     title="松江市" href="../districts/32/32201.svg" xlink:href="../districts/32/32201.svg"
     x="13287.45" y="-3560.63" width="45.53" height="27.66"

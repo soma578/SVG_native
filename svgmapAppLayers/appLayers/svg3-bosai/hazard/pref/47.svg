@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>沖縄県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/47/flood.webp" xlink:href="../../hazard-overview/47/flood.webp"
-    x="12262.87683" y="-2819.02417" width="900.82934" height="444.95734"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/47/tsunami.webp" xlink:href="../../hazard-overview/47/tsunami.webp"
-    x="12262.87683" y="-2819.02417" width="900.82934" height="444.95734"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/47/landslide-warning.webp" xlink:href="../../hazard-overview/47/landslide-warning.webp"
-    x="12262.87683" y="-2819.02417" width="900.82934" height="444.95734"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/47/landslide-special.webp" xlink:href="../../hazard-overview/47/landslide-special.webp"
-    x="12262.87683" y="-2819.02417" width="900.82934" height="444.95734"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-47"
+    title="47 ハザード概要" href="../../hazard-vector-overview/pref/47.svg" xlink:href="../../hazard-vector-overview/pref/47.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-47201"
     title="那覇市" href="../districts/47/47201.svg" xlink:href="../districts/47/47201.svg"
     x="12763.58" y="-2624.67" width="10.32" height="7.03"

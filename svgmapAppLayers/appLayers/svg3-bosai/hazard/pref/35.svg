@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>山口県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/35/flood.webp" xlink:href="../../hazard-overview/35/flood.webp"
-    x="13067.05482" y="-3490.31618" width="192.60836" height="129.47536"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/35/tsunami.webp" xlink:href="../../hazard-overview/35/tsunami.webp"
-    x="13067.05482" y="-3490.31618" width="192.60836" height="129.47536"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/35/landslide-warning.webp" xlink:href="../../hazard-overview/35/landslide-warning.webp"
-    x="13067.05482" y="-3490.31618" width="192.60836" height="129.47536"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/35/landslide-special.webp" xlink:href="../../hazard-overview/35/landslide-special.webp"
-    x="13067.05482" y="-3490.31618" width="192.60836" height="129.47536"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-35"
+    title="35 ハザード概要" href="../../hazard-vector-overview/pref/35.svg" xlink:href="../../hazard-vector-overview/pref/35.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-35201"
     title="下関市" href="../districts/35/35201.svg" xlink:href="../districts/35/35201.svg"
     x="13077.51" y="-3437.38" width="39.74" height="46.41"

@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>群馬県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/10/flood.webp" xlink:href="../../hazard-overview/10/flood.webp"
-    x="13830.59454" y="-3714.98046" width="145.51892" height="125.56592"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/10/tsunami.webp" xlink:href="../../hazard-overview/10/tsunami.webp"
-    x="13830.59454" y="-3714.98046" width="145.51892" height="125.56592"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/10/landslide-warning.webp" xlink:href="../../hazard-overview/10/landslide-warning.webp"
-    x="13830.59454" y="-3714.98046" width="145.51892" height="125.56592"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/10/landslide-special.webp" xlink:href="../../hazard-overview/10/landslide-special.webp"
-    x="13830.59454" y="-3714.98046" width="145.51892" height="125.56592"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-10"
+    title="10 ハザード概要" href="../../hazard-vector-overview/pref/10.svg" xlink:href="../../hazard-vector-overview/pref/10.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-10201"
     title="前橋市" href="../districts/10/10201.svg" xlink:href="../districts/10/10201.svg"
     x="13900.17" y="-3656.25" width="22.87" height="24.62"

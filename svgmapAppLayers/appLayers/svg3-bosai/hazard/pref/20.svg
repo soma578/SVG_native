@@ -4,22 +4,10 @@
      data-hazard-loading="svgmap-native-lod">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)" />
   <title>長野県 ハザードLOD</title>
-  <image id="hazard-flood"
-    href="../../hazard-overview/20/flood.webp" xlink:href="../../hazard-overview/20/flood.webp"
-    x="13721.65915" y="-3713.83785" width="163.0617" height="204.7867"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-tsunami-inundation"
-    href="../../hazard-overview/20/tsunami.webp" xlink:href="../../hazard-overview/20/tsunami.webp"
-    x="13721.65915" y="-3713.83785" width="163.0617" height="204.7867"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-warning"
-    href="../../hazard-overview/20/landslide-warning.webp" xlink:href="../../hazard-overview/20/landslide-warning.webp"
-    x="13721.65915" y="-3713.83785" width="163.0617" height="204.7867"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
-  <image id="hazard-landslide-special"
-    href="../../hazard-overview/20/landslide-special.webp" xlink:href="../../hazard-overview/20/landslide-special.webp"
-    x="13721.65915" y="-3713.83785" width="163.0617" height="204.7867"
-    visibleMaxZoom="2900" visible-max-zoom="2900" pointer-events="none" />
+  <animation id="hazard-vector-overview-20"
+    title="20 ハザード概要" href="../../hazard-vector-overview/pref/20.svg" xlink:href="../../hazard-vector-overview/pref/20.svg"
+    x="12243.4" y="-4605.6" width="3205.3" height="2251"
+    visibleMaxZoom="2900" visible-max-zoom="2900" visibility="visible" />
   <animation id="hazard-municipality-20201"
     title="長野市" href="../districts/20/20201.svg" xlink:href="../districts/20/20201.svg"
     x="13791" y="-3683.58" width="40.88" height="37.5"

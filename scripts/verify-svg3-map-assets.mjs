@@ -32,6 +32,18 @@ assert.equal(
   47,
   'Expected vector hazard overviews for all prefectures',
 )
+const hazardController = fs.readFileSync(path.join(sourceHazard, 'hazardLayer.html'), 'utf8')
+assert(hazardController.includes('区域の濃さ') && hazardController.includes('詳細区域'),
+  'Hazard controller must expose the shared display controls and readable LOD state')
+const hazardRoot = fs.readFileSync(path.join(sourceHazard, 'hazardLayer.svg'), 'utf8')
+assert(hazardRoot.includes('visibleMaxZoom="1000"')
+  && (hazardRoot.match(/visibleMinZoom="1000"/g) || []).length === 47,
+  'National-to-prefecture hazard transition must be non-overlapping at scale 10')
+for (const filename of fs.readdirSync(path.join(sourceHazard, 'pref')).filter((name) => /^\d{2}\.svg$/.test(name))) {
+  const source = fs.readFileSync(path.join(sourceHazard, 'pref', filename), 'utf8')
+  assert(source.includes('visibleMaxZoom="3500"') && source.includes('visibleMinZoom="3500"'),
+    `Hazard detail transition is outdated: ${filename}`)
+}
 
 const teamLayerController = fs.readFileSync(path.join(root,
   'svgmapAppLayers/appLayers/svg3-bosai/team-activity/map/layers/portable/team-activity/teamActivityLayer.html'), 'utf8')

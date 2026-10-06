@@ -13,7 +13,9 @@
     .steep { background:#8b5a2b; } .debris { background:#1565a8; }
     .status { margin: 8px 0; padding: 7px 9px; border-left: 4px solid #8b5a2b; background: #faf5ef; }
     .status.error { border-color:#b91c1c; background:#fef2f2; color:#7f1d1d; }
-    .actions { display:flex; flex-wrap:wrap; gap:6px; }
+    .actions, .display-options { display:flex; align-items:center; flex-wrap:wrap; gap:6px 10px; }
+    .display-options { margin:7px 0; }
+    .display-options input[type="range"] { width:120px; }
     a.button { padding:5px 9px; border:1px solid #a5b4c4; border-radius:6px; color:#24364b; text-decoration:none; }
     .notice { padding:7px 9px; border-left:3px solid #b45309; background:#fffbeb; font-size:11px; }
   </style>
@@ -27,12 +29,16 @@
     <label><input class="typeFilter" type="checkbox" value="急傾斜" checked><span class="dot steep"></span>急傾斜 16,794件</label>
     <label><input class="typeFilter" type="checkbox" value="土石流" checked><span class="dot debris"></span>土石流 2,868件</label>
   </div>
+  <div class="display-options">
+    <label>区域線の濃さ <input id="opacityRange" type="range" min="20" max="100" value="90"></label>
+    <output id="opacityValue">90%</output>
+  </div>
   <div id="statusMessage" class="status" role="status" aria-live="polite">読み込み待ち</div>
-  <p>対象 <strong id="filteredCount">-</strong>件　現在の画面に描画 <strong id="visibleCount">-</strong>点</p>
+  <p>対象 <strong id="filteredCount">-</strong>件　選択可能な区域 <strong id="visibleCount">-</strong>件</p>
   <div class="actions">
     <a class="button" href="https://www.pref.okayama.jp/page/1036031.html" target="_blank" rel="noopener noreferrer">岡山県の説明</a>
     <a class="button" href="https://www.gis.pref.okayama.jp/pref-okayama/PositionSelect?mid=5002" target="_blank" rel="noopener noreferrer">公式GISで確認</a>
   </div>
-  <p class="notice">既存の土砂災害警戒区域とは別の情報です。今後の基礎調査・指定の候補であり、公表により直ちに規制が発生するものではありません。点は各箇所の代表座標で、区域境界を示しません。</p>
+  <p class="notice">既存の土砂災害警戒区域とは別の情報です。今後の基礎調査・指定の候補であり、公表により直ちに規制が発生するものではありません。超広域では約1km、県域では約500mの分布確認用メッシュ、中間・拡大時は岡山県GISから取り込んだ公式ポリゴンを表示します。拡大して区域をタップすると、所在地・箇所番号を確認できます。表示時に県GISへ通信しません。</p>
 </body>
 </html>

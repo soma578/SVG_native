@@ -13,7 +13,8 @@ const checkOnly = process.argv.includes('--check')
 const NATIONAL_BOUNDS = Object.freeze({ x: 12243.4, y: -4605.6, width: 3205.3, height: 2251 })
 const LEVELS = Object.freeze({
   national: Object.freeze({ grid: 1.5, minimumArea: 2.25 }),
-  prefecture: Object.freeze({ grid: 0.25, minimumArea: 0.0625 }),
+  // 県概要は一枚の軽量SVGのまま、拡大時に角張って見えない粒度まで細かくする。
+  prefecture: Object.freeze({ grid: 0.15, minimumArea: 0.0225 }),
 })
 const TYPES = Object.freeze({
   'hazard-flood': Object.freeze({ fill: '#3b82f6', fillOpacity: '0.32', stroke: '#1d4ed8' }),

@@ -1,6 +1,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { prepareHazardTransition } from './prepare-hazard-transition.mjs'
+import { prepareHazardRasterLod } from './prepare-hazard-raster-lod.mjs'
+import { prepareHazardCityBundles } from './prepare-hazard-city-bundles.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const publicDir = path.join(root, 'public')
@@ -8,6 +11,10 @@ const markerPath = path.join(publicDir, '.svgmap-generated-assets.json')
 const markerName = 'scripts/prepare-public-assets.mjs'
 const excludedSourceRoots = [
   path.join(root, 'svgmapAppLayers', 'authoringLayers', 'bbs'),
+  // The published prefecture documents are rewritten to use raster tiles;
+  // keep the old overviews in source control, but do not ship unused copies.
+  path.join(root, 'svgmapAppLayers', 'appLayers', 'svg3-bosai', 'hazard-overview'),
+  path.join(root, 'svgmapAppLayers', 'appLayers', 'svg3-bosai', 'hazard-vector-overview', 'pref'),
 ]
 const remoteLayerLib = 'https://cdn.jsdelivr.net/gh/svgmap/svgmapjs@latest/svgMapLayerLib.js'
 const localLayerLib = '/svgmapjs/svgMapLayerLib.js'
@@ -102,4 +109,7 @@ for (const [destName, sourceName] of assets) {
   }
 }
 
+prepareHazardTransition(publicDir)
+prepareHazardRasterLod(publicDir)
+prepareHazardCityBundles(publicDir)
 console.log('[assets] SVGMap assets copied into public (no symlinks)')

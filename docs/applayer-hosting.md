@@ -59,22 +59,36 @@ a promise that every copied layer works without host-side dependencies.
   only for that exact allowlisted hostname. Other proxy policies continue to
   use the standard Fetch transport.
 
-## Okayama managed data layers
+## Managed data layers
 
-- `/api/chugoku-outages` reads only the official Okayama prefecture outage
-  page and its `33xxx` municipality-detail paths. It normalizes the current
-  events and keeps a four-minute warm-instance cache while all browser/CDN
-  response caches remain `no-store`.
+- `/api/chugoku-outages` reads the official current-outage index, the
+  municipality-detail paths for prefecture codes 31 through 35, and the
+  official standard/short-outage history for the available past week. It
+  normalizes current and restored events, rejects records outside the five
+  Chugoku prefectures, and keeps a four-minute warm-instance cache while all
+  browser/CDN response caches remain `no-store`.
 - Direct acquisition is the default. If the official server blocks Vercel
   egress, set `CHUGOKU_OUTAGE_RELAY_URL` and
   `CHUGOKU_OUTAGE_RELAY_TOKEN`. The relay must use a fixed approved IP, require
-  the bearer token, return raw HTML, and allow only the two path shapes shown
+  the bearer token, return raw HTML, and allow only the path shapes shown
   in `.env.example`; do not expose a general URL relay or this workstation.
-- The landslide candidate layer is a versioned snapshot, not a live scrape.
-  Run `npm run data:okayama-landslide` only when the prefecture updates the
-  data. The importer agrees to the official GIS terms, pages through both
-  candidate categories, and refuses to write unless the official totals are
-  exactly 16,794 steep-slope plus 2,868 debris-flow records.
+- The Okayama landslide layer is fully static at runtime. The versioned
+  `candidates.json` snapshot supplies each feature's centre pin and attributes;
+  `geometry/steep.svg` and `geometry/debris.svg` contain filled polygons fetched
+  from the official GIS `Map/GetFeature` endpoint during import. Browsers never
+  contact the prefectural GIS to display the layer.
+- Geometry uses two levels of detail. Wide views load only the approximately
+  30-metre simplified overview SVGs and draw all feature centres into one
+  canvas image. Close views load the approximately 2-metre detailed compound
+  paths and replace the canvas with clickable pins. The SVGs use fewer than 100
+  path nodes rather than one DOM node per feature.
+- Run `npm run data:okayama-landslide` only when the prefecture updates the
+  feature list. The importer agrees to the official GIS terms, pages through
+  both categories, and refuses to write unless the official totals are exactly
+  16,794 steep-slope plus 2,868 debris-flow records.
+- Run `npm run data:okayama-landslide-geometry` after updating the feature list.
+  The importer checkpoints individual geometries in the gitignored cache and
+  validates every response as a polygon before replacing the two static SVGs.
 
 ## Auditing
 

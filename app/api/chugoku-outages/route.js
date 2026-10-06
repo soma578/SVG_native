@@ -3,15 +3,18 @@ import {
   assertAllowedOutagePath,
   parseMunicipalityDetail,
   parsePrefecturePage,
+  parseHistoryPage,
 } from './normalize.js'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-const PREFECTURE_PATH = '/LWC31133.html'
+const CURRENT_PATH = '/'
+const HISTORY_PATH = '/LWC30040/index'
 const CACHE_MILLISECONDS = 4 * 60 * 1000
-const MAX_MUNICIPALITIES = 30
+const MAX_MUNICIPALITIES = 250
+const CHUGOKU_PREFECTURE_CODES = new Set(['31', '32', '33', '34', '35'])
 let memoryCache = null
 
 const responseHeaders = {
@@ -23,11 +26,11 @@ const responseHeaders = {
 }
 
 async function fetchHtml(pathname) {
-  assertAllowedOutagePath(pathname)
+  const allowedPath = assertAllowedOutagePath(pathname)
   const relayBase = process.env.CHUGOKU_OUTAGE_RELAY_URL?.trim()
-  const directUrl = new URL(pathname, SOURCE_ORIGIN)
+  const directUrl = new URL(allowedPath, SOURCE_ORIGIN)
   const target = relayBase
-    ? new URL(`?path=${encodeURIComponent(pathname)}`, relayBase)
+    ? new URL(`?path=${encodeURIComponent(allowedPath)}`, relayBase)
     : directUrl
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), 12_000)
@@ -54,23 +57,40 @@ async function fetchHtml(pathname) {
 }
 
 async function collect() {
-  const prefecture = parsePrefecturePage(await fetchHtml(PREFECTURE_PATH))
-  if (prefecture.municipalityPaths.length > MAX_MUNICIPALITIES) {
-    throw new Error(`Too many municipality detail links: ${prefecture.municipalityPaths.length}`)
+  const currentIndex = parsePrefecturePage(await fetchHtml(CURRENT_PATH))
+  if (currentIndex.municipalityPaths.length > MAX_MUNICIPALITIES) {
+    throw new Error(`Too many municipality detail links: ${currentIndex.municipalityPaths.length}`)
   }
-  const nested = await Promise.all(prefecture.municipalityPaths.map(async ({ path, municipalityCode }) =>
+  const currentNested = await Promise.all(currentIndex.municipalityPaths.map(async ({ path, municipalityCode }) =>
     parseMunicipalityDetail(await fetchHtml(path), municipalityCode)))
+  const historyDates = Array.from({ length: 8 }, (_, offset) => {
+    const jst = new Date(Date.now() + 9 * 60 * 60 * 1000 - offset * 24 * 60 * 60 * 1000)
+    return `${jst.getUTCFullYear()}${String(jst.getUTCMonth() + 1).padStart(2, '0')}${String(jst.getUTCDate()).padStart(2, '0')}`
+  })
+  const historyPages = await Promise.all(historyDates.flatMap((date) => [
+    fetchHtml(`${HISTORY_PATH}?date=${date}`).then((html) => parseHistoryPage(html, 'standard')),
+    fetchHtml(`${HISTORY_PATH}?date=${date}&type=s`).then((html) => parseHistoryPage(html, 'short')),
+  ]))
+  const history = [...new Map(historyPages.flatMap((page) => page.outages)
+    .filter((outage) => CHUGOKU_PREFECTURE_CODES.has(outage.prefectureCode))
+    .map((outage) => [outage.id, outage])).values()]
+  const current = currentNested.flat()
   return {
-    schemaVersion: 1,
-    region: { id: 'okayama', name: '岡山県' },
-    source: `${SOURCE_ORIGIN}${PREFECTURE_PATH}`,
-    sourceUpdatedAt: prefecture.updatedAt,
+    schemaVersion: 2,
+    region: { id: 'chugoku', name: '中国地方', prefectureCodes: [...CHUGOKU_PREFECTURE_CODES] },
+    source: SOURCE_ORIGIN,
+    historySource: `${SOURCE_ORIGIN}/LWC30040`,
+    sourceUpdatedAt: currentIndex.updatedAt,
     fetchedAt: new Date().toISOString(),
     acquisition: process.env.CHUGOKU_OUTAGE_RELAY_URL ? 'relay' : 'direct',
-    outages: nested.flat(),
+    historyAvailableDays: 7,
+    current,
+    history,
+    outages: [...current, ...history],
     notices: [
       '停電戸数はおよそ5分間隔で更新され、確認状況により変更されます。',
-      '工事停電、約5分以内の停電、引込線や建物内設備の故障等は含まれません。',
+      '履歴は公式サイトが公開する過去1週間分です。5分未満で自動復旧した停電も履歴に含みます。',
+      '工事停電、引込線や建物内設備の故障等は含まれません。',
     ],
   }
 }
@@ -95,7 +115,7 @@ export async function GET() {
     }
     return Response.json({
       error: '中国電力ネットワークの停電情報を取得できませんでした。',
-      source: `${SOURCE_ORIGIN}${PREFECTURE_PATH}`,
+      source: SOURCE_ORIGIN,
     }, { status: 502, headers: responseHeaders })
   }
 }

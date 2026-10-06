@@ -36,12 +36,19 @@ const cacheTimestamp = (value) => {
 }
 
 if ('serviceWorker' in navigator) {
+  const hadServiceWorkerController = Boolean(navigator.serviceWorker.controller)
   navigator.serviceWorker.addEventListener('message', (event) => {
     const message = event.data || {}
     if (message.type === 'SVG3_CACHE_FALLBACK') {
       showCacheStatus(`通信できないため保存済みの${message.label}を表示（保存: ${cacheTimestamp(message.cachedAt)}）`, true)
     } else if (message.type === 'SVG3_CACHE_FRESH' && navigator.onLine) {
       showCacheStatus('')
+    } else if (message.type === 'SVG3_CACHE_READY' && hadServiceWorkerController) {
+      const reloadKey = `svg3-cache-reloaded:${message.version}`
+      if (!sessionStorage.getItem(reloadKey)) {
+        sessionStorage.setItem(reloadKey, '1')
+        location.reload()
+      }
     }
   })
   window.addEventListener('offline', () => {
@@ -51,9 +58,11 @@ if ('serviceWorker' in navigator) {
   if (!navigator.onLine) {
     showCacheStatus('オフラインです。取得済みの地図・データを使用します', true)
   }
-  navigator.serviceWorker.register('/sw.js').catch((error) => {
-    console.info('[host] service worker unavailable', error)
-  })
+  navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
+    .then((registration) => registration.update())
+    .catch((error) => {
+      console.info('[host] service worker unavailable', error)
+    })
 }
 
 // Start loading layers only after the cache listener is ready. Dynamic CSV and

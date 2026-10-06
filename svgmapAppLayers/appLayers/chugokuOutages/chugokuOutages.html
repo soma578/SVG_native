@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>中国電力 停電情報（岡山県）</title>
+  <title>中国電力 停電情報・履歴（中国地方）</title>
   <style>
     :root { color-scheme: light; font-family: system-ui, sans-serif; }
     body { margin: 9px; color: #1f2937; font-size: 13px; line-height: 1.5; }
     h1 { margin: 0 0 5px; font-size: 17px; }
     p { margin: 6px 0; }
     button, a.button { display: inline-block; padding: 6px 10px; border: 1px solid #a5b4c4; border-radius: 6px; background: #fff; color: #24364b; cursor: pointer; font: inherit; text-decoration: none; }
+    select { padding: 6px 8px; border: 1px solid #a5b4c4; border-radius: 6px; background: #fff; color: #24364b; font: inherit; }
     .actions { display: flex; flex-wrap: wrap; gap: 6px; }
     .status { margin: 8px 0; padding: 7px 9px; border-left: 4px solid #d84315; background: #fff4ef; }
     .status.error { border-color: #b91c1c; background: #fef2f2; color: #7f1d1d; }
@@ -20,15 +21,29 @@
   <script type="module" src="./chugokuOutages.js"></script>
 </head>
 <body>
-  <h1><span class="marker"></span>中国電力 停電情報（岡山県）</h1>
-  <p>中国電力ネットワークの現在発生中の停電を、市区町村・地域の代表点に表示します。</p>
+  <h1><span class="marker"></span>中国電力 停電情報・履歴（中国地方）</h1>
+  <p>鳥取・島根・岡山・広島・山口の現在の停電と、公式サイトが公開する過去1週間の履歴を表示します。</p>
   <div class="actions">
+    <label>表示期間
+      <select id="periodFilter">
+        <option value="current">現在発生中</option>
+        <option value="hours:1">過去1時間</option>
+        <option value="hours:3">過去3時間</option>
+        <option value="hours:6">過去6時間</option>
+        <option value="hours:12">過去12時間</option>
+        <option value="hours:24">過去24時間</option>
+        <option value="today" selected>今日</option>
+        <option value="days:3">過去3日</option>
+        <option value="days:5">過去5日</option>
+        <option value="days:7">過去7日</option>
+      </select>
+    </label>
     <button id="reloadButton" type="button">最新情報を取得</button>
-    <a class="button" href="https://www.teideninfo.energia.co.jp/LWC31133.html" target="_blank" rel="noopener noreferrer">公式情報を開く</a>
+    <a class="button" href="https://www.teideninfo.energia.co.jp/" target="_blank" rel="noopener noreferrer">公式情報を開く</a>
   </div>
   <div id="statusMessage" class="status" role="status" aria-live="polite">読み込み待ち</div>
-  <p>表示 <strong id="outageCount">-</strong>件　推定停電戸数 <strong id="householdCount">-</strong>戸</p>
+  <p>表示 <strong id="outageCount">-</strong>件（発生中 <strong id="activeCount">-</strong>件）　停電戸数 <strong id="householdCount">-</strong>戸</p>
   <p>公式更新: <span id="sourceUpdatedAt">-</span>　取得: <span id="fetchedAt">-</span></p>
-  <p class="notice">点は住所文字列から求めた代表位置で、停電範囲や個別建物を示すものではありません。戸数・復旧見込みは確認状況により変わります。工事停電、約5分以内の停電、引込線・建物内設備の故障等は含まれません。</p>
+  <p class="notice">点は住所文字列から求めた代表位置で、停電範囲や個別建物を示すものではありません。赤は発生中、橙は復旧済みです。履歴の戸数は発生時の最大・一時的な戸数で、5分未満の自動復旧も含みます。公式公開期間は過去1週間です。</p>
 </body>
 </html>

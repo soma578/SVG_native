@@ -70,6 +70,7 @@ try {
     importedAt: new Date().toISOString(),
     source: 'https://www.pref.okayama.jp/page/1036031.html',
     gis: positionUrl,
+    coordinateCrs: 'EPSG:4301',
     counts: {
       steepSlope: validRecords.filter((record) => record.type === '急傾斜').length,
       debrisFlow: validRecords.filter((record) => record.type === '土石流').length,

@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 2,
+  "source": "https://www.gis.pref.okayama.jp/pref-okayama/PositionSelect?mid=5002",
+  "sourceCrs": "EPSG:4301",
+  "outputCrs": "OGC:CRS84",
+  "coordinateTransform": "Okayama GeoAccessJS tky2jdk (Tokyo Datum to JGD2000)",
+  "sourceUpdatedAt": "2026-05-20",
+  "importedAt": "2026-10-02T16:41:53.859Z",
+  "total": 19662,
+  "layers": [
+    {
+      "type": "急傾斜",
+      "filename": "steep.svg",
+      "count": 16794,
+      "bounds": {
+        "west": 133.2886151703357,
+        "south": 34.30159582563422,
+        "east": 134.4065638988096,
+        "north": 35.33143315018703
+      },
+      "bytes": 6273097
+    },
+    {
+      "type": "土石流",
+      "filename": "debris.svg",
+      "count": 2868,
+      "bounds": {
+        "west": 133.29495907467245,
+        "south": 34.39080330919747,
+        "east": 134.39527543423924,
+        "north": 35.32834049416717
+      },
+      "bytes": 2373125
+    }
+  ],
+  "overviews": [
+    {
+      "type": "急傾斜",
+      "filename": "steep-overview.svg",
+      "count": 16794,
+      "bounds": {
+        "west": 133.2886151703357,
+        "south": 34.30159582563422,
+        "east": 134.4065638988096,
+        "north": 35.33143315018703
+      },
+      "bytes": 3059419
+    },
+    {
+      "type": "土石流",
+      "filename": "debris-overview.svg",
+      "count": 2868,
+      "bounds": {
+        "west": 133.29495907467245,
+        "south": 34.39080330919747,
+        "east": 134.39527543423924,
+        "north": 35.32834049416717
+      },
+      "bytes": 1199292
+    }
+  ],
+  "shardedOverviews": [
+    {
+      "type": "急傾斜",
+      "name": "overview",
+      "filename": "steep-overview-shards.svg",
+      "shards": 95,
+      "count": 16794,
+      "bytes": 3039055,
+      "bounds": {
+        "west": 133.2886151703357,
+        "south": 34.30159582563422,
+        "east": 134.4065638988096,
+        "north": 35.33143315018703
+      }
+    },
+    {
+      "type": "土石流",
+      "name": "overview",
+      "filename": "debris-overview-shards.svg",
+      "shards": 87,
+      "count": 2868,
+      "bytes": 770788,
+      "bounds": {
+        "west": 133.29495907467245,
+        "south": 34.39080330919747,
+        "east": 134.39527543423924,
+        "north": 35.32834049416717
+      }
+    }
+  ],
+  "shardedDetails": [
+    {
+      "type": "急傾斜",
+      "name": "detail",
+      "filename": "steep-detail-shards.svg",
+      "shards": 95,
+      "count": 16794,
+      "bytes": 6331031,
+      "bounds": {
+        "west": 133.2886151703357,
+        "south": 34.30159582563422,
+        "east": 134.4065638988096,
+        "north": 35.33143315018703
+      }
+    },
+    {
+      "type": "土石流",
+      "name": "detail",
+      "filename": "debris-detail-shards.svg",
+      "shards": 87,
+      "count": 2868,
+      "bytes": 2425793,
+      "bounds": {
+        "west": 133.29495907467245,
+        "south": 34.39080330919747,
+        "east": 134.39527543423924,
+        "north": 35.32834049416717
+      }
+    }
+  ],
+  "farOverviews": [
+    {
+      "type": "急傾斜",
+      "filename": "steep-far.svg",
+      "count": 16794,
+      "cells": 11783,
+      "rectangles": 4099,
+      "gridSize": 0.005,
+      "bounds": {
+        "west": 133.285,
+        "south": 34.300000000000004,
+        "east": 134.41,
+        "north": 35.335
+      },
+      "bytes": 233791
+    },
+    {
+      "type": "土石流",
+      "filename": "debris-far.svg",
+      "count": 2868,
+      "cells": 3816,
+      "rectangles": 1862,
+      "gridSize": 0.005,
+      "bounds": {
+        "west": 133.29,
+        "south": 34.39,
+        "east": 134.4,
+        "north": 35.33
+      },
+      "bytes": 106505
+    }
+  ],
+  "veryFarOverviews": [
+    {
+      "type": "急傾斜",
+      "filename": "steep-very-far.svg",
+      "count": 16794,
+      "cells": 5013,
+      "rectangles": 1016,
+      "gridSize": 0.01,
+      "bounds": {
+        "west": 133.28,
+        "south": 34.300000000000004,
+        "east": 134.41,
+        "north": 35.34
+      },
+      "bytes": 50116
+    },
+    {
+      "type": "土石流",
+      "filename": "debris-very-far.svg",
+      "count": 2868,
+      "cells": 2112,
+      "rectangles": 979,
+      "gridSize": 0.01,
+      "bounds": {
+        "west": 133.29,
+        "south": 34.39,
+        "east": 134.4,
+        "north": 35.33
+      },
+      "bytes": 48302
+    }
+  ],
+  "hitIndex": {
+    "shards": 96,
+    "total": 19662
+  }
+}

@@ -41,13 +41,16 @@ const isShellAsset = (relative) => {
     return /\.(js|html|svg)$/.test(relative)
   }
   if (relative.startsWith('svgmapAppLayers/appLayers/okayamaLandslideCandidates/')) {
-    return /\.(js|html|svg|json)$/.test(relative)
+    if (relative.includes('/geometry/') || relative.endsWith('/candidates.json')) return false
+    return /\.(js|html|svg)$/.test(relative)
   }
   if (!relative.startsWith('svgmapAppLayers/appLayers/svg3-bosai/')) return false
   if (/\/map\/data\//.test(relative)) return false
   if (/\/hazard\/(pref|districts)\//.test(relative)) return false
   if (/\/hazard-overview\//.test(relative)) return false
   if (/\/hazard-vector-overview\//.test(relative)) return false
+  if (/\/hazard-raster-tiles\//.test(relative)) return false
+  if (/\/hazard-city-bundles\//.test(relative)) return false
   return /\.(js|html|svg|json)$/.test(relative)
 }
 
@@ -59,6 +62,10 @@ const shell = [...new Set([...localShell, ...externalShell])]
 const hash = crypto.createHash('sha256')
 hash.update(fs.readFileSync(fileURLToPath(import.meta.url)))
 hash.update(fs.readFileSync(path.join(root, 'scripts/prepare-public-assets.mjs')))
+hash.update(fs.readFileSync(path.join(root, 'scripts/prepare-hazard-transition.mjs')))
+hash.update(fs.readFileSync(path.join(root, 'scripts/prepare-hazard-raster-lod.mjs')))
+hash.update(fs.readFileSync(path.join(root, 'scripts/prepare-hazard-city-bundles.mjs')))
+hash.update(fs.readFileSync(path.join(root, 'svgmapAppLayers/appLayers/svg3-bosai/hazard-raster-tiles/index.json')))
 for (const relative of sourceFiles) {
   hash.update(relative)
   hash.update(fs.readFileSync(path.join(root, relative)))
@@ -129,9 +136,9 @@ const fetchWithTimeout = async (request, milliseconds = 7000) => {
   }
 };
 
-const networkFirst = async (request, cacheName, maximum, label) => {
+const networkFirst = async (request, cacheName, maximum, label, timeout = 7000) => {
   try {
-    const response = await fetchWithTimeout(request);
+    const response = await fetchWithTimeout(request, timeout);
     if (!response.ok && response.type !== 'opaque') throw new Error('HTTP ' + response.status);
     await store(cacheName, request, response, maximum);
     void notifyClients({ type: 'SVG3_CACHE_FRESH', label });
@@ -215,9 +222,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // API responses with private or live upstream data must never enter the
-  // stale-while-revalidate runtime cache. The CORS relay sets its own upstream
-  // cache policy and must always reach the server-side allowlist check.
+  // API responses with private/live upstream data or their own explicit HTTP
+  // cache policy must never enter the Service Worker's stale runtime cache.
+  // Each route remains responsible for browser/CDN cache headers.
   if (url.origin === self.location.origin &&
     (url.pathname === '/api/private-sheet-csv'
       || url.pathname === '/api/private-sheet-image'
@@ -240,6 +247,12 @@ self.addEventListener('fetch', (event) => {
 
   if (url.pathname === '/api/drive-image') {
     event.respondWith(networkFirst(request, DYNAMIC_CACHE, MAX_DYNAMIC_ENTRIES, 'Google Drive写真'));
+    return;
+  }
+
+  if (url.pathname.includes('/svgmapAppLayers/appLayers/okayamaLandslideCandidates/geometry/')
+    || url.pathname.endsWith('/svgmapAppLayers/appLayers/okayamaLandslideCandidates/candidates.json')) {
+    event.respondWith(networkFirst(request, DYNAMIC_CACHE, MAX_DYNAMIC_ENTRIES, '岡山県土砂災害レイヤー', 30000));
     return;
   }
 

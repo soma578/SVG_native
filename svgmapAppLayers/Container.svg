@@ -236,10 +236,10 @@
              xlink:href="./authoringLayers/local/csvLayer/csvXhr_r20.svg#csvPath=/api/private-sheet-csv&amp;latCol=2&amp;lngCol=3&amp;titleCol=1&amp;popup=externalCsvPhoto" />
   <animation x="-30000" y="-30000" width="60000" height="60000"
              xlink:href="./appLayers/oxygenDeviceLog/oxygenDeviceLog.svg"
-             class="岡山大学 clickable" title="酸素濃縮装置 最新ログ" visibility="hidden" opacity="1" />
+             class="岡山大学 clickable" title="酸素濃縮装置 最新ログ（山陽電子）" visibility="hidden" opacity="1" />
   <animation x="-30000" y="-30000" width="60000" height="60000"
              xlink:href="./appLayers/chugokuOutages/chugokuOutages.svg"
-             class="岡山大学 clickable" title="中国電力 停電情報（岡山県）" visibility="hidden" opacity="1" />
+             class="岡山大学 clickable" title="中国電力 停電情報・履歴（中国地方）" visibility="hidden" opacity="1" />
   <animation x="123" y="-46" width="22" height="22"
              xlink:href="./appLayers/okayamaLandslideCandidates/okayamaLandslideCandidates.svg"
              class="岡山大学 clickable" title="岡山県 新たな土砂災害リスク箇所" visibility="hidden" opacity="1" />

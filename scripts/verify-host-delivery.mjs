@@ -19,9 +19,17 @@ assert(swGenerator.includes("svgmapAppLayers/appLayers/chugokuOutages/")
   && swGenerator.includes("url.pathname === '/api/chugoku-outages'"),
   'The outage layer shell must be precached while its live API bypasses Service Worker caches')
 assert(swGenerator.includes("svgmapAppLayers/appLayers/okayamaLandslideCandidates/"),
-  'The Okayama landslide candidate snapshot must be available from the offline shell')
+  'The Okayama landslide layer shell must be managed by the Service Worker')
+assert(swGenerator.includes("relative.includes('/geometry/')")
+  && swGenerator.includes("relative.endsWith('/candidates.json')")
+  && swGenerator.includes("networkFirst(request, DYNAMIC_CACHE"),
+  'Large Okayama geometry and point data must load and cache on demand instead of blocking Service Worker installation')
 assert(bootstrap.includes("[location.origin], true, true"),
   'Absolute same-origin URLs must bypass the CORS proxy')
+assert(bootstrap.includes("updateViaCache: 'none'")
+  && bootstrap.includes('SVG3_CACHE_READY')
+  && bootstrap.includes('location.reload()'),
+  'A newly activated Service Worker must bypass the HTTP cache and reload an already controlled page once')
 assert(core.includes('beforeElem && beforeElem.parentNode == parentElem')
   && core.includes('Array.from(parentElem.children).find(')
   && !core.includes('parentElem.insertBefore(img, childSpans.item(0))'),
@@ -40,12 +48,12 @@ assert(!/title="eMAFF農地情報"[^>]*data-special-server-required|data-special
   'eMAFF must use the fixed local backend')
 assert(/title="海底ケーブル\(海しる\)"[^>]*data-external-api-changed/.test(container),
   'Retired MSIL layers must be identified as an external API change')
-assert(/title="酸素濃縮装置 最新ログ"[^>]*visibility="hidden"/.test(container),
+assert(/title="酸素濃縮装置 最新ログ（山陽電子）"[^>]*visibility="hidden"/.test(container),
   'The sanitized oxygen-device snapshot must be registered as a hidden-by-default layer')
 for (const title of [
   '外部CSV現地情報',
-  '酸素濃縮装置 最新ログ',
-  '中国電力 停電情報（岡山県）',
+  '酸素濃縮装置 最新ログ（山陽電子）',
+  '中国電力 停電情報・履歴（中国地方）',
   '岡山県 新たな土砂災害リスク箇所',
   '洪水・気象警報(岡山大SVG3)',
   'L4 ハザード(岡山大SVG3)',

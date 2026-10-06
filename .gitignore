@@ -14,6 +14,7 @@ public/sw.js
 artifacts/applayer-audit/
 test-results/
 playwright-report/
+.okayama-landslide-geometry-cache.ndjson
 
 # Local device-log imports may contain subscriber/customer identifiers. Only the
 # sanitized AppLayer snapshot is publishable.

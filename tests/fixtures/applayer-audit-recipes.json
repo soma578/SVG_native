@@ -20,5 +20,35 @@
         "lngSpan": 0.04
       }
     ]
+  },
+  "中国電力 停電情報・履歴（中国地方）": {
+    "frameUrlIncludes": "/appLayers/chugokuOutages/chugokuOutages.html",
+    "actions": [
+      {
+        "type": "viewport",
+        "lat": 34.7,
+        "lng": 132.7,
+        "latSpan": 4.0,
+        "lngSpan": 6.0
+      },
+      {
+        "type": "select",
+        "selector": "#periodFilter",
+        "value": "days:7",
+        "timeoutMs": 30000
+      }
+    ]
+  },
+  "岡山県 新たな土砂災害リスク箇所": {
+    "frameUrlIncludes": "/appLayers/okayamaLandslideCandidates/okayamaLandslideCandidates.html",
+    "actions": [
+      {
+        "type": "viewport",
+        "lat": 34.75,
+        "lng": 133.85,
+        "latSpan": 1.5,
+        "lngSpan": 2.0
+      }
+    ]
   }
 }

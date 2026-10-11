@@ -192,6 +192,7 @@ self.addEventListener('fetch', (event) => {
     (url.pathname === '/api/private-sheet-csv'
       || url.pathname === '/api/private-sheet-image'
       || url.pathname === '/api/cors-proxy'
+      || url.pathname === '/api/mizupigui'
       || url.pathname === '/api/chugoku-outages')) {
     event.respondWith(fetch(request));
     return;

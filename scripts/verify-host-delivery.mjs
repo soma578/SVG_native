@@ -15,6 +15,8 @@ assert(swGenerator.includes("path.join(root, 'scripts/prepare-public-assets.mjs'
   'Changes to public-asset transforms must invalidate the Service Worker cache')
 assert(swGenerator.includes("url.pathname === '/api/chugoku-outages'"),
   'The outage API must bypass Service Worker caches')
+assert(swGenerator.includes("url.pathname === '/api/mizupigui'"),
+  'The live water-stake API must bypass Service Worker caches')
 assert(swGenerator.includes("relative.includes('/geometry/')")
   && swGenerator.includes("relative.endsWith('/candidates.json')")
   && swGenerator.includes("networkFirst(request, DYNAMIC_CACHE"),
@@ -48,13 +50,20 @@ assert(/title="海底ケーブル\(海しる\)"[^>]*data-external-api-changed/.t
   'Retired MSIL layers must be identified as an external API change')
 assert(/title="酸素濃縮装置 最新ログ（山陽電子）"[^>]*visibility="hidden"/.test(container),
   'The sanitized oxygen-device snapshot must be registered as a hidden-by-default layer')
+assert(container.includes('title="重ねるハザードマップALL"')
+  && container.includes('xlink:href="./appLayers/mlitHazard/mlitHazard.svg"')
+  && !container.includes('title="L4 ハザード(岡山大SVG3)"'),
+  'Use the upstream SVGMap hazard layer instead of listing the duplicate custom L4 layer')
+assert(fs.readFileSync('svgmapAppLayers/appLayers/mlitHazard/mlitHazard.html', 'utf8')
+  .includes('dynamicWebTile.startBlank()'),
+  'The upstream hazard selector must not request default local std tiles before selection')
 for (const title of [
   '外部CSV現地情報',
   '酸素濃縮装置 最新ログ（山陽電子）',
+  '水ピィ杭 最新状態（logpot）',
   '中国電力 停電情報・履歴（中国地方）',
   '岡山県 新たな土砂災害リスク箇所',
   '洪水・気象警報(岡山大SVG3)',
-  'L4 ハザード(岡山大SVG3)',
   'L2 避難所',
   '全国河川監視カメラ',
   'L3 チーム活動',

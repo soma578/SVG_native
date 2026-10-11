@@ -1,4 +1,21 @@
 {
+  "重ねるハザードマップALL": {
+    "frameUrlIncludes": "/appLayers/mlitHazard/mlitHazard.html",
+    "actions": [
+      {
+        "type": "viewport",
+        "lat": 34.66,
+        "lng": 133.92,
+        "latSpan": 0.3,
+        "lngSpan": 0.4
+      },
+      {
+        "type": "check",
+        "selector": "#hz_table input[name='subLayers'][id*='01_flood_l2_shinsuishin_data']",
+        "timeoutMs": 15000
+      }
+    ]
+  },
   "警察庁_交通事故データ": {
     "frameUrlIncludes": "/appLayers/npaGoJp/ta.html",
     "actions": [

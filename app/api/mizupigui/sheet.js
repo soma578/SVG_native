@@ -1,8 +1,9 @@
 import { GoogleAuth } from 'google-auth-library'
-import { HISTORY_HEADERS, LATEST_HEADERS, historyRow, latestRow } from './normalize.js'
+import { HISTORY_HEADERS, LATEST_HEADERS, historyRow, latestRow, normalizePayload } from './normalize.js'
 
 const SCOPE = 'https://www.googleapis.com/auth/spreadsheets'
 const ROOT = 'https://sheets.googleapis.com/v4/spreadsheets'
+const MAX_LATEST_ROWS = 5000
 
 function range(sheetName, cells) {
   return `'${sheetName.replaceAll("'", "''")}'!${cells}`
@@ -14,18 +15,67 @@ function assertHeaders(actual, expected, name) {
   }
 }
 
+async function sheetsClient(credentialsJson, injectedClient) {
+  if (injectedClient) return injectedClient
+  const credentials = JSON.parse(credentialsJson)
+  if (credentials.type !== 'service_account' || !credentials.client_email || !credentials.private_key) {
+    throw new Error('Invalid service account configuration')
+  }
+  return new GoogleAuth({ credentials, scopes: [SCOPE] }).getClient()
+}
+
+function sheetBoolean(value) {
+  if (value === true || value === false) return value
+  if (value === 'TRUE') return true
+  if (value === 'FALSE') return false
+  throw new Error('Invalid boolean in latest sheet')
+}
+
+function sheetNumberOrNull(value) {
+  return value === '' || value == null ? null : Number(value)
+}
+
+export function normalizeLatestRows(values) {
+  assertHeaders(values?.[0], LATEST_HEADERS, 'latest')
+  const rows = values.slice(1)
+  if (rows.length > MAX_LATEST_ROWS) throw new Error('Mizupigui latest sheet is too large')
+  const ids = new Set()
+  let updatedAt = null
+  const stakes = rows.map((row) => {
+    const stake = normalizePayload({
+      id: row[0], name: row[1], lat: sheetNumberOrNull(row[2]), lng: sheetNumberOrNull(row[3]),
+      waterLevel: sheetNumberOrNull(row[4]), tiltDetected: sheetBoolean(row[5]),
+      batteryOk: sheetBoolean(row[6]), lastReceivedAt: row[7],
+      floodedAt: row[8] || null, logId: row[9],
+    })
+    if (ids.has(stake.id)) throw new Error('Mizupigui latest sheet contains duplicate stake IDs')
+    ids.add(stake.id)
+    const receivedAt = row[10]
+    if (typeof receivedAt !== 'string' || !Number.isFinite(Date.parse(receivedAt))) {
+      throw new Error('Mizupigui latest sheet contains an invalid receivedAt')
+    }
+    if (!updatedAt || Date.parse(receivedAt) > Date.parse(updatedAt)) updatedAt = receivedAt
+    const { logId, ...publicStake } = stake
+    return publicStake
+  })
+  return { updatedAt, stakes }
+}
+
+export async function readLatestMizupigui({ spreadsheetId, latestSheetName, credentialsJson,
+  client: injectedClient, signal }) {
+  const client = await sheetsClient(credentialsJson, injectedClient)
+  if (signal?.aborted) throw signal.reason
+  const url = new URL(`${ROOT}/${encodeURIComponent(spreadsheetId)}/values/${encodeURIComponent(range(latestSheetName, 'A1:L'))}`)
+  url.searchParams.set('valueRenderOption', 'UNFORMATTED_VALUE')
+  const response = await client.request({ url: url.href, method: 'GET', signal })
+  return normalizeLatestRows(response.data?.values)
+}
+
 export async function appendMizupiguiEvent({
   spreadsheetId, sheetName, latestSheetName, credentialsJson,
   stake, retryCount, client: injectedClient, signal,
 }) {
-  let client = injectedClient
-  if (!client) {
-    const credentials = JSON.parse(credentialsJson)
-    if (credentials.type !== 'service_account' || !credentials.client_email || !credentials.private_key) {
-      throw new Error('Invalid service account configuration')
-    }
-    client = await new GoogleAuth({ credentials, scopes: [SCOPE] }).getClient()
-  }
+  const client = await sheetsClient(credentialsJson, injectedClient)
   if (signal?.aborted) throw signal.reason
 
   const base = `${ROOT}/${encodeURIComponent(spreadsheetId)}/values`

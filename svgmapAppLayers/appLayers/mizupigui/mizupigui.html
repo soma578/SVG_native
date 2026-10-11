@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>水ピィ杭</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; }
+    body { margin: 9px; color: #1f2937; font-size: 13px; line-height: 1.5; }
+    h1 { margin: 0 0 6px; font-size: 17px; }
+    p { margin: 6px 0; }
+    button { padding: 6px 10px; border: 1px solid #a5b4c4; border-radius: 6px; background: #fff; color: #24364b; cursor: pointer; font: inherit; }
+    button:disabled { cursor: wait; opacity: .6; }
+    .legend { display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 8px 0; }
+    .legend span { white-space: nowrap; }
+    .dot { display: inline-block; width: 11px; height: 11px; margin-right: 4px; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px #94a3b8; vertical-align: -2px; }
+    .dry { background: #16a34a; } .level-1 { background: #eab308; }
+    .level-2 { background: #dc2626; } .unknown { background: #64748b; }
+    .status { margin: 8px 0; padding: 7px 9px; border-left: 4px solid #16a34a; background: #f0fdf4; }
+    .status.error { border-color: #b91c1c; background: #fef2f2; color: #7f1d1d; }
+    .notice { padding: 7px 9px; border-left: 3px solid #64748b; background: #f8fafc; font-size: 11px; }
+  </style>
+  <script type="module" src="./mizupigui.js"></script>
+</head>
+<body>
+  <h1>水ピィ杭</h1>
+  <div class="legend" aria-label="水位の凡例">
+    <span><i class="dot dry"></i>水なし</span>
+    <span><i class="dot level-1"></i>1段目</span>
+    <span><i class="dot level-2"></i>2段目</span>
+    <span><i class="dot unknown"></i>センサー異常等</span>
+  </div>
+  <button id="reloadButton" type="button">最新情報を取得</button>
+  <div id="statusMessage" class="status" role="status" aria-live="polite">読み込み待ち</div>
+  <p>表示 <strong id="visibleCount">-</strong>杭 ／ 受信済み <strong id="totalCount">-</strong>杭</p>
+  <p>最終更新: <span id="updatedAt">-</span></p>
+  <p class="notice">杭ごとの最新ログを表示します。座標が未提供の杭は地図に表示できません。情報は約1分ごとに再取得します。水位は段階値であり、実測水深ではありません。</p>
+</body>
+</html>

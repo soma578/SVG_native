@@ -1,6 +1,6 @@
 import { createHash, timingSafeEqual } from 'node:crypto'
 import { normalizePayload } from './normalize.js'
-import { appendMizupiguiEvent } from './sheet.js'
+import { appendMizupiguiEvent, readLatestMizupigui } from './sheet.js'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -101,4 +101,41 @@ export async function handlePost(request, options = {}) {
 
 export async function POST(request) {
   return handlePost(request)
+}
+
+export async function handleGet(_request, options = {}) {
+  const spreadsheetId = options.spreadsheetId ?? process.env.MIZUPIGUI_SHEET_ID
+  const latestSheetName = options.latestSheetName ?? process.env.MIZUPIGUI_LATEST_SHEET_NAME ?? 'latest'
+  const credentialsJson = options.credentialsJson ?? process.env.SVG3_GOOGLE_SERVICE_ACCOUNT_JSON
+  const read = options.read ?? readLatestMizupigui
+  if (!spreadsheetId || !/^[\w-]{10,}$/.test(spreadsheetId) || !latestSheetName
+    || /[\r\n]/.test(latestSheetName) || !credentialsJson) {
+    return json(503, { error: 'Receiver is not configured' })
+  }
+  const controller = new AbortController()
+  let timer
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => {
+      controller.abort()
+      reject(new Error('Storage timeout'))
+    }, options.storageTimeoutMs ?? STORAGE_TIMEOUT_MS)
+  })
+  try {
+    const result = await Promise.race([
+      Promise.resolve().then(() => read({ spreadsheetId, latestSheetName, credentialsJson,
+        signal: controller.signal })),
+      timeout,
+    ])
+    return json(200, result)
+  } catch (error) {
+    console.error('[mizupigui] latest read failed', { error: error?.message?.includes('sheet header') ? 'sheet-schema'
+      : error?.message === 'Storage timeout' ? 'timeout' : 'sheets-request' })
+    return json(503, { error: 'Storage temporarily unavailable' })
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+export async function GET(request) {
+  return handleGet(request)
 }

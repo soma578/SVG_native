@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { handlePost } from './route.js'
+import { handlePost, handleGet } from './route.js'
 import { HISTORY_HEADERS, LATEST_HEADERS, historyRow, latestRow, normalizePayload } from './normalize.js'
-import { appendMizupiguiEvent } from './sheet.js'
+import { appendMizupiguiEvent, normalizeLatestRows, readLatestMizupigui } from './sheet.js'
 
 const key = 'test-key-with-at-least-thirty-two-characters'
 const stake = {
@@ -33,6 +33,7 @@ function fakeSheets() {
       assert.ok(operation.signal, 'all Sheets requests must be abortable')
       const url = decodeURIComponent(operation.url)
       if (operation.method === 'GET') {
+        if (!url.includes(':batchGet') && url.includes("'latest'!A1:L")) return { data: { values: latest } }
         return { data: { valueRanges: [
           { values: [history[0]] },
           { values: history.slice(1).map((row) => [row[2]]) },
@@ -174,4 +175,35 @@ test('mismatched Sheet headers and duplicate latest IDs stop writes', async () =
   sheets.latest.push(latestRow(stake, 0, '2026-09-10T00:00:00Z'))
   sheets.latest.push(latestRow(stake, 0, '2026-09-10T00:00:00Z'))
   await assert.rejects(appendMizupiguiEvent(sheetOptions(sheets.client)), /duplicate stake IDs/)
+})
+
+test('public latest read exposes only map fields and preserves null and false', async () => {
+  const sheets = fakeSheets()
+  await appendMizupiguiEvent(sheetOptions(sheets.client, { ...stake, lat: null, lng: null,
+    waterLevel: null, tiltDetected: false }))
+  const result = await readLatestMizupigui({ spreadsheetId: 'test-id', latestSheetName: 'latest',
+    client: sheets.client, signal: new AbortController().signal })
+  assert.equal(result.stakes.length, 1)
+  assert.equal(result.stakes[0].lat, null)
+  assert.equal(result.stakes[0].waterLevel, null)
+  assert.equal(result.stakes[0].tiltDetected, false)
+  assert.equal(result.stakes[0].batteryOk, true)
+  assert.ok(result.updatedAt)
+  assert.equal(Object.hasOwn(result.stakes[0], 'logId'), false)
+  assert.equal(sheets.calls.at(-1).method, 'GET')
+  assert.match(sheets.calls.at(-1).url, /valueRenderOption=UNFORMATTED_VALUE/)
+  assert.throws(() => normalizeLatestRows([['bad'], sheets.latest[1]]), /sheet header/)
+  assert.throws(() => normalizeLatestRows([LATEST_HEADERS, sheets.latest[1], sheets.latest[1]]), /duplicate stake IDs/)
+})
+
+test('GET latest needs no API key, is never cached, and fails closed', async () => {
+  const getOptions = { spreadsheetId: 'test-spreadsheet-id', latestSheetName: 'latest', credentialsJson: '{}',
+    read: async () => ({ updatedAt: null, stakes: [] }) }
+  const request = new Request('https://example.test/api/mizupigui')
+  const response = await handleGet(request, getOptions)
+  assert.equal(response.status, 200)
+  assert.deepEqual(await response.json(), { updatedAt: null, stakes: [] })
+  assert.match(response.headers.get('Cache-Control'), /no-store/)
+  assert.equal((await handleGet(request, { ...getOptions, spreadsheetId: '' })).status, 503)
+  assert.equal((await handleGet(request, { ...getOptions, read: async () => { throw new Error('private') } })).status, 503)
 })

@@ -36,6 +36,8 @@ assert.equal(await dispatch('https://map.example/svgmap-bootstrap.js'), undefine
   'Application JS must not be served from the Service Worker cache')
 assert.equal(await dispatch('https://map.example/svgmapAppLayers/Container.svg'), undefined,
   'Application SVG must not be served from the Service Worker cache')
+assert.equal((await dispatch('https://map.example/api/mizupigui')).status, 200,
+  'Live water-stake data must bypass Service Worker caches')
 
 let activation
 handlers.get('activate')({ waitUntil: (promise) => { activation = promise } })

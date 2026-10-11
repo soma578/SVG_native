@@ -567,6 +567,7 @@ var dynamicWebTile = function(){
 	
 	return {
 		init:init,
+		startBlank: function(){ mapName = null; },
 		getServerParams : getServerParams,
 		setServerParams : setServerParams,
 		getTileURL: getURL,

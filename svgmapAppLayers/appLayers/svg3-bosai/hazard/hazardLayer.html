@@ -62,19 +62,29 @@ import { MAP_MESSAGES } from '../representative-pins/mapMessages.js';
 
   const rootDocumentHash = () => {
     const documents = window.svgMap?.getSvgImages?.() || {};
+    const layerId = window.svgImageProps?.rootLayer;
+    if (layerId && documents[layerId]) return layerId;
     return Object.keys(documents).find((hash) => documents[hash] === window.svgImage) || null;
   };
 
-  const municipalitiesReady = (scale) => {
-    if (scale < 15) return false;
+  const currentScale = () => {
+    const rootHash = rootDocumentHash();
+    const live = rootHash && window.svgMap?.getSvgImagesProps?.()?.[rootHash]?.scale;
+    return Number(live ?? window.svgImageProps?.scale);
+  };
+
+  const municipalityLoadState = (scale) => {
+    if (scale < 15) return { ready: false, waiting: false, deferred: false };
     const images = window.svgMap?.getSvgImages?.() || {};
     const view = window.svgMap?.getGeoViewBox?.();
-    if (!view) return false;
+    if (!view) return { ready: false, waiting: false, deferred: false };
     const west = Number(view.x) * 100;
     const east = (Number(view.x) + Number(view.width)) * 100;
     const north = -Number(view.y) * 100;
     const south = -(Number(view.y) + Number(view.height)) * 100;
     let expected = 0;
+    let missing = false;
+    let deferred = false;
     const selector = scale < 70
       ? 'animation[id^="hazard-city-bundle-"]'
       : 'animation[id^="hazard-municipality-"]';
@@ -85,25 +95,43 @@ import { MAP_MESSAGES } from '../representative-pins/mapMessages.js';
         const width = Number(node.getAttribute('width'));
         const height = Number(node.getAttribute('height'));
         if (x > east || x + width < west || y > north || y + height < south) continue;
+        const minScale = Number(node.getAttribute('visibleMinZoom')) / 100;
+        if (Number.isFinite(minScale) && scale < minScale) {
+          deferred = true;
+          continue;
+        }
         expected += 1;
         const child = images[node.getAttribute('iid')];
-        if (!child) return false;
+        if (!child) {
+          missing = true;
+          continue;
+        }
         if (scale >= 70) {
           const source = child.getElementById?.(`hazard-source-${node.getAttribute('id').slice(-5)}`);
-          if (source && !images[source.getAttribute('iid')]) return false;
+          if (source && !images[source.getAttribute('iid')]) missing = true;
         }
       }
     }
-    return expected > 0;
+    const highRaster = Object.values(images).some((doc) =>
+      doc?.querySelector?.('[data-hazard-raster-tier="high"]'));
+    const rasterOnly = expected === 0 && !deferred && highRaster;
+    return {
+      ready: expected > 0 && !missing && !deferred,
+      waiting: expected > 0 && missing && !deferred,
+      deferred,
+      rasterOnly,
+      highRaster,
+    };
   };
 
-  const applyTypesToDocument = (svgDocument, _props, enabledTypes, changes, rasterFallback) => {
+  const applyTypesToDocument = (svgDocument, _props, enabledTypes, changes, rasterFallback, scale) => {
     const enabled = new Set(enabledTypes);
     for (const [type, id] of Object.entries(HAZARD_GROUPS)) {
       const node = svgDocument?.getElementById?.(id);
       if (!node) continue;
+      const isRaster = node.hasAttribute('data-hazard-raster');
       const shown = state.visible && enabled.has(type)
-        && (!node.hasAttribute('data-hazard-raster') || rasterFallback);
+        && (isRaster ? rasterFallback : !(rasterFallback && scale >= 15));
       const visibility = shown ? 'visible' : 'hidden';
       if (node.getAttribute('visibility') !== visibility && !(shown && !node.hasAttribute('visibility'))) {
         node.setAttribute('visibility', visibility);
@@ -127,12 +155,17 @@ import { MAP_MESSAGES } from '../representative-pins/mapMessages.js';
     }
   };
 
-  const updateLodState = (documentCount, rasterFallback) => {
-    const scale = Number(window.svgImageProps?.scale);
+  const updateLodState = (documentCount, rasterFallback, deferred, rasterOnly, highRaster) => {
+    const scale = currentScale();
     const label = document.getElementById('lod-state');
     const stage = !Number.isFinite(scale) ? '読み込み中'
       : scale < 10 ? '全国概要'
       : scale < 15 ? '広域画像（分割タイル）'
+      : rasterOnly && scale < 30 ? '広域画像（拡大すると高精細画像）'
+      : rasterOnly ? '高精細画像（詳細区域はさらに拡大）'
+      : rasterFallback && deferred && highRaster && scale >= 30 ? '高精細画像（詳細区域はさらに拡大）'
+      : rasterFallback && deferred ? '広域画像（拡大すると市区町村形状）'
+      : rasterFallback && scale >= 70 ? '詳細区域を読込中（高精細画像を継続）'
       : rasterFallback ? '市区町村を読込中（広域画像を継続）'
       : scale < 70 ? '市区町村概要（領域別）'
       : '詳細区域';
@@ -143,19 +176,20 @@ import { MAP_MESSAGES } from '../representative-pins/mapMessages.js';
     const rootHash = rootDocumentHash();
     const enabledTypes = [...state.enabledTypes];
     const changes = { modified: false };
-    const scale = Number(window.svgImageProps?.scale);
-    const rasterFallback = !Number.isFinite(scale) || scale < 15 || !municipalitiesReady(scale);
+    const scale = currentScale();
+    const loadState = municipalityLoadState(scale);
+    const rasterFallback = !Number.isFinite(scale) || scale < 15 || !loadState.ready;
     if (rootHash && typeof window.svgMap?.linkedDocOp === 'function') {
-      window.svgMap.linkedDocOp(applyTypesToDocument, rootHash, enabledTypes, changes, rasterFallback);
+      window.svgMap.linkedDocOp(applyTypesToDocument, rootHash, enabledTypes, changes, rasterFallback, scale);
     } else {
-      applyTypesToDocument(window.svgImage, window.svgImageProps, enabledTypes, changes, rasterFallback);
+      applyTypesToDocument(window.svgImage, window.svgImageProps, enabledTypes, changes, rasterFallback, scale);
     }
     const props = window.svgMap?.getSvgImagesProps?.() || {};
     const documentCount = rootHash
       ? Object.values(props).filter((entry) => entry?.rootLayer === rootHash || entry === window.svgImageProps).length
       : 1;
-    updateLodState(documentCount, rasterFallback && scale >= 15);
-    return { modified: changes.modified, waiting: rasterFallback && scale >= 15 };
+    updateLodState(documentCount, rasterFallback && scale >= 15, loadState.deferred, loadState.rasterOnly, loadState.highRaster);
+    return { modified: changes.modified, waiting: loadState.waiting };
   };
 
   const refresh = () => {

@@ -3,6 +3,10 @@ import path from 'node:path'
 
 const GRID = 25 // SVGMap's native coordinates are longitude/latitude × 100.
 const TYPES = ['hazard-flood', 'hazard-tsunami-inundation', 'hazard-landslide-warning', 'hazard-landslide-special']
+const DEFAULT_CITY_MIN_ZOOM = 1500
+// Okayama uses original-boundary raster tiles through scale 70, then the
+// original detailed SVG. Its simplified city-bundle tier is unnecessary.
+const DETAIL_TILE_PREFECTURES = new Set(['33'])
 const round = (value) => Number(value.toFixed(5))
 
 function boundsOf(source, label) {
@@ -60,6 +64,11 @@ export function prepareHazardCityBundles(publicDir) {
 
     const prefPath = path.join(appRoot, 'hazard/pref', `${prefecture}.svg`)
     let prefSource = fs.readFileSync(prefPath, 'utf8')
+    if (DETAIL_TILE_PREFECTURES.has(prefecture)) {
+      prefSource = prefSource.replaceAll('visibleMinZoom="1500" visible-min-zoom="1500"', 'visibleMinZoom="9000" visible-min-zoom="9000"')
+      fs.writeFileSync(prefPath, prefSource)
+      continue
+    }
     const animations = []
     for (const [key, members] of [...buckets].sort(([a], [b]) => a.localeCompare(b))) {
       const bounds = unionBounds(members)
@@ -74,7 +83,7 @@ export function prepareHazardCityBundles(publicDir) {
       fs.mkdirSync(path.dirname(target), { recursive: true })
       fs.writeFileSync(target, svg)
       const href = `../../hazard-city-bundles/pref/${prefecture}/${filename}`
-      animations.push(`  <animation id="hazard-city-bundle-${prefecture}-${key}" title="${prefecture} 市区町村概要" href="${href}" xlink:href="${href}" x="${bounds.x}" y="${bounds.y}" width="${bounds.width}" height="${bounds.height}" visibleMinZoom="1500" visibleMaxZoom="6999.9" visibility="visible" />`)
+      animations.push(`  <animation id="hazard-city-bundle-${prefecture}-${key}" title="${prefecture} 市区町村概要" href="${href}" xlink:href="${href}" x="${bounds.x}" y="${bounds.y}" width="${bounds.width}" height="${bounds.height}" visibleMinZoom="${DEFAULT_CITY_MIN_ZOOM}" visibleMaxZoom="6999.9" visibility="visible" />`)
       bundleCount++
     }
     const next = prefSource.replace('  <animation id="hazard-municipality-', `${animations.join('\n')}\n  <animation id="hazard-municipality-`)

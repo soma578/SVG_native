@@ -1,0 +1,1590 @@
+{
+  "schemaVersion": 1,
+  "kind": "svg3-hazard-detail-tiles",
+  "sourceHash": "b6f37aa53f46317b4678e0c44baeb8e737d40bfb6ff18bf03a062a6fa856dd7c",
+  "styleHash": "7378ca1f703b412b73cfbf92a6b1d83844d47be6fd42bdd048bed1feff3a4c5b",
+  "density": 96,
+  "prefecture": "33",
+  "bounds": {
+    "x": 13317.95431,
+    "y": -3544.02869,
+    "width": 132.10038,
+    "height": 122.93438
+  },
+  "imageWidth": 12682,
+  "imageHeight": 11802,
+  "columns": 10,
+  "rows": 10,
+  "tiles": [
+    {
+      "type": "flood",
+      "path": "pref/33/flood-5-2.webp",
+      "x": 13384.0045,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 1040,
+      "sha256": "c1712e634d733ed7e8315910d2d23d2f5980dd11afa7cf82e66f05c3ba95e841"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-6-2.webp",
+      "x": 13397.21245473,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 26810,
+      "sha256": "103ef75711ccbff027f71319ec7715b00075c1d17e0e1220dc72fb73cb3131d7"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-7-2.webp",
+      "x": 13410.42040945,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 14328,
+      "sha256": "4e7dd845750cd14847a850c1d250e7b91ce9db1480fb52795a8bda87e0831512"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-3-3.webp",
+      "x": 13357.57817418,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 29768,
+      "sha256": "8e4f2979e9c8c5639416dba647431cd5e26e12ae2dc17a3ec9db8e43fca0f905"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-4-3.webp",
+      "x": 13370.78612891,
+      "y": -3507.15462584,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 17958,
+      "sha256": "da2f5a5bd744e9836b5136483dc26d2a9a5acb7c70e599c178e6fe040ffcb43e"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-5-3.webp",
+      "x": 13384.0045,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 24246,
+      "sha256": "de531f20c3c228422dae666b51f8378107c12ba04b6a79429ca9336ad80b7e10"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-6-3.webp",
+      "x": 13397.21245473,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 100410,
+      "sha256": "2b98e89838f526a9c4b02c74653802bb7568911fff8feecfa67306ab2ea61116"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-7-3.webp",
+      "x": 13410.42040945,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 80174,
+      "sha256": "ee0fa931255f7f3cdc78d0717be5998f3be6e04024a36193248ef908a6d027bd"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-4-4.webp",
+      "x": 13370.78612891,
+      "y": -3494.86327112,
+      "width": 13.21837109,
+      "height": 12.30177112,
+      "bytes": 9860,
+      "sha256": "4a26b9ab072621fd47f26796e6c5c3ebb1bcfc47e25a31b81f63453191f41f97"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-5-4.webp",
+      "x": 13384.0045,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 47360,
+      "sha256": "986838f2570334bb0c39a21565a8c5822724658f5cbc4753f8bdb5736fe16dc8"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-6-4.webp",
+      "x": 13397.21245473,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 44366,
+      "sha256": "2777300382c5b8826167904d4a74c95edfe5ccd67362817c9ef66e42e1b7d5f6"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-7-4.webp",
+      "x": 13410.42040945,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 28710,
+      "sha256": "4489f0ac1d77cea50691bcc6d6900e7b4eb431cf1ef996a9290ed77bbd2ddd96"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-8-4.webp",
+      "x": 13423.62836418,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 9498,
+      "sha256": "30c1443bb1544233c45721e7ab5b3b8d63c7eab57f20fe0ca5f31ac93a84aa07"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-4-5.webp",
+      "x": 13370.78612891,
+      "y": -3482.5615,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 390,
+      "sha256": "026cfd9c9b96a8a3b48252d6981859292b26bd3d5ae3baca33d1f90abb79be7d"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-5-5.webp",
+      "x": 13384.0045,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 104894,
+      "sha256": "27c2c9e1defd000f8adb74f7ea43a8bb12a26459cc231920c98cbf5dc8ce77d7"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-6-5.webp",
+      "x": 13397.21245473,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 87410,
+      "sha256": "39f80af7264a8eb10c1fd0aa5ca43b017127bf49064ea453161d4e63b07f05b6"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-7-5.webp",
+      "x": 13410.42040945,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 27638,
+      "sha256": "12b410b26599a55211d04c7acc427540673c7ac61ccf9ee315322da25c1e4c1c"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-8-5.webp",
+      "x": 13423.62836418,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 13094,
+      "sha256": "9eb2da1452f0fde2fd5159c2af9b7384d6b3065b558f86c569d6693a09d37609"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-1-6.webp",
+      "x": 13331.16226473,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 16042,
+      "sha256": "6d732cefb668d792806bdf66027aac6ad5ab204d5e533831f344c32d3b8015e8"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-2-6.webp",
+      "x": 13344.37021945,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 89574,
+      "sha256": "d8cba2e6d75f0369369f5d9ba78fa7d5e02946f5d4820d177f20b203960bf3e1"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-3-6.webp",
+      "x": 13357.57817418,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 36866,
+      "sha256": "9e34d17df1ae21bca7d5a37815f869fee64f94c4cb37d83c6f3276991d6d7be1"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-4-6.webp",
+      "x": 13370.78612891,
+      "y": -3470.27014528,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 66756,
+      "sha256": "a85b8b4d47ed79b0e2c5b0c1adde01a7a828892f1e7076dccced0c01a71b67b2"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-5-6.webp",
+      "x": 13384.0045,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 284512,
+      "sha256": "dab986b8852150c35420265c14ec02070f30febc7706620cda2cbfc2a1718d3d"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-6-6.webp",
+      "x": 13397.21245473,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 76646,
+      "sha256": "47158680ee3faf319773cc2a6ee3a547d33e4e01cb98792e6a8e5f4c5cd54996"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-1-7.webp",
+      "x": 13331.16226473,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 17858,
+      "sha256": "67f9aa19058fafa012f68d1fd5fc4f8a9aa50dbfb1fb941cabed532b838674c0"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-2-7.webp",
+      "x": 13344.37021945,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 16910,
+      "sha256": "49f6691cfdf6e963e8fd8d19cfd3b2059b7c3f0b26848898d8f3f741e2f693bd"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-3-7.webp",
+      "x": 13357.57817418,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 73404,
+      "sha256": "2ccccfc6230c5c4a02f07c703f0ccd4ea4fcef229281fd918eca90aca925c1b1"
+    },
+    {
+      "type": "flood",
+      "path": "pref/33/flood-5-7.webp",
+      "x": 13384.0045,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 49080,
+      "sha256": "fe7488ebd016e0eb5393cd2cfceb47ee96e3f5106115681623a38183059dca92"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-7-5.webp",
+      "x": 13410.42040945,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 8570,
+      "sha256": "74e4644b4b612e4fccd28fe3990857c2f98c85f3c09c84a15dd1240e56b92d79"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-8-5.webp",
+      "x": 13423.62836418,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 7750,
+      "sha256": "62b3578ff9317fa0484010f3dc55e26ff9634ac2a1641ce98f1930ec8b4caa7c"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-5-6.webp",
+      "x": 13384.0045,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 186682,
+      "sha256": "3bd8cf2a84561ad258427dadd46aa0538afe835c8a37ff57c62f364bbc263a7b"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-6-6.webp",
+      "x": 13397.21245473,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 223180,
+      "sha256": "58ccbabcc17bb8d8714cd7cc935e214e331efea44d361008e3ed67c3fb45c0fb"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-7-6.webp",
+      "x": 13410.42040945,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 68378,
+      "sha256": "f543d6e958e2e63553e26329289234b611cb92da1ed8b1077c1edf6d73e27dcf"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-8-6.webp",
+      "x": 13423.62836418,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 2898,
+      "sha256": "a610fbc4ecdaf1b87e60d090edfca5df911f5cf1e3443b59e86f9ee87e5bf881"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-2-7.webp",
+      "x": 13344.37021945,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 84178,
+      "sha256": "19adaa6f7d0fdc17f817e57279052abaaafe388c07e833817b84b19ef8ca1a20"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-3-7.webp",
+      "x": 13357.57817418,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 136476,
+      "sha256": "78174c24ffb223add7fafa1768a5b1d91f58d294361d94f44ff6323f33fca24c"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-4-7.webp",
+      "x": 13370.78612891,
+      "y": -3457.97879056,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 135218,
+      "sha256": "8a6c221283821cac1cfe0c1be784f186e7cc976da44cc0d21bb0ad4ecbfe011d"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-5-7.webp",
+      "x": 13384.0045,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 162810,
+      "sha256": "7e72adfb54bab2dc93eb270e229c12955d7fc30849896a84e58e3e9bd02553b1"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-6-7.webp",
+      "x": 13397.21245473,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 25580,
+      "sha256": "4f68f0ed472a474fa0a1c0b8176cf464d2b929023be15b657227e4915dc4bb08"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-7-7.webp",
+      "x": 13410.42040945,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 942,
+      "sha256": "a48cf6364ae7ba3906705b98d15b8a676d8d43a54bbd1d84e08e3db3e6732625"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-2-8.webp",
+      "x": 13344.37021945,
+      "y": -3445.68743584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 7638,
+      "sha256": "12df0f31bb6f16482b52f3a454fd9b81d298f74de37e206d2c963e8a2e2c5864"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-3-8.webp",
+      "x": 13357.57817418,
+      "y": -3445.68743584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 1158,
+      "sha256": "27a5919e34a91f38297d064e87797071925e84f384d17e8d3f0d9d3e04660bbb"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-4-8.webp",
+      "x": 13370.78612891,
+      "y": -3445.68743584,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 7680,
+      "sha256": "db88d22a7bd97e2cc0cdeeccce502f8dd0d217ef38b9f77e8a4e8b4b7300a3a4"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-5-8.webp",
+      "x": 13384.0045,
+      "y": -3445.68743584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 3372,
+      "sha256": "92b0a063511e3bc106f93b3c4b6b59c3a8f6434e7bbeb2c31e624ea9dad90bde"
+    },
+    {
+      "type": "tsunami",
+      "path": "pref/33/tsunami-2-9.webp",
+      "x": 13344.37021945,
+      "y": -3433.39608112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 824,
+      "sha256": "4041c209f8b32d0ee934b12450c5f0959304da737e3fc56e11a7013068660809"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-5-0.webp",
+      "x": 13384.0045,
+      "y": -3544.02869,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 2168,
+      "sha256": "0c6dd91ad96677e6afbf666f3b4dcee2f9fe0946d11f78ce7c3b023d9e2a7097"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-6-0.webp",
+      "x": 13397.21245473,
+      "y": -3544.02869,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 418,
+      "sha256": "f78e13b7fda5e7b1b687cd7868a7bb1537d827d3621619f1cefc69f07fc95ade"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-2-1.webp",
+      "x": 13344.37021945,
+      "y": -3531.73733528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 7968,
+      "sha256": "fabfa5a7a1819d7d16b36f5c30558b2b779f90880466fa8b24856d4eb3c4e938"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-3-1.webp",
+      "x": 13357.57817418,
+      "y": -3531.73733528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 36144,
+      "sha256": "ccc4aa7fa73c33c56d6e0f9006776e90270eb977cb0e67e610df5cd245eb619c"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-4-1.webp",
+      "x": 13370.78612891,
+      "y": -3531.73733528,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 21494,
+      "sha256": "cf5901c14702532fbb2d75bd02cdf6a484c39a1630d08b5717365bf5c94fe6ab"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-5-1.webp",
+      "x": 13384.0045,
+      "y": -3531.73733528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 40384,
+      "sha256": "bc97e5d82900aafcd42ad0f35cc9625a0e345d42486bed33a1445d2b480fd5d7"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-6-1.webp",
+      "x": 13397.21245473,
+      "y": -3531.73733528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 31496,
+      "sha256": "2abe1acd0d904dabccb5a94a8bbe8a52326fb405c8be456acc0e165f6938a1bc"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-7-1.webp",
+      "x": 13410.42040945,
+      "y": -3531.73733528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 18954,
+      "sha256": "5cdcf5a48e5d6259714f893a45fd01c624de94ac3eec8b0ab7ba0e3010cb6bfe"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-8-1.webp",
+      "x": 13423.62836418,
+      "y": -3531.73733528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 8366,
+      "sha256": "eaa27347d617238cdf7cb28fa86bf5b621b196f5be0510c3ff0c91155a8fbbeb"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-0-2.webp",
+      "x": 13317.95431,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 1782,
+      "sha256": "b7cd78cbe3c3459d218aa016a81d4d1da9b4f17b42bfee12a151cebad3a25863"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-1-2.webp",
+      "x": 13331.16226473,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 35676,
+      "sha256": "a2b882fa54d718b6f0281d81ce42a47f9f79bd63aeaf9f6e0d5e9c0b3e81b10a"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-2-2.webp",
+      "x": 13344.37021945,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 41134,
+      "sha256": "94762f047d04822228a2ec33f7f9606886f43ae721f777fa8502f47b309c26bc"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-3-2.webp",
+      "x": 13357.57817418,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 85336,
+      "sha256": "baf009565c71c4765d89a4cce359d2206c51387a0f3e5578286a504409eef574"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-4-2.webp",
+      "x": 13370.78612891,
+      "y": -3519.44598056,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 97184,
+      "sha256": "d5097a583345531ea435441a17545e5c8de035839cdace9342b023b112dbb95e"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-5-2.webp",
+      "x": 13384.0045,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 76106,
+      "sha256": "89eed0ef8c2ccb74612ab7ef4eea430e10543b87a9d5150536feba48dc6463c2"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-6-2.webp",
+      "x": 13397.21245473,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 94984,
+      "sha256": "8fe6cc9840a0d943cd8fa618fd9a0e7d1dd2a89f7f90c56e1825c7f429ffd1f0"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-7-2.webp",
+      "x": 13410.42040945,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 46180,
+      "sha256": "c6cc21fd293ccd965574bb0a819717aca82c53f51daa386ce223a78fc51941aa"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-8-2.webp",
+      "x": 13423.62836418,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 111898,
+      "sha256": "bc4c93c4a8f27fe602e4562e05f5570ad1263531c7c7dbdb09f163a731e9af87"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-9-2.webp",
+      "x": 13436.83631891,
+      "y": -3519.44598056,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 7038,
+      "sha256": "3da5b570ed464a12ef10d6f5c31df02dd2138bd7776e644288c885079a7f43d9"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-0-3.webp",
+      "x": 13317.95431,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 1596,
+      "sha256": "250964eb0952843ce7203f870e2310693f62f38493ec6f19485bbebcdbc0245e"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-1-3.webp",
+      "x": 13331.16226473,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 62952,
+      "sha256": "a6f1b714c16021a09fbf5596d3c30f38c68841bf5b6dc041cca9399dfe8fa45c"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-2-3.webp",
+      "x": 13344.37021945,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 101286,
+      "sha256": "478ba52bdf0c50111a2a36ba9119da16b10bfe282000ced25e00b54082fc4bfc"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-3-3.webp",
+      "x": 13357.57817418,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 103084,
+      "sha256": "2a15081e388c55a7b867144cf1f81ecb6686d2d1b708feb0f2897b6995ab94c7"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-4-3.webp",
+      "x": 13370.78612891,
+      "y": -3507.15462584,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 128416,
+      "sha256": "84c2708a855ce4f0498af7f019fc96770378cb69f61663004b1238f0b53cbdfb"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-5-3.webp",
+      "x": 13384.0045,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 76046,
+      "sha256": "4a7c1d61441b9562736ffa0a3d7b9ece9c033e2f869322b7eab02979d9c9d179"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-6-3.webp",
+      "x": 13397.21245473,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 69354,
+      "sha256": "774026c072289bcf53ceead2b27795f80b88a9c0a313ffab657f6e4bdf5ed47f"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-7-3.webp",
+      "x": 13410.42040945,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 87496,
+      "sha256": "797ee074e8aab3bbabb260d1ec6e85debbbeae675abf10dedd0622a36f03ce29"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-8-3.webp",
+      "x": 13423.62836418,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 39020,
+      "sha256": "bf981e43328c5d722feb1319f1e3e1ed08773968eb105458df3bc90b909807b2"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-0-4.webp",
+      "x": 13317.95431,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 1492,
+      "sha256": "1b311de93bb0869cfe1d9bcc3ecc19d0338e2cfe3e7276133fa53d1ee18cdc46"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-1-4.webp",
+      "x": 13331.16226473,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 34420,
+      "sha256": "8334778104f64b923583b0bff51f57f26076a85714c98081986ae4e3b61c5819"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-2-4.webp",
+      "x": 13344.37021945,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 72520,
+      "sha256": "3d15a59e53b76bd3f34fbbbe7ad919aabbcc11b59deec66f060f98c3af7b7f1f"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-3-4.webp",
+      "x": 13357.57817418,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 96462,
+      "sha256": "3c352ffb8009c13afc08a110cc1af9b4ead3f4c766ad397e36012c8964310cca"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-4-4.webp",
+      "x": 13370.78612891,
+      "y": -3494.86327112,
+      "width": 13.21837109,
+      "height": 12.30177112,
+      "bytes": 76300,
+      "sha256": "9b6bc4c151eb1fda991e5905204e3f3a01be2fe2da14ab78dc549fd251fd5e0f"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-5-4.webp",
+      "x": 13384.0045,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 84642,
+      "sha256": "994fadd9e18a5055f262b2c56e07d2343cba230034623bc903c7d09fe89947eb"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-6-4.webp",
+      "x": 13397.21245473,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 97196,
+      "sha256": "1e6d3bea7c75fe5c643d9d94c1e3dbb8b43bc520b69f7f23b36e1d42ae99eb78"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-7-4.webp",
+      "x": 13410.42040945,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 75330,
+      "sha256": "b32b96f5c421440f63d183b7a358f3d1a98339e05d0a8942f4126b780d3e385c"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-8-4.webp",
+      "x": 13423.62836418,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 10330,
+      "sha256": "c16477fe61caaeb77be10fbc54fb3ea4bf5bc8efa79e1dfbc31f8614011f2114"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-1-5.webp",
+      "x": 13331.16226473,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 35820,
+      "sha256": "e3fc7d75398f4a7260e9d4311f95f036914455eabf9389158f5c78308a337356"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-2-5.webp",
+      "x": 13344.37021945,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 156656,
+      "sha256": "fcc8b18ee61acca3cf889e1f7c7eea24cde0b1309875dcfd858d2a1691f85d36"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-3-5.webp",
+      "x": 13357.57817418,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 99940,
+      "sha256": "3678e49f484d473af66b56d93d4b64defaf8f4fafc1a2cd293bff75e6bd46707"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-4-5.webp",
+      "x": 13370.78612891,
+      "y": -3482.5615,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 94044,
+      "sha256": "98de2505ee68315e95f9e194b98123b877230b1e5d213a032a2d78115fb1f78c"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-5-5.webp",
+      "x": 13384.0045,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 83726,
+      "sha256": "0b012e02bc7104293cbb638aa91bbe62906b268729b266dce18b24f8419d7642"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-6-5.webp",
+      "x": 13397.21245473,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 120462,
+      "sha256": "b6efe46541f9364cb40f555433dc9d538fb46f8162fc0b9b741250f22d90774f"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-7-5.webp",
+      "x": 13410.42040945,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 117650,
+      "sha256": "8d5c8de1541a97d681926f61940c5781456c54ee4d30d6da181c3f045bc83bdf"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-8-5.webp",
+      "x": 13423.62836418,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 62584,
+      "sha256": "6e2b78c4aeb001c02ec01e99291b29e744fc21cfc13b43f605b41432f6d6a657"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-1-6.webp",
+      "x": 13331.16226473,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 63898,
+      "sha256": "52f105e58aaf55917147969f908d27b172097b87064b6d080d829b95ca51d385"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-2-6.webp",
+      "x": 13344.37021945,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 87390,
+      "sha256": "154aed400c91ba8b81ebbdf6b06cc0ff110d7ecf283b3547bff5ad431f329add"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-3-6.webp",
+      "x": 13357.57817418,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 124702,
+      "sha256": "c37aa2086e75aa4a8a3f1a7ba29e21eb8a4a268c5b595e097a6e66729b21e52f"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-4-6.webp",
+      "x": 13370.78612891,
+      "y": -3470.27014528,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 42380,
+      "sha256": "08ebee313ee87370823d0027e2150ebbe47eef3ea0cca2738c9fcc59cec0947e"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-5-6.webp",
+      "x": 13384.0045,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 33038,
+      "sha256": "bd654b217eefee33d29e08089c13cf79c7724ce16eb8311081f301ced1bac8bb"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-6-6.webp",
+      "x": 13397.21245473,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 55938,
+      "sha256": "d25996ab140d3d019f7edb15a34757671f52231ab164ecf4a73af7bd248b7f75"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-7-6.webp",
+      "x": 13410.42040945,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 30318,
+      "sha256": "6bd898c3b7508a1c08510e711b36f380063f07febda80f01e631d7b6baa480cf"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-8-6.webp",
+      "x": 13423.62836418,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 2254,
+      "sha256": "cd660bb7bc8e626f760eb95b1c974c09e82db9e863dcbade11c00144398ee21a"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-1-7.webp",
+      "x": 13331.16226473,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 1904,
+      "sha256": "0e96679ffe564af0f743dd7624cedeadbed1513d4fccf562dd39ed0771023784"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-2-7.webp",
+      "x": 13344.37021945,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 123062,
+      "sha256": "db5813b8c47ba535bbbb7950cd803242957a9a566d3ff673820a49078314b4ad"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-3-7.webp",
+      "x": 13357.57817418,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 53274,
+      "sha256": "a773b3ef32424aa282e6ae60ad898b50aa5fa214462ca27f2414e0c97c999a52"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-4-7.webp",
+      "x": 13370.78612891,
+      "y": -3457.97879056,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 59774,
+      "sha256": "d721a5cd56e82c1fb7af6c70c5e6467b817099fd6f2f831d276c6b957403107a"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-5-7.webp",
+      "x": 13384.0045,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 131776,
+      "sha256": "925c80cf0f6bcbd99761d717c142d1650837956b3c39a7c1226db735441feb06"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-6-7.webp",
+      "x": 13397.21245473,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 20254,
+      "sha256": "eb200da759e8337f0102ce60995427cbbf26c1ab98c4df4a19ab62e920a32e7f"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-7-7.webp",
+      "x": 13410.42040945,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 846,
+      "sha256": "263623c947bf88e798cd8d21ed4f0f572e4abe7690c3f6d5df233c7c5ff97b0d"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-2-8.webp",
+      "x": 13344.37021945,
+      "y": -3445.68743584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 26262,
+      "sha256": "cba88de6a6824f83ba4f55dc443f41c5a3f0adac7ea60f1e114b4d4365bd904b"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-3-8.webp",
+      "x": 13357.57817418,
+      "y": -3445.68743584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 2202,
+      "sha256": "26788da16d4116815d6d053519db7fcb46962b68ba08f7a9ee3bd34cb112fe4b"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-4-8.webp",
+      "x": 13370.78612891,
+      "y": -3445.68743584,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 10108,
+      "sha256": "a2489bc8c1ea85ef860904f7098750451ebc31b4aee158fbb94c00892aa9efc8"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-5-8.webp",
+      "x": 13384.0045,
+      "y": -3445.68743584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 3752,
+      "sha256": "ba1e2c1a4dcdaac561a45f4f37684407e77b2321d1e5b84fde0be79bc2b26e38"
+    },
+    {
+      "type": "landslide-warning",
+      "path": "pref/33/landslide-warning-2-9.webp",
+      "x": 13344.37021945,
+      "y": -3433.39608112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 1426,
+      "sha256": "1e20be76524bc0b236c3141752b2f2a6daa99d787ed0afbd92990072bcc995ab"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-2-1.webp",
+      "x": 13344.37021945,
+      "y": -3531.73733528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 2070,
+      "sha256": "8df64ed4d2d6435587ea655efd6cdf256cbb3b7d7b5716a799674a635cc64161"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-3-1.webp",
+      "x": 13357.57817418,
+      "y": -3531.73733528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 2478,
+      "sha256": "0eeaac69cdfb9b1d1ab4a94bd8326ef69f32e2dccb68303a4cae2e3cdc082583"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-6-1.webp",
+      "x": 13397.21245473,
+      "y": -3531.73733528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 2668,
+      "sha256": "c4a068111c41c7c5162009ce22dc39f5e7b6e50ec9ad792e2ac66f1550ee4698"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-7-1.webp",
+      "x": 13410.42040945,
+      "y": -3531.73733528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 3880,
+      "sha256": "1ec23e5ae759bef944a1e0cd1bcd6b15f82ed50f78ec5b32b44dab9984a236c3"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-1-2.webp",
+      "x": 13331.16226473,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 4208,
+      "sha256": "96864344c5137717103af8c68d22f5ee6cbf79f5d9525eebee1f41f509f5b500"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-2-2.webp",
+      "x": 13344.37021945,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 3308,
+      "sha256": "7fa31c93f2aad3a6a61329ceec5666ef98c96140340eef857d9617628d6b6427"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-3-2.webp",
+      "x": 13357.57817418,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 868,
+      "sha256": "e3674d2b015b29185e37bea18b75d78443725b4bfc142871b4dc712571dfc3ba"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-4-2.webp",
+      "x": 13370.78612891,
+      "y": -3519.44598056,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 4360,
+      "sha256": "4331ea920ffa7c246564448337ac816f02eac957ad70dc6afbf8a8ac65a37936"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-5-2.webp",
+      "x": 13384.0045,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 908,
+      "sha256": "5c13f4a3a280b8a4b341b3b05289966bf29c1b0171f89fdf44134c56619e3442"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-6-2.webp",
+      "x": 13397.21245473,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 3194,
+      "sha256": "e7031b126f2c0edb7b21bf96365627bbc41a23a76a5e899c6486c64a39b4ea51"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-7-2.webp",
+      "x": 13410.42040945,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 3054,
+      "sha256": "fbb06f34f93147247d1ccde48dd1cece3b91c7babd51177cf4f44c2ea2db041b"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-8-2.webp",
+      "x": 13423.62836418,
+      "y": -3519.44598056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 986,
+      "sha256": "2c249160d234abd408bdf54554a5ec7cf741d3296fc09892a62ddb9f089b1342"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-9-2.webp",
+      "x": 13436.83631891,
+      "y": -3519.44598056,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 798,
+      "sha256": "71bacca11013779e737fb62d5b2149ab60d418995eedddda62eb971ea6785c45"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-0-3.webp",
+      "x": 13317.95431,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 698,
+      "sha256": "606d0fa2604f6addc7dee29d11f8044c8f5f67a715dce6404c7ff980cf94d469"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-1-3.webp",
+      "x": 13331.16226473,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 4892,
+      "sha256": "5c3d6214a9a69ef8f7ca223d5d3c03ef98e05ccd82f4c6f6028232c2f4ff306a"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-2-3.webp",
+      "x": 13344.37021945,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 5666,
+      "sha256": "71f9c83a138e9a6eeabb8c41c5dbe4ac1b1a599cf02bf655ef526b25d66706be"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-3-3.webp",
+      "x": 13357.57817418,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 902,
+      "sha256": "aaa98c1c6663595edee861f4416271c2ede1af5143dc2c79c9e03b5a4511ea99"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-4-3.webp",
+      "x": 13370.78612891,
+      "y": -3507.15462584,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 7918,
+      "sha256": "91d737ae16c269ddd4a019dfdbdbb924291a40dd84ffa3e5944f84987362bd50"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-6-3.webp",
+      "x": 13397.21245473,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 902,
+      "sha256": "d2c18eb249000f2e994c1f89163cc4c8902681275601abe0d60eefea1eae0b0e"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-7-3.webp",
+      "x": 13410.42040945,
+      "y": -3507.15462584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 2204,
+      "sha256": "ab2936e529dfb01226a6bc8c9423d91424bcbcc04cf2c575edf160234ed3cefb"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-1-4.webp",
+      "x": 13331.16226473,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 2604,
+      "sha256": "0b52eeb38bf09a6a2ea31f9bb28cd9db3ae7ae9320ed555d4949f0587d1c8108"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-2-4.webp",
+      "x": 13344.37021945,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 760,
+      "sha256": "a647928d37f43cd3c0a9be8a9ad5137e2fb576170fb1476bc08fcd17318c3b8b"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-3-4.webp",
+      "x": 13357.57817418,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 2770,
+      "sha256": "76ea1bb1f80ee9cae3366b5367f1b2f1232f58204a11bd04b5fbb05cd5fa6ad8"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-4-4.webp",
+      "x": 13370.78612891,
+      "y": -3494.86327112,
+      "width": 13.21837109,
+      "height": 12.30177112,
+      "bytes": 4566,
+      "sha256": "5006916e4dff4fa661a5453ce22379ad40c5caadd0bf118a6b0325787adbe73c"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-5-4.webp",
+      "x": 13384.0045,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 2114,
+      "sha256": "5062a237d00f16cc4b578e13941a7ead7604e016a7de9dc73c813776804e24be"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-6-4.webp",
+      "x": 13397.21245473,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 2698,
+      "sha256": "47d9b447256c42ebd0428d592dccca639375336dc3ebae4a9f201a215f94882b"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-7-4.webp",
+      "x": 13410.42040945,
+      "y": -3494.86327112,
+      "width": 13.20795473,
+      "height": 12.30177112,
+      "bytes": 2860,
+      "sha256": "6fbb392eaee7e9b53c76ef34d31a7c2213379219624fb16fd5291314da630ade"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-1-5.webp",
+      "x": 13331.16226473,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 4608,
+      "sha256": "98c1876cc25ce081da961243953998b8d4ef0f9e1bf5800d133d30ac69bc3edc"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-2-5.webp",
+      "x": 13344.37021945,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 4552,
+      "sha256": "74eb154af3903f79903d685a95636e20352ae611aef76c6bf462afa5cffbf1a1"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-3-5.webp",
+      "x": 13357.57817418,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 9588,
+      "sha256": "e4ca192ace78ed44929aecef7832263270a72cc5913f365ee5172684ce953dd9"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-4-5.webp",
+      "x": 13370.78612891,
+      "y": -3482.5615,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 1060,
+      "sha256": "bceb6544e347279ac5298bee4771c6b2284641badb472f311be0150ee9ab768a"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-5-5.webp",
+      "x": 13384.0045,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 1296,
+      "sha256": "180a0e72f786acd19170d0565f7d1f2385ae217556981621d975dcfbac5e6f8e"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-6-5.webp",
+      "x": 13397.21245473,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 7146,
+      "sha256": "0a6d107caf765f9752d5b239031bcc071a3e95808e51fb50f1fbcbf812643aa9"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-7-5.webp",
+      "x": 13410.42040945,
+      "y": -3482.5615,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 3526,
+      "sha256": "936b954912a73b32fc8160a2c3873be2f705a9ebf438257eed132522e43e7600"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-2-6.webp",
+      "x": 13344.37021945,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 7420,
+      "sha256": "7a3fc78c7ef2cfa6e4cd6290b0cfa2988e33e897bd3491a24b9d4b8e05fed539"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-3-6.webp",
+      "x": 13357.57817418,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 4896,
+      "sha256": "fb74817ebc5015c9b8a330eeb37090c13ea5baaa2099ad6a1570e44f18e885f6"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-4-6.webp",
+      "x": 13370.78612891,
+      "y": -3470.27014528,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 3624,
+      "sha256": "379fdb433a17488b84efd180166462852fe0ae4c45b967dde003ff06d484fb4a"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-5-6.webp",
+      "x": 13384.0045,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 3952,
+      "sha256": "669d9094cc84497e47c47a1e85cd14fe75efa085fa0a8b425d129d293d8023d5"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-6-6.webp",
+      "x": 13397.21245473,
+      "y": -3470.27014528,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 4676,
+      "sha256": "b65689999af02a6c07931286d45bd1dfdc16ca8f3c4334c2395694f800451d17"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-2-7.webp",
+      "x": 13344.37021945,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 8958,
+      "sha256": "a9744d9374e2d2fcf40a0eb49bcfeafad0e3c631955bafaac0277d46fec3230b"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-3-7.webp",
+      "x": 13357.57817418,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 6854,
+      "sha256": "80dc199a7c4c06ee7512cfe2acc3e33fb31e885827e5d39341fee2805847766a"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-4-7.webp",
+      "x": 13370.78612891,
+      "y": -3457.97879056,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 5614,
+      "sha256": "48ced3948cf260cce9a5a4e10cb360bc324930b4eae008cbc62e24c1619892c5"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-5-7.webp",
+      "x": 13384.0045,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 8852,
+      "sha256": "0c40c9b323ba8d80a194fe732cd3b9286355b56b5b4a7e4be9690399755dd0fb"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-6-7.webp",
+      "x": 13397.21245473,
+      "y": -3457.97879056,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 1066,
+      "sha256": "ceeb9966918ec60fa649e58d72c3f3e99d5d1a59696536e9633c81b51da02cfa"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-2-8.webp",
+      "x": 13344.37021945,
+      "y": -3445.68743584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 2204,
+      "sha256": "e3fb21580e753bf5d87ec266def7243727add789c94a9e1a44c671b831722e3c"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-3-8.webp",
+      "x": 13357.57817418,
+      "y": -3445.68743584,
+      "width": 13.20795473,
+      "height": 12.29135472,
+      "bytes": 978,
+      "sha256": "44eb0125de767e5a54042c8e93ee0e2217802fd567daf3f2de8a8737812eb660"
+    },
+    {
+      "type": "landslide-special",
+      "path": "pref/33/landslide-special-4-8.webp",
+      "x": 13370.78612891,
+      "y": -3445.68743584,
+      "width": 13.21837109,
+      "height": 12.29135472,
+      "bytes": 2344,
+      "sha256": "e56d228b889fb5119404e826d5f588e3f042de749fa7c054f71fdd7d27d48407"
+    }
+  ]
+}

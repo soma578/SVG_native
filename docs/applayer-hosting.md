@@ -21,9 +21,13 @@ a promise that every copied layer works without host-side dependencies.
 
 ## Delivery boundaries
 
+- App HTML, JS, SVG, and navigation are network-only in the Service Worker;
+  browser HTTP caching revalidates them. Old shell/runtime caches are removed
+  when the new worker activates, and the worker no longer reloads open tabs.
+  This favors version consistency over offline app startup. Map tiles and a
+  small set of selected data sources retain explicit caches.
 - `/api/cors-proxy` is network-only in the Service Worker. Current weather,
-  river, road, and similar responses must not use the runtime cache's
-  stale-while-revalidate behavior.
+  river, road, and similar responses must not use stale cache entries.
 - Proxy responses override browser and edge-cache headers with `no-store` for
   `Cache-Control`, `CDN-Cache-Control`, and `Vercel-CDN-Cache-Control`.
   Upstream compression and hop-by-hop headers are not forwarded. In

@@ -13,23 +13,21 @@ assert(swGenerator.includes("url.pathname === '/api/cors-proxy'"),
   'The live CORS proxy must bypass Service Worker caches')
 assert(swGenerator.includes("path.join(root, 'scripts/prepare-public-assets.mjs')"),
   'Changes to public-asset transforms must invalidate the Service Worker cache')
-assert(swGenerator.includes("svgmapAppLayers/appLayers/oxygenDeviceLog/"),
-  'The fixed oxygen-device snapshot must be available from the offline shell')
-assert(swGenerator.includes("svgmapAppLayers/appLayers/chugokuOutages/")
-  && swGenerator.includes("url.pathname === '/api/chugoku-outages'"),
-  'The outage layer shell must be precached while its live API bypasses Service Worker caches')
-assert(swGenerator.includes("svgmapAppLayers/appLayers/okayamaLandslideCandidates/"),
-  'The Okayama landslide layer shell must be managed by the Service Worker')
+assert(swGenerator.includes("url.pathname === '/api/chugoku-outages'"),
+  'The outage API must bypass Service Worker caches')
 assert(swGenerator.includes("relative.includes('/geometry/')")
   && swGenerator.includes("relative.endsWith('/candidates.json')")
   && swGenerator.includes("networkFirst(request, DYNAMIC_CACHE"),
-  'Large Okayama geometry and point data must load and cache on demand instead of blocking Service Worker installation')
+  'Large Okayama geometry and point data must load and cache on demand')
 assert(bootstrap.includes("[location.origin], true, true"),
   'Absolute same-origin URLs must bypass the CORS proxy')
 assert(bootstrap.includes("updateViaCache: 'none'")
-  && bootstrap.includes('SVG3_CACHE_READY')
-  && bootstrap.includes('location.reload()'),
-  'A newly activated Service Worker must bypass the HTTP cache and reload an already controlled page once')
+  && !bootstrap.includes('location.reload()')
+  && !swGenerator.includes('const SHELL_CACHE =')
+  && !swGenerator.includes('const RUNTIME_CACHE =')
+  && swGenerator.includes("if (request.mode === 'navigate')")
+  && swGenerator.includes('All other same-origin assets'),
+  'Application code and navigation must not use stale Service Worker shell/runtime caches or forced reloads')
 assert(core.includes('beforeElem && beforeElem.parentNode == parentElem')
   && core.includes('Array.from(parentElem.children).find(')
   && !core.includes('parentElem.insertBefore(img, childSpans.item(0))'),
@@ -80,4 +78,34 @@ assert(oxygenLayer.includes("data-layer-id', 'oxygenDeviceLog'")
   && oxygenIcons.every((icon) => !icon.includes('<text') && icon.includes('r="10.5"')),
   'The oxygen-device POIs and property card must follow the webcam visual and interaction contract')
 
-console.log('[host-delivery] SW/cache invalidation, same-origin bypass, BBS exclusion, local library, safe POI/UI hooks, custom layers, and backend state passed')
+const hazardPublicRoot = 'public/svgmapAppLayers/appLayers/svg3-bosai/hazard/pref'
+const okayamaHazard = fs.readFileSync(`${hazardPublicRoot}/33.svg`, 'utf8')
+const hiroshimaHazard = fs.readFileSync(`${hazardPublicRoot}/34.svg`, 'utf8')
+assert(!okayamaHazard.includes('hazard-city-bundle-')
+  && okayamaHazard.includes('data-hazard-raster-tier="low" visibleMaxZoom="2999.9"')
+  && okayamaHazard.includes('data-hazard-raster-tier="high" visibleMinZoom="3000"')
+  && okayamaHazard.includes('hazard-detail-tiles/pref/33/')
+  && [...okayamaHazard.matchAll(/<animation id="hazard-municipality-[^>]+visibleMinZoom="(\d+)"/g)]
+    .every((match) => match[1] === '9000'),
+  'Okayama must use high-resolution tiles until the original detailed SVG starts at scale 90')
+const okayamaDistrict = fs.readFileSync('public/svgmapAppLayers/appLayers/svg3-bosai/hazard/districts/33/33101.svg', 'utf8')
+const okayamaDetail = fs.readFileSync('public/map/layers/hazard/33/districts/33101.svg', 'utf8')
+const originalOkayamaDetail = fs.readFileSync('map/layers/hazard/33/districts/33101.svg', 'utf8')
+const pathData = (svg) => [...svg.matchAll(/<path\s+d="([^"]+)"/g)].map((match) => match[1])
+assert(okayamaDistrict.includes('href="/map/layers/hazard/33/districts/33101.svg"')
+  && !okayamaDistrict.includes('<path')
+  && JSON.stringify(pathData(okayamaDetail)) === JSON.stringify(pathData(originalOkayamaDetail))
+  && okayamaDetail.includes('stroke-width="0.012"')
+  && okayamaDetail.includes('stroke-width="0.015"'),
+  'Okayama detail must load the original district SVG, not a simplified preview')
+assert([...hiroshimaHazard.matchAll(/<animation id="hazard-city-bundle-[^>]+visibleMinZoom="(\d+)"/g)]
+  .every((match) => match[1] === '1500') && hiroshimaHazard.includes('hazard-city-bundle-'),
+  'Other prefectures must retain the existing city-bundle transition')
+const hazardController = fs.readFileSync('svgmapAppLayers/appLayers/svg3-bosai/hazard/hazardLayer.html', 'utf8')
+assert(hazardController.includes('waiting: expected > 0 && missing && !deferred'),
+  'Deferred city bundles must not trigger repeated readiness polling')
+assert(hazardController.includes('documents[layerId]')
+  && hazardController.includes('getSvgImagesProps?.()?.[rootHash]?.scale'),
+  'Hazard controller must use the live root document and scale after zoom')
+
+console.log('[host-delivery] network-only app shell, SW cache migration, same-origin bypass, BBS exclusion, local library, safe POI/UI hooks, custom layers, and backend state passed')

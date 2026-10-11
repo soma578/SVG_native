@@ -16,6 +16,11 @@ export function prepareHazardRasterLod(publicDir) {
   if (index.schemaVersion !== 1 || Object.keys(index.prefectures).length !== 47) {
     throw new Error('Incomplete hazard raster tile index')
   }
+  const detailRoot = 'svgmapAppLayers/appLayers/svg3-bosai/hazard-detail-tiles'
+  const detailIndex = JSON.parse(fs.readFileSync(path.join(publicDir, detailRoot, 'index.json'), 'utf8'))
+  if (detailIndex.schemaVersion !== 1 || detailIndex.prefecture !== '33' || detailIndex.density < 90) {
+    throw new Error('Incomplete Okayama high-resolution hazard tiles')
+  }
   const prefRoot = path.join(publicDir, 'svgmapAppLayers/appLayers/svg3-bosai/hazard/pref')
   let count = 0
   for (const [code, entry] of Object.entries(index.prefectures)) {
@@ -27,7 +32,17 @@ export function prepareHazardRasterLod(publicDir) {
         return `    <image href="${href}" xlink:href="${href}" x="${tile.x}" y="${tile.y}" width="${tile.width}" height="${tile.height}" pointer-events="none" />`
       })
       if (images.length !== 4) throw new Error(`Incomplete hazard tiles: ${code} ${type}`)
-      const group = `  <g id="${id}" data-hazard-raster="true" visibleMinZoom="1000" visibility="visible" pointer-events="none">\n${images.join('\n')}\n  </g>`
+      const detailImages = code === '33'
+        ? detailIndex.tiles.filter((tile) => tile.type === type).map((tile) => {
+          const href = `/${detailRoot}/${tile.path}`
+          return `      <image href="${href}" xlink:href="${href}" x="${tile.x}" y="${tile.y}" width="${tile.width}" height="${tile.height}" pointer-events="none" />`
+        })
+        : []
+      if (code === '33' && detailImages.length === 0) throw new Error(`Missing high-resolution hazard tiles: ${type}`)
+      const content = code === '33'
+        ? `    <g data-hazard-raster-tier="low" visibleMaxZoom="2999.9">\n${images.join('\n')}\n    </g>\n    <g data-hazard-raster-tier="high" visibleMinZoom="3000">\n${detailImages.join('\n')}\n    </g>`
+        : images.join('\n')
+      const group = `  <g id="${id}" data-hazard-raster="true" visibleMinZoom="1000" visibility="visible" pointer-events="none">\n${content}\n  </g>`
       if (type === 'flood') {
         const next = source.replace(/  <animation id="hazard-vector-overview-\d\d"[\s\S]*?\/>/, group)
         if (next === source) throw new Error(`Missing prefecture overview: ${code}`)
@@ -41,5 +56,5 @@ export function prepareHazardRasterLod(publicDir) {
     fs.writeFileSync(target, source)
     count++
   }
-  console.log(`[assets] hazard raster/city LOD: ${count} prefectures, raster <15, city shapes >=15`)
+  console.log(`[assets] hazard raster/city LOD: ${count} prefectures, Okayama detail tiles from scale 30`)
 }

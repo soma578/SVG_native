@@ -39,6 +39,60 @@
 		svgMap.refreshScreen();
 		putGlobalMessage("© OpenStreetMap contributors");
 	});
+
+	// Keep the last fully loaded tile set behind a new zoom level. SVGMap's
+	// transition images are removed when requests finish, including failures;
+	// without this fallback an offline/failed zoom leaves a white map.
+	var lastLoadedTiles = [];
+	var requestedTileSet = "";
+	var tileCheckTimer = null;
+	var tileCheckGeneration = 0;
+
+	function renderedTileImages(){
+		try {
+			return parent.document.querySelectorAll('#mapcanvas img[src*=".tile.openstreetmap.org/"]');
+		} catch (error) {
+			// An isolated controller cannot inspect the host's rendered tiles.
+			return null;
+		}
+	}
+
+	function watchTileSet(tileSet, generation, attempts){
+		if (generation !== tileCheckGeneration) return;
+		var rendered = renderedTileImages();
+		if (!rendered) return;
+		var loadedURLs = new Set();
+		for (var i = 0; i < rendered.length; i++) {
+			if (rendered[i].complete && rendered[i].naturalWidth > 0) {
+				loadedURLs.add(rendered[i].src);
+			}
+		}
+		var tiles = svgImage.getElementsByTagName('image');
+		var nextLoadedTiles = [];
+		var complete = true;
+		for (var i = 0; i < tiles.length; i++) {
+			var tile = tiles[i];
+			if (!tileSet[tile.getAttribute('metadata')]) continue;
+			nextLoadedTiles.push(tile);
+			if (!loadedURLs.has(tile.getAttribute('xlink:href'))) complete = false;
+		}
+		if (nextLoadedTiles.length !== Object.keys(tileSet).length) complete = false;
+		if (complete) {
+			lastLoadedTiles = nextLoadedTiles;
+			var removed = false;
+			for (var i = tiles.length - 1; i >= 0; i--) {
+				if (!tileSet[tiles[i].getAttribute('metadata')]) {
+					tiles[i].parentNode.removeChild(tiles[i]);
+					removed = true;
+				}
+			}
+			if (removed) svgMap.refreshScreen();
+		} else if (attempts < 120) {
+			tileCheckTimer = setTimeout(function(){
+				watchTileSet(tileSet, generation, attempts + 1);
+			}, 250);
+		}
+	}
 	
 	function preRenderFunction(){
 	// 再描画直前に実行されるコールバック関数
@@ -55,7 +109,13 @@
 		var tileSet = getTileSet( svgMap.getGeoViewBox() , level )
 		
 		// 現在読み込まれているimageというタグ名を持った(地図のタイルごとのイメージ)要素を取得
-		console.log("tileSet:",tileSet);
+		var signature = Object.keys(tileSet).sort().join('|');
+		var changed = signature !== requestedTileSet;
+		if (changed) {
+			requestedTileSet = signature;
+			tileCheckGeneration++;
+			clearTimeout(tileCheckTimer);
+		}
 		var currentTiles =  svgImage.getElementsByTagName("image");
 		
 		// 取得できた各タイル分以下を繰り返し、既に読み込み済みのものは再利用、表示範囲外のものは削除する
@@ -65,7 +125,7 @@
 			if ( tileSet[qkey] ){
 //				すでにあるのでスキップさせるフラグ立てる。
 				tileSet[qkey].exist = true;
-			} else {
+			} else if (lastLoadedTiles.indexOf(oneTile) === -1) {
 //				ないものなので、消去
 				oneTile.parentNode.removeChild(oneTile);
 			}
@@ -77,6 +137,12 @@
 				var addTile = getTile( tileSet[tkey].x , tileSet[tkey].y , level , this.CRS );
 				svgImage.getElementsByTagName("svg")[0].appendChild(addTile);
 			}
+		}
+		if (changed) {
+			var generation = tileCheckGeneration;
+			tileCheckTimer = setTimeout(function(){
+				watchTileSet(tileSet, generation, 0);
+			}, 100);
 		}
 	}
 

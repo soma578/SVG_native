@@ -15,6 +15,10 @@ const nextConfig = {
       { key: 'X-Content-Type-Options', value: 'nosniff' },
     ]
     return [
+      ...['/svgmap.html', '/svgmap-bootstrap.js', '/customShowPoiProperty.js', '/layerListStyle.css', '/map/:path*'].map((source) => ({
+        source,
+        headers: staticSvgMapHeaders,
+      })),
       {
         source: '/svgmapjs/:path*',
         headers: staticSvgMapHeaders,

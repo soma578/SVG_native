@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { prepareHazardTransition } from './prepare-hazard-transition.mjs'
 import { prepareHazardRasterLod } from './prepare-hazard-raster-lod.mjs'
 import { prepareHazardCityBundles } from './prepare-hazard-city-bundles.mjs'
+import { prepareOkayamaHazardDetailStyle } from './hazard-detail-style.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const publicDir = path.join(root, 'public')
@@ -109,6 +110,7 @@ for (const [destName, sourceName] of assets) {
   }
 }
 
+prepareOkayamaHazardDetailStyle(publicDir)
 prepareHazardTransition(publicDir)
 prepareHazardRasterLod(publicDir)
 prepareHazardCityBundles(publicDir)

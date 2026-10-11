@@ -1,57 +1,109 @@
-export const SHEET_HEADERS = [
-  'receivedAt', 'id', 'name', 'lat', 'lng', 'waterLevel',
-  'tiltDetected', 'batteryOk', 'lastReceivedAt', 'updatedAt',
+export const HISTORY_HEADERS = [
+  'receivedAt', 'retryCount', 'logId', 'id', 'name', 'lat', 'lng',
+  'waterLevel', 'tiltDetected', 'batteryOk', 'lastReceivedAt', 'floodedAt',
 ]
 
-function timestamp(value, label) {
-  if (typeof value !== 'string' || !/^\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d{1,3})?)?(?:Z|[+-]\d\d:\d\d)$/.test(value)) {
-    throw new Error(`${label} must be an ISO 8601 timestamp with a time zone`)
+export const LATEST_HEADERS = [
+  'id', 'name', 'lat', 'lng', 'waterLevel', 'tiltDetected', 'batteryOk',
+  'lastReceivedAt', 'floodedAt', 'logId', 'receivedAt', 'retryCount',
+]
+
+const LOGPOT_TIMESTAMP = /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\+09:00$/
+
+function timestamp(value, label, nullable = false) {
+  if (nullable && value === null) return null
+  if (typeof value !== 'string' || !LOGPOT_TIMESTAMP.test(value)) {
+    throw new Error(label + ' must be an ISO 8601 timestamp with seconds and +09:00')
   }
-  const parsed = Date.parse(value)
-  if (!Number.isFinite(parsed)) throw new Error(`${label} is invalid`)
-  return new Date(parsed).toISOString()
+  if (!Number.isFinite(Date.parse(value))) throw new Error(label + ' is invalid')
+  return value
 }
 
-function stakeOf(value, index) {
+function nullableCoordinate(value, minimum, maximum, label) {
+  if (value === null) return null
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < minimum || value > maximum) {
+    throw new Error(label + ' is invalid')
+  }
+  return value
+}
+
+export function normalizePayload(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
-    throw new Error(`stakes[${index}] must be an object`)
+    throw new Error('JSON object required')
   }
-  const { id, name, lat, lng, waterLevel, tiltDetected, batteryOk, lastReceivedAt } = value
-  if (typeof id !== 'string' || !/^[\p{L}\p{N}_-]{1,64}$/u.test(id)) throw new Error(`stakes[${index}].id is invalid`)
-  if (typeof name !== 'string' || !name.trim() || name.length > 100) throw new Error(`stakes[${index}].name is invalid`)
-  if (typeof lat !== 'number' || !Number.isFinite(lat) || lat < -90 || lat > 90) throw new Error(`stakes[${index}].lat is invalid`)
-  if (typeof lng !== 'number' || !Number.isFinite(lng) || lng < -180 || lng > 180) throw new Error(`stakes[${index}].lng is invalid`)
-  if (waterLevel !== null && ![0, 1, 2].includes(waterLevel)) throw new Error(`stakes[${index}].waterLevel is invalid`)
-  if (tiltDetected !== null && typeof tiltDetected !== 'boolean') throw new Error(`stakes[${index}].tiltDetected is invalid`)
-  if (typeof batteryOk !== 'boolean') throw new Error(`stakes[${index}].batteryOk is invalid`)
-  return { id, name: name.trim(), lat, lng, waterLevel, tiltDetected, batteryOk, lastReceivedAt: timestamp(lastReceivedAt, `stakes[${index}].lastReceivedAt`) }
+
+  const {
+    logId, id, name, lat, lng, waterLevel,
+    tiltDetected, batteryOk, lastReceivedAt, floodedAt,
+  } = value
+
+  if (typeof logId !== 'string' || !logId || logId.length > 256 || /[\r\n]/.test(logId)) {
+    throw new Error('logId is invalid')
+  }
+  if (typeof id !== 'string' || !/^[\p{L}\p{N}_-]{1,64}$/u.test(id)) {
+    throw new Error('id is invalid')
+  }
+  if (typeof name !== 'string' || !name.trim() || name.length > 100) {
+    throw new Error('name is invalid')
+  }
+
+  const normalizedLat = nullableCoordinate(lat, -90, 90, 'lat')
+  const normalizedLng = nullableCoordinate(lng, -180, 180, 'lng')
+
+  if (waterLevel !== null && ![0, 1, 2].includes(waterLevel)) {
+    throw new Error('waterLevel is invalid')
+  }
+  if (typeof tiltDetected !== 'boolean') throw new Error('tiltDetected is invalid')
+  if (typeof batteryOk !== 'boolean') throw new Error('batteryOk is invalid')
+
+  return {
+    logId,
+    id,
+    name: name.trim(),
+    lat: normalizedLat,
+    lng: normalizedLng,
+    waterLevel,
+    tiltDetected,
+    batteryOk,
+    lastReceivedAt: timestamp(lastReceivedAt, 'lastReceivedAt'),
+    floodedAt: timestamp(floodedAt, 'floodedAt', true),
+  }
 }
 
-export function normalizePayload(payload) {
-  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('JSON object required')
-  const isBatch = Object.hasOwn(payload, 'stakes')
-  const source = isBatch ? payload.stakes : [payload]
-  if (!Array.isArray(source) || source.length < 1 || source.length > 100) throw new Error('stakes must contain 1–100 records')
-  const updatedAt = payload.updatedAt === undefined ? '' : timestamp(payload.updatedAt, 'updatedAt')
-  const seen = new Set()
-  const stakes = source.map(stakeOf).filter((stake) => {
-    const key = `${stake.id}\0${stake.lastReceivedAt}`
-    if (seen.has(key)) return false
-    seen.add(key)
-    return true
-  })
-  return { stakes, updatedAt }
+function cell(value) {
+  return value === null ? '' : value
 }
 
-export function eventKey(stake) {
-  return `${stake.id}\0${stake.lastReceivedAt}`
-}
-
-export function sheetRow(stake, updatedAt, receivedAt) {
+export function historyRow(stake, retryCount, receivedAt) {
   return [
-    receivedAt, stake.id, stake.name, stake.lat, stake.lng,
-    stake.waterLevel === null ? '' : stake.waterLevel,
-    stake.tiltDetected === null ? '' : stake.tiltDetected,
-    stake.batteryOk, stake.lastReceivedAt, updatedAt,
+    receivedAt,
+    retryCount,
+    stake.logId,
+    stake.id,
+    stake.name,
+    cell(stake.lat),
+    cell(stake.lng),
+    cell(stake.waterLevel),
+    stake.tiltDetected,
+    stake.batteryOk,
+    stake.lastReceivedAt,
+    cell(stake.floodedAt),
+  ]
+}
+
+export function latestRow(stake, retryCount, receivedAt) {
+  return [
+    stake.id,
+    stake.name,
+    cell(stake.lat),
+    cell(stake.lng),
+    cell(stake.waterLevel),
+    stake.tiltDetected,
+    stake.batteryOk,
+    stake.lastReceivedAt,
+    cell(stake.floodedAt),
+    stake.logId,
+    receivedAt,
+    retryCount,
   ]
 }

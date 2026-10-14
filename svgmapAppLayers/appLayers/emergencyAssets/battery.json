@@ -1,0 +1,94 @@
+{
+  "updatedAt": "2026-10-14T09:20:00+09:00",
+  "demo": true,
+  "assets": [
+    {
+      "id": "DEMO-BAT-001",
+      "name": "【デモ・架空】岡山エリア・蓄電拠点 A",
+      "address": "岡山市北区内（架空の表示位置）",
+      "lat": 34.682,
+      "lng": 133.913,
+      "status": "available",
+      "chargePercent": 82,
+      "capacityKWh": 10,
+      "updatedAt": "2026-10-14T09:20:00+09:00"
+    },
+    {
+      "id": "DEMO-BAT-002",
+      "name": "【デモ・架空】倉敷エリア・蓄電拠点 B",
+      "address": "倉敷市内（架空の表示位置）",
+      "lat": 34.595,
+      "lng": 133.768,
+      "status": "inUse",
+      "chargePercent": 43,
+      "capacityKWh": 20,
+      "updatedAt": "2026-10-14T08:45:00+09:00"
+    },
+    {
+      "id": "DEMO-BAT-003",
+      "name": "【デモ・架空】総社エリア・蓄電拠点 C",
+      "address": "総社市内（架空の表示位置）",
+      "lat": 34.678,
+      "lng": 133.737,
+      "status": "available",
+      "chargePercent": 94,
+      "capacityKWh": 5,
+      "updatedAt": "2026-10-14T07:55:00+09:00"
+    },
+    {
+      "id": "DEMO-BAT-004",
+      "name": "【デモ・架空】玉野エリア・蓄電拠点 D",
+      "address": "玉野市内（架空の表示位置）",
+      "lat": 34.498,
+      "lng": 133.946,
+      "status": "available",
+      "chargePercent": 67,
+      "capacityKWh": 30,
+      "updatedAt": "2026-10-14T08:10:00+09:00"
+    },
+    {
+      "id": "DEMO-BAT-005",
+      "name": "【デモ・架空】赤磐エリア・蓄電拠点 E",
+      "address": "赤磐市内（架空の表示位置）",
+      "lat": 34.758,
+      "lng": 134.021,
+      "status": "inUse",
+      "chargePercent": 27,
+      "capacityKWh": 10,
+      "updatedAt": "2026-10-14T06:35:00+09:00"
+    },
+    {
+      "id": "DEMO-BAT-006",
+      "name": "【デモ・架空】津山エリア・蓄電拠点 F",
+      "address": "津山市内（架空の表示位置）",
+      "lat": 35.067,
+      "lng": 134.012,
+      "status": "unknown",
+      "chargePercent": null,
+      "capacityKWh": 20,
+      "updatedAt": "2026-10-12T16:20:00+09:00"
+    },
+    {
+      "id": "DEMO-BAT-007",
+      "name": "【デモ・架空】備前エリア・蓄電拠点 G",
+      "address": "備前市内（架空の表示位置）",
+      "lat": 34.738,
+      "lng": 134.194,
+      "status": "fault",
+      "chargePercent": 12,
+      "capacityKWh": 5,
+      "updatedAt": "2026-10-13T17:10:00+09:00"
+    },
+    {
+      "id": "DEMO-BAT-008",
+      "name": "【デモ・架空】新見エリア・蓄電拠点 H",
+      "address": "新見市内（架空の表示位置）",
+      "lat": 34.978,
+      "lng": 133.468,
+      "status": "available",
+      "chargePercent": 76,
+      "capacityKWh": 15,
+      "updatedAt": "2026-10-13T14:40:00+09:00"
+    }
+  ]
+}

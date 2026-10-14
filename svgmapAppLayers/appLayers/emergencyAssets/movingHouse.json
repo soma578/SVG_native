@@ -1,0 +1,102 @@
+{
+  "updatedAt": "2026-10-14T09:10:00+09:00",
+  "demo": true,
+  "assets": [
+    {
+      "id": "DEMO-MH-001",
+      "name": "【デモ・架空】岡山エリア・移動式住宅 A",
+      "address": "岡山市南区内（架空の表示位置）",
+      "lat": 34.617,
+      "lng": 133.901,
+      "placement": "installed",
+      "accepting": true,
+      "capacity": 4,
+      "occupied": 2,
+      "updatedAt": "2026-10-14T09:10:00+09:00"
+    },
+    {
+      "id": "DEMO-MH-002",
+      "name": "【デモ・架空】倉敷エリア・移動式住宅 B",
+      "address": "倉敷市内（架空の表示位置）",
+      "lat": 34.602,
+      "lng": 133.775,
+      "placement": "installed",
+      "accepting": true,
+      "capacity": 2,
+      "occupied": 2,
+      "updatedAt": "2026-10-14T08:30:00+09:00"
+    },
+    {
+      "id": "DEMO-MH-003",
+      "name": "【デモ・架空】総社エリア・移動式住宅 C",
+      "address": "総社市内（架空の表示位置）",
+      "lat": 34.666,
+      "lng": 133.756,
+      "placement": "installed",
+      "accepting": true,
+      "capacity": 3,
+      "occupied": 1,
+      "updatedAt": "2026-10-14T07:40:00+09:00"
+    },
+    {
+      "id": "DEMO-MH-004",
+      "name": "【デモ・架空】玉野エリア・移動式住宅 D",
+      "address": "玉野市内（架空の表示位置）",
+      "lat": 34.514,
+      "lng": 133.971,
+      "placement": "installing",
+      "accepting": false,
+      "capacity": 4,
+      "occupied": 0,
+      "updatedAt": "2026-10-14T08:15:00+09:00"
+    },
+    {
+      "id": "DEMO-MH-005",
+      "name": "【デモ・架空】赤磐エリア・移動式住宅 E",
+      "address": "赤磐市内（架空の表示位置）",
+      "lat": 34.777,
+      "lng": 134.044,
+      "placement": "installed",
+      "accepting": false,
+      "capacity": 2,
+      "occupied": 0,
+      "updatedAt": "2026-10-13T18:05:00+09:00"
+    },
+    {
+      "id": "DEMO-MH-006",
+      "name": "【デモ・架空】津山エリア・移動式住宅 F",
+      "address": "津山市内（架空の表示位置）",
+      "lat": 35.052,
+      "lng": 134.036,
+      "placement": "inTransit",
+      "accepting": false,
+      "capacity": 3,
+      "occupied": 0,
+      "updatedAt": "2026-10-14T06:50:00+09:00"
+    },
+    {
+      "id": "DEMO-MH-007",
+      "name": "【デモ・架空】備前エリア・移動式住宅 G",
+      "address": "備前市内（架空の表示位置）",
+      "lat": 34.713,
+      "lng": 134.174,
+      "placement": "installed",
+      "accepting": true,
+      "capacity": 4,
+      "occupied": 3,
+      "updatedAt": "2026-10-14T08:05:00+09:00"
+    },
+    {
+      "id": "DEMO-MH-008",
+      "name": "【デモ・架空】新見エリア・移動式住宅 H",
+      "address": "新見市内（架空の表示位置）",
+      "lat": 34.963,
+      "lng": 133.492,
+      "placement": "unknown",
+      "accepting": null,
+      "capacity": null,
+      "occupied": null,
+      "updatedAt": "2026-10-12T15:30:00+09:00"
+    }
+  ]
+}

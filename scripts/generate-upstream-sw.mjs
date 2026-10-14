@@ -29,6 +29,9 @@ const isShellAsset = (relative) => {
   if (relative.startsWith('svgmapAppLayers/appLayers/oxygenDeviceLog/')) {
     return /\.(js|html|svg|csv)$/.test(relative)
   }
+  if (relative.startsWith('svgmapAppLayers/appLayers/emergencyAssets/')) {
+    return /\.(js|html|svg|css|json)$/.test(relative)
+  }
   if (relative.startsWith('svgmapAppLayers/appLayers/chugokuOutages/')) {
     return /\.(js|html|svg)$/.test(relative)
   }

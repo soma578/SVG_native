@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="12243.4 -4605.6 3205.3 2251"
+     data-controller="movingHouse.html#exec=appearOnLayerLoad&amp;requiredHeight=340"
+     property="住宅ID,名称,設置状況,利用可否,定員,入居人数,最終確認">
+  <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)"/>
+  <defs>
+    <!-- 車輪と牽引部で、避難所の通常の家マークと区別する。 -->
+    <!-- フラットな連結住戸アイコンで、避難所やトレーラーハウスと区別する。 -->
+    <g id="asset-available"><image x="-13" y="-13" width="26" height="26" xlink:href="./icons/house-available.svg"/></g>
+    <g id="asset-partial"><image x="-13" y="-13" width="26" height="26" xlink:href="./icons/house-partial.svg"/></g>
+    <g id="asset-unavailable"><image x="-13" y="-13" width="26" height="26" xlink:href="./icons/house-unavailable.svg"/></g>
+    <g id="asset-unknown"><image x="-13" y="-13" width="26" height="26" xlink:href="./icons/house-unknown.svg"/></g>
+  </defs>
+  <g id="assetPoints"/>
+</svg>

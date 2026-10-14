@@ -1,0 +1,15 @@
+:root { color-scheme: light; font-family: system-ui, sans-serif; }
+body { margin: 9px; color: #1f2937; font-size: 13px; line-height: 1.5; }
+h1 { margin: 0 0 6px; font-size: 17px; }
+p { margin: 6px 0; }
+button { padding: 6px 10px; border: 1px solid #a5b4c4; border-radius: 6px; background: #fff; color: #24364b; cursor: pointer; font: inherit; }
+button:disabled { cursor: wait; opacity: .6; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 8px 0; }
+.legend span { white-space: nowrap; }
+.dot { display: inline-block; width: 11px; height: 11px; margin-right: 4px; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px #94a3b8; vertical-align: -2px; }
+.available { background: #15803d; } .partial { background: #ca8a04; }
+.unavailable { background: #dc2626; } .unknown { background: #64748b; }
+.status { margin: 8px 0; padding: 7px 9px; border-left: 4px solid #15803d; background: #f0fdf4; }
+.status.error { border-color: #b91c1c; background: #fef2f2; color: #7f1d1d; }
+.demo-notice { padding: 7px 9px; border: 2px solid #b91c1c; border-radius: 6px; background: #fff1f2; color: #991b1b; font-weight: 700; }
+.notice { padding: 7px 9px; border-left: 3px solid #64748b; background: #f8fafc; font-size: 11px; }

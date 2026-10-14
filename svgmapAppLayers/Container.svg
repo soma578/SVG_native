@@ -241,6 +241,12 @@
              xlink:href="./appLayers/mizupigui/mizupigui.svg"
              class="岡山大学 clickable" title="水ピィ杭 最新状態（logpot）" visibility="hidden" opacity="1" />
   <animation x="-30000" y="-30000" width="60000" height="60000"
+             xlink:href="./appLayers/emergencyAssets/battery.svg"
+             class="岡山大学 clickable" title="非常用電源・固体電池（デモ）" visibility="hidden" opacity="1" />
+  <animation x="-30000" y="-30000" width="60000" height="60000"
+             xlink:href="./appLayers/emergencyAssets/movingHouse.svg"
+             class="岡山大学 clickable" title="ムービングハウス・利用状況（デモ）" visibility="hidden" opacity="1" />
+  <animation x="-30000" y="-30000" width="60000" height="60000"
              xlink:href="./appLayers/chugokuOutages/chugokuOutages.svg"
              class="岡山大学 clickable" title="中国電力 停電情報・履歴（中国地方）" visibility="hidden" opacity="1" />
   <animation x="123" y="-46" width="22" height="22"

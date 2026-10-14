@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="12243.4 -4605.6 3205.3 2251"
+     data-controller="mosademy.html#exec=appearOnLayerLoad&amp;requiredHeight=360"
+     property="施設ID,施設名,状態,最終計測">
+  <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)"/>
+  <defs>
+    <g id="facility-available"><image x="-13" y="-13" width="26" height="26" xlink:href="./icons/available.svg"/></g>
+    <g id="facility-partial"><image x="-13" y="-13" width="26" height="26" xlink:href="./icons/partial.svg"/></g>
+    <g id="facility-unavailable"><image x="-13" y="-13" width="26" height="26" xlink:href="./icons/unavailable.svg"/></g>
+    <g id="facility-unknown"><image x="-13" y="-13" width="26" height="26" xlink:href="./icons/unknown.svg"/></g>
+  </defs>
+  <g id="facilityPoints"/>
+</svg>

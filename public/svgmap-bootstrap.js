@@ -1,5 +1,7 @@
 const module = await import('/svgmapjs/SVGMapLv0.1_r18module.js')
 window.svgMap = module.svgMap
+const { installOkayamaPropertyView } = await import('/okayama-property-view.js')
+installOkayamaPropertyView(window.svgMap)
 const { CorsProxy } = await import('/svgmapjs/CorsProxyModule.js')
 const corsProxy = new CorsProxy()
 corsProxy.setService('/api/cors-proxy?url=', [location.origin], true, true)

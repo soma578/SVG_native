@@ -1,18 +1,18 @@
+// Keep MOSAdemy's approved-data loader and sensor renderer. HLMap groups the
+// returned sensors by facility so one location has one pin and detail buttons.
+import { loadApprovedSensors, showSensor } from 'https://mosa-github.github.io/data_test_server_page/assets/svgmap-data.js'
 import { showPropertyModal } from '../svg3-bosai/representative-pins/propertyModal.js'
-import { CATALOG_URL, approvedDatasetUrl, normalizePublicData, facilityState } from './model.js'
+import { groupByFacility } from './view-model.js'
 
 const REFRESH_MS = 180_000
-const FETCH_TIMEOUT_MS = 20_000
 const ui = {
   reload: document.getElementById('reloadButton'),
   status: document.getElementById('statusMessage'),
-  count: document.getElementById('facilityCount'),
+  facilityCount: document.getElementById('facilityCount'),
+  sensorCount: document.getElementById('sensorCount'),
   measuredAt: document.getElementById('measuredAt'),
   fetchedAt: document.getElementById('fetchedAt'),
 }
-const colors = { available: '#15803d', partial: '#a16207', unavailable: '#b91c1c', unknown: '#475569' }
-const sensorLabels = { generator: '発電機の燃料残量', water: '水位残量', power: '電力' }
-const expectedUnits = { generator: 'L', water: '%', power: 'W' }
 let initialized = false
 let loading = false
 let facilities = []
@@ -40,99 +40,116 @@ async function initialize() {
   }, REFRESH_MS)
 }
 
-async function fetchJson(url, signal) {
-  const response = await fetch(url, { cache: 'no-store', signal, credentials: 'omit' })
-  if (!response.ok) throw new Error(`${new URL(url).pathname}: HTTP ${response.status}`)
-  return response.json()
-}
-
 async function loadData() {
   if (loading) return
   loading = true
   ui.reload.disabled = true
-  setStatus('公開データを取得しています', '')
-  const controller = new AbortController()
-  const timeout = window.setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
+  setStatus('先方の公開データを取得しています', '')
   try {
-    const catalog = await fetchJson(CATALOG_URL, controller.signal)
-    const [latest, locations, cameras] = await Promise.all(
-      ['latest', 'locations', 'cameras'].map((id) => fetchJson(approvedDatasetUrl(catalog, id), controller.signal)),
-    )
-    const data = normalizePublicData(catalog, latest, locations, cameras)
-    facilities = data.facilities
-    draw()
-    ui.count.textContent = facilities.length.toLocaleString('ja-JP')
+    const sensors = await loadApprovedSensors()
+    const nextFacilities = groupByFacility(sensors)
+    draw(nextFacilities)
+    facilities = nextFacilities
+    ui.facilityCount.textContent = facilities.length.toLocaleString('ja-JP')
+    ui.sensorCount.textContent = facilities.reduce((count, facility) => count + facility.sensors.length, 0).toLocaleString('ja-JP')
     ui.measuredAt.textContent = formatDate(latestMeasurement())
     ui.fetchedAt.textContent = formatDate(new Date().toISOString())
-    const skipped = data.skippedRows ? `（関連付けられないデータ ${data.skippedRows}件）` : ''
-    setStatus(facilities.length ? `${facilities.length}施設の公開データを表示しています${skipped}` : '公開施設の位置情報はありません', '')
+    setStatus(facilities.length ? `${facilities.length}施設の公開データを表示しています` : '表示できる公開施設はありません', '')
   } catch (error) {
     console.error('[mosademy] public data load failed', error)
-    if (facilities.length) draw()
-    setStatus(`再取得に失敗しました。前回の表示を保持しています（${error.name === 'AbortError' ? '時間切れ' : error.message}）`, 'error')
+    setStatus(`再取得に失敗しました。前回の表示を保持しています（${error.message}）`, 'error')
   } finally {
-    window.clearTimeout(timeout)
     loading = false
     ui.reload.disabled = false
   }
 }
 
-function latestMeasurement() {
-  return facilities.reduce((latest, facility) =>
-    facility.measuredAt && (!latest || Date.parse(facility.measuredAt) > Date.parse(latest))
-      ? facility.measuredAt : latest, null)
-}
-
-function draw() {
+function draw(nextFacilities) {
   const fragment = svgImage.createDocumentFragment()
-  facilities.forEach((facility, index) => {
-    const [state] = facilityState(facility)
-    const marker = svgImage.createElement('use')
-    marker.setAttribute('xlink:href', `#facility-${state}`)
-    marker.setAttribute('transform', `ref(svg,${(facility.lng * 100).toFixed(5)},${(-facility.lat * 100).toFixed(5)})`)
+  nextFacilities.forEach((facility, index) => {
+    const marker = svgImage.createElement('image')
+    marker.setAttribute('href', './icons/available.svg')
+    marker.setAttribute('x', '-12')
+    marker.setAttribute('y', '-12')
+    marker.setAttribute('width', '24')
+    marker.setAttribute('height', '24')
+    marker.setAttribute('transform', `ref(svg,${facility.lng},${-facility.lat})`)
     marker.setAttribute('data-record-index', String(index))
-    marker.setAttribute('data-feature-id', facility.id)
-    marker.setAttribute('data-layer-id', 'mosademy')
-    marker.setAttribute('data-kind', 'poi')
-    marker.setAttribute('data-title', facility.name)
-    marker.setAttribute('content', [facility.id, facility.name, state, facility.measuredAt || ''].map(csvSafe).join(','))
-    marker.setAttribute('xlink:title', facility.name)
-    marker.setAttribute('pointer-events', 'all')
+    marker.setAttribute('data-facility-id', facility.id)
+    marker.setAttribute('title', facility.name)
+    const sensorValue = (type) => {
+      const sensor = facility.sensors.find((item) => item.type === type)
+      return sensor?.value == null ? '-' : `${sensor.value}${sensor.unit ? ` ${sensor.unit}` : ''}`
+    }
+    const camera = facility.sensors.find((item) => item.cameras?.length)
+    const measuredAt = facility.sensors.reduce((latest, sensor) =>
+      sensor.updated_at && (!latest || Date.parse(sensor.updated_at) > Date.parse(latest))
+        ? sensor.updated_at : latest, null)
+    marker.setAttribute('content', [facility.id, facility.name, sensorValue('generator'),
+      sensorValue('water'), sensorValue('power'), camera?.cameras?.[0]?.image_url || camera?.name || '-',
+      formatDate(measuredAt)].map(csvSafe).join(','))
     fragment.appendChild(marker)
   })
-  svgImage.getElementById('facilityPoints').replaceChildren(fragment)
+  svgImage.getElementById('sensor-root').replaceChildren(fragment)
   svgMap.refreshScreen()
+}
+
+function latestMeasurement() {
+  return facilities.flatMap((facility) => facility.sensors)
+    .reduce((latest, sensor) => sensor.updated_at && (!latest || Date.parse(sensor.updated_at) > Date.parse(latest))
+      ? sensor.updated_at : latest, null)
 }
 
 export function showFacilityProperty(target) {
   const facility = facilities[Number(target?.getAttribute('data-record-index'))]
   if (!facility) return
-  const [state, stateLabel] = facilityState(facility)
-  const rows = [
-    ['施設ID', facility.id],
-    ['最終計測', formatDate(facility.measuredAt)],
-    ...facility.sensors.map((sensor) => {
-      const label = sensorLabels[sensor.type]
-      const unit = sensor.unit === expectedUnits[sensor.type] ? ` ${sensor.unit}` : ''
-      const value = sensor.value === null ? '未取得' : `${sensor.value.toLocaleString('ja-JP')}${unit}`
-      return [label, `${value} ／ ${statusLabel(sensor.status)} ／ ${formatDate(sensor.measuredAt)}`]
-    }),
-  ]
-  const body = rows.map(([label, value]) => `<div class="svg3-property-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')
-  const media = facility.cameras.map((camera) => `<div class="svg3-property-row svg3-property-media-row">
-    <dt>${escapeHtml(camera.name)}</dt><dd><div class="svg3-property-media"><img src="${escapeHtml(camera.imageUrl)}" alt="${escapeHtml(camera.name)}" loading="lazy" referrerpolicy="no-referrer"></div>
-    <span class="svg3-property-media-status">${escapeHtml(statusLabel(camera.status))} ／ 撮影 ${escapeHtml(formatDate(camera.measuredAt))}</span></dd></div>`).join('')
-  return showPropertyModal(`<article class="svg3-property svg3-property-webcam-compact" style="--property-accent:${colors[state]}">
+  const buttons = facility.sensors.map((sensor, index) =>
+    `<button type="button" data-sensor-index="${index}" aria-pressed="false">${escapeHtml(sensor.name || sensor.id)}</button>`).join('')
+  const info = showPropertyModal(`<article class="svg3-property svg3-property-webcam-compact">
     <header class="svg3-property-header"><p class="svg3-property-kind">MOSAdemy 設備監視</p>
     <h2 class="svg3-property-title">${escapeHtml(facility.name)}</h2>
-    <div class="svg3-property-status"><span class="svg3-property-dot"></span><span>${escapeHtml(stateLabel)}</span></div></header>
-    <dl class="svg3-property-body">${body}${media}</dl></article>`,
-  { attribution: { label: 'MOSAdemy 公開承認済みデータ' } })
+    <div class="svg3-property-status"><span class="svg3-property-dot"></span><span>${facility.sensors.length}項目</span></div></header>
+    <div class="svg3-property-actions svg3-property-actions-padded" role="group" aria-label="表示する項目を選択"
+      style="grid-template-columns:repeat(2,minmax(0,1fr));padding:12px 17px 6px">${buttons}</div>
+    <div class="svg3-property-body"><div class="svg3-property-row mosademy-detail" aria-live="polite"></div></div>
+    </article>`, { attribution: { label: 'MOSAdemy 公開承認済みデータ' } })
+  if (!info) return info
+  const buttonNodes = [...info.querySelectorAll('[data-sensor-index]')]
+  buttonNodes.forEach((button, index) => button.addEventListener('click', () => {
+    renderSelectedSensor(info, facility.sensors[index])
+    buttonNodes.forEach((node) => {
+      const selected = node === button
+      node.setAttribute('aria-pressed', String(selected))
+      node.style.background = selected ? '#e5f1eb' : '#fff'
+    })
+  }))
+  buttonNodes[0]?.click()
+  return info
 }
 
-function statusLabel(value) {
-  return { normal: '正常', warning: '要確認', offline: 'オフライン', error: '異常', unknown: '状態不明' }[value] || '状態不明'
+function renderSelectedSensor(info, sensor) {
+  const supplierView = document.createElement('div')
+  showSensor(supplierView, sensor)
+  const detail = info.querySelector('.mosademy-detail')
+  const doc = detail.ownerDocument
+  const label = doc.createElement('dt')
+  label.textContent = sensor.name || sensor.id
+  const value = doc.createElement('dd')
+  value.textContent = supplierView.querySelector('p')?.textContent || '表示できるデータはありません'
+  detail.replaceChildren(label, value)
+  for (const supplierImage of supplierView.querySelectorAll('img')) {
+    const media = doc.createElement('div')
+    media.className = 'svg3-property-media'
+    const image = doc.createElement('img')
+    image.src = supplierImage.src
+    image.alt = supplierImage.alt
+    image.loading = 'lazy'
+    image.referrerPolicy = 'no-referrer'
+    media.appendChild(image)
+    value.appendChild(media)
+  }
 }
+
 function formatDate(value) {
   const date = value ? new Date(value) : null
   return date && Number.isFinite(date.getTime())

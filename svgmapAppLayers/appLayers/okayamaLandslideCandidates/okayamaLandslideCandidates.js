@@ -137,7 +137,17 @@ function customHitTester(position) {
   const hits = hitFeatures.filter((feature) => enabled.has(feature.type) &&
     featureContains(feature, Number(position.lng), Number(position.lat), tolerance))
   if (!position.isMapCenterHitTest) clickHitFeatures = hits
-  return hits.length ? hits.map((feature) => feature.location || feature.siteNumber) : null
+  return hits.length ? hits.map((feature) => {
+    // SVGMap's default property renderer reads content/property from the hit
+    // element. Retain data-hitTestIndex so the original custom card can be
+    // restored by changing the host property-view setting.
+    const target = svgImage.createElement('g')
+    target.setAttribute('data-title', feature.location || feature.siteNumber || '')
+    target.setAttribute('content', [feature.siteNumber, feature.type, feature.location,
+      feature.householdClass || '-', '令和7年度末']
+      .map((value) => String(value ?? '').replace(/[\r\n,]/g, ' ')).join(','))
+    return target
+  }) : null
 }
 
 function featureContains(feature, lon, lat, tolerance) {

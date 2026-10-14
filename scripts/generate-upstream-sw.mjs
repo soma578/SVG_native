@@ -70,6 +70,7 @@ for (const relative of sourceFiles) {
 for (const relative of [
   'public/layerListStyle.css',
   'public/svgmap-bootstrap.js',
+  'public/okayama-property-view.js',
   'public/customShowPoiProperty.js',
 ]) {
   hash.update(relative)

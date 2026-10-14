@@ -45,6 +45,14 @@ for (const item of cases) {
       return null
     }, item.record.id)
     expect(marker).toBe('#asset-available')
+    const metadata = await frame.evaluate(() => {
+      const root = window.svgImage.documentElement
+      const point = window.svgImage.getElementById('assetPoints').querySelector('use')
+      return { labels: root.getAttribute('property').split(','),
+        values: window.svgMap.parseEscapedCsvLine(point.getAttribute('content')) }
+    })
+    expect(metadata.values).toHaveLength(metadata.labels.length)
+    expect(metadata.values.at(-1)).toBe('手動登録データ')
     await expect.poll(() => page.evaluate((icon) => [...document.querySelectorAll('img')]
       .some((img) => img.src.includes(`/emergencyAssets/icons/${icon}`) && img.complete && img.naturalWidth > 0), item.icon))
       .toBe(true)

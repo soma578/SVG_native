@@ -69,8 +69,17 @@ function draw() {
     marker.setAttribute('data-layer-id', kind)
     marker.setAttribute('data-kind', 'poi')
     marker.setAttribute('data-title', record.name)
-    marker.setAttribute('content', [record.id, record.name, displayState(record, kind)[1], record.updatedAt]
-      .map(csvSafe).join(','))
+    const metadata = kind === 'battery'
+      ? [record.id, record.name, displayState(record, kind)[1],
+        record.chargePercent === null ? '未確認' : `${record.chargePercent}%`,
+        record.capacityKWh === null ? '未登録' : `${record.capacityKWh} kWh`, record.updatedAt,
+        isDemo ? 'デモ・架空データ' : '手動登録データ']
+      : [record.id, record.name, placementLabel(record.placement),
+        record.accepting === null ? '未確認' : record.accepting ? '受付中' : '受付停止',
+        record.capacity === null ? '未登録' : `${record.capacity}人`,
+        record.occupied === null ? '未登録' : `${record.occupied}人`, record.updatedAt,
+        isDemo ? 'デモ・架空データ' : '手動登録データ']
+    marker.setAttribute('content', metadata.map(csvSafe).join(','))
     marker.setAttribute('xlink:title', record.name)
     marker.setAttribute('pointer-events', 'all')
     fragment.appendChild(marker)

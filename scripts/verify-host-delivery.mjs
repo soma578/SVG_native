@@ -6,6 +6,7 @@ const assetGenerator = fs.readFileSync('scripts/prepare-public-assets.mjs', 'utf
 const page = fs.readFileSync('index.html', 'utf8')
 const poiRenderer = fs.readFileSync('public/customShowPoiProperty.js', 'utf8')
 const bootstrap = fs.readFileSync('public/svgmap-bootstrap.js', 'utf8')
+const okayamaPropertyView = fs.readFileSync('public/okayama-property-view.js', 'utf8')
 const container = fs.readFileSync('svgmapAppLayers/Container.svg', 'utf8')
 const core = fs.readFileSync('svgmapjs/SVGMapLv0.1_Class_r18module.js', 'utf8')
 
@@ -23,6 +24,10 @@ assert(swGenerator.includes("relative.includes('/geometry/')")
   'Large Okayama geometry and point data must load and cache on demand')
 assert(bootstrap.includes("[location.origin], true, true"),
   'Absolute same-origin URLs must bypass the CORS proxy')
+assert(bootstrap.includes("import('/okayama-property-view.js')")
+  && okayamaPropertyView.includes("OKAYAMA_PROPERTY_VIEW = 'svgmap'")
+  && okayamaPropertyView.includes("mode === 'svgmap'"),
+  'Okayama layers must use SVGMap properties by default while retaining the custom switch')
 assert(bootstrap.includes("updateViaCache: 'none'")
   && !bootstrap.includes('location.reload()')
   && !swGenerator.includes('const SHELL_CACHE =')

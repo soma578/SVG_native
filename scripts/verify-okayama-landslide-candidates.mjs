@@ -27,6 +27,10 @@ assert.deepEqual(manifest.farOverviews.map(({ type, count }) => ({ type, count }
 assert.deepEqual(manifest.veryFarOverviews.map(({ type, count }) => ({ type, count })), [
   { type: '急傾斜', count: 16794 }, { type: '土石流', count: 2868 },
 ])
+assert(manifest.farOverviews.every(({ minFeatures, cells }) => minFeatures === 2 && cells > 0),
+  'Far mesh must show clusters instead of every single candidate cell')
+assert(manifest.veryFarOverviews.every(({ minFeatures, cells }) => minFeatures === 3 && cells > 0),
+  'Very-far mesh must show clusters instead of every single candidate cell')
 for (const collection of [manifest.shardedOverviews, manifest.shardedDetails]) {
   assert.deepEqual(collection.map(({ type, count }) => ({ type, count })), [
     { type: '急傾斜', count: 16794 }, { type: '土石流', count: 2868 },

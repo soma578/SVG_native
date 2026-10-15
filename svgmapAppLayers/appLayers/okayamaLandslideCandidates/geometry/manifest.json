@@ -5,7 +5,7 @@
   "outputCrs": "OGC:CRS84",
   "coordinateTransform": "Okayama GeoAccessJS tky2jdk (Tokyo Datum to JGD2000)",
   "sourceUpdatedAt": "2026-05-20",
-  "importedAt": "2026-10-02T16:41:53.859Z",
+  "importedAt": "2026-10-15T01:35:01.134Z",
   "total": 19662,
   "layers": [
     {
@@ -124,31 +124,33 @@
       "type": "急傾斜",
       "filename": "steep-far.svg",
       "count": 16794,
-      "cells": 11783,
-      "rectangles": 4099,
+      "cells": 6397,
+      "rectangles": 3266,
       "gridSize": 0.005,
+      "minFeatures": 2,
       "bounds": {
-        "west": 133.285,
+        "west": 133.29,
         "south": 34.300000000000004,
-        "east": 134.41,
-        "north": 35.335
+        "east": 134.405,
+        "north": 35.32
       },
-      "bytes": 233791
+      "bytes": 186524
     },
     {
       "type": "土石流",
       "filename": "debris-far.svg",
       "count": 2868,
-      "cells": 3816,
-      "rectangles": 1862,
+      "cells": 1370,
+      "rectangles": 850,
       "gridSize": 0.005,
+      "minFeatures": 2,
       "bounds": {
-        "west": 133.29,
-        "south": 34.39,
-        "east": 134.4,
+        "west": 133.29500000000002,
+        "south": 34.465,
+        "east": 134.395,
         "north": 35.33
       },
-      "bytes": 106505
+      "bytes": 48825
     }
   ],
   "veryFarOverviews": [
@@ -156,31 +158,33 @@
       "type": "急傾斜",
       "filename": "steep-very-far.svg",
       "count": 16794,
-      "cells": 5013,
-      "rectangles": 1016,
+      "cells": 3093,
+      "rectangles": 1150,
       "gridSize": 0.01,
+      "minFeatures": 3,
       "bounds": {
-        "west": 133.28,
+        "west": 133.3,
         "south": 34.300000000000004,
-        "east": 134.41,
-        "north": 35.34
+        "east": 134.39000000000001,
+        "north": 35.32
       },
-      "bytes": 50116
+      "bytes": 56682
     },
     {
       "type": "土石流",
       "filename": "debris-very-far.svg",
       "count": 2868,
-      "cells": 2112,
-      "rectangles": 979,
+      "cells": 570,
+      "rectangles": 382,
       "gridSize": 0.01,
+      "minFeatures": 3,
       "bounds": {
         "west": 133.29,
-        "south": 34.39,
-        "east": 134.4,
-        "north": 35.33
+        "south": 34.480000000000004,
+        "east": 134.39000000000001,
+        "north": 35.32
       },
-      "bytes": 48302
+      "bytes": 19049
     }
   ],
   "hitIndex": {

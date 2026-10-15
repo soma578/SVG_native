@@ -321,9 +321,9 @@ function geometryIntersectsCell(rings, west, south, east, north) {
   return false
 }
 
-function writeGridSvg(type, geometries, { filename, gridSize }) {
+function writeGridSvg(type, geometries, { filename, gridSize, minFeatures = 1 }) {
   const selected = geometries.filter((geometry) => geometry.type === type)
-  const rows = new Map()
+  const cellCounts = new Map()
   for (const geometry of selected) {
     const bounds = geometryBounds(geometry.rings)
     const minX = Math.floor(bounds.west / gridSize), maxX = Math.floor(bounds.east / gridSize)
@@ -332,11 +332,15 @@ function writeGridSvg(type, geometries, { filename, gridSize }) {
       for (let x = minX; x <= maxX; x += 1) {
         const west = x * gridSize, south = y * gridSize
         if (!geometryIntersectsCell(geometry.rings, west, south, west + gridSize, south + gridSize)) continue
-        if (!rows.has(y)) rows.set(y, new Set())
-        rows.get(y).add(x)
+        if (!cellCounts.has(y)) cellCounts.set(y, new Map())
+        const row = cellCounts.get(y)
+        row.set(x, (row.get(x) || 0) + 1)
       }
     }
   }
+  const rows = new Map([...cellCounts].map(([y, cells]) => [y, new Set(
+    [...cells].filter(([, count]) => count >= minFeatures).map(([x]) => x),
+  )]).filter(([, cells]) => cells.size))
   const rectangles = []
   for (const [y, values] of rows) {
     const xs = [...values].sort((a, b) => a - b)
@@ -369,7 +373,7 @@ function writeGridSvg(type, geometries, { filename, gridSize }) {
 `
   fs.writeFileSync(path.join(outputDirectory, filename), svg)
   return { type, filename, count: selected.length, cells: [...rows.values()].reduce((sum, row) => sum + row.size, 0),
-    rectangles: rectangles.length, gridSize, bounds, bytes: Buffer.byteLength(svg) }
+    rectangles: rectangles.length, gridSize, minFeatures, bounds, bytes: Buffer.byteLength(svg) }
 }
 
 const cache = readCache()
@@ -410,12 +414,12 @@ const shardedDetails = [
   writeShardedSvgSet('土石流', geometries, { name: 'detail', tolerance: 0.00002, chunkSize: 125 }),
 ]
 const farOverviews = [
-  writeGridSvg('急傾斜', geometries, { filename: 'steep-far.svg', gridSize: 0.005 }),
-  writeGridSvg('土石流', geometries, { filename: 'debris-far.svg', gridSize: 0.005 }),
+  writeGridSvg('急傾斜', geometries, { filename: 'steep-far.svg', gridSize: 0.005, minFeatures: 2 }),
+  writeGridSvg('土石流', geometries, { filename: 'debris-far.svg', gridSize: 0.005, minFeatures: 2 }),
 ]
 const veryFarOverviews = [
-  writeGridSvg('急傾斜', geometries, { filename: 'steep-very-far.svg', gridSize: 0.01 }),
-  writeGridSvg('土石流', geometries, { filename: 'debris-very-far.svg', gridSize: 0.01 }),
+  writeGridSvg('急傾斜', geometries, { filename: 'steep-very-far.svg', gridSize: 0.01, minFeatures: 3 }),
+  writeGridSvg('土石流', geometries, { filename: 'debris-very-far.svg', gridSize: 0.01, minFeatures: 3 }),
 ]
 const hitIndex = writeHitIndex(candidates.records, geometries)
 fs.writeFileSync(path.join(outputDirectory, 'manifest.json'), `${JSON.stringify({

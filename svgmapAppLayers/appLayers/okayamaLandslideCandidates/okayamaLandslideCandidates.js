@@ -6,6 +6,7 @@ const GIS_URL = 'https://www.gis.pref.okayama.jp/pref-okayama/PositionSelect?mid
 const POLYGON_DETAIL_VIEW_WIDTH = 0.12
 const POLYGON_OVERVIEW_VIEW_WIDTH = 0.45
 const POLYGON_VERY_FAR_VIEW_WIDTH = 1.6
+const POLYGON_HIT_VIEW_WIDTH = POLYGON_OVERVIEW_VIEW_WIDTH
 const ui = {
   filters: [...document.querySelectorAll('.typeFilter')],
   opacity: document.getElementById('opacityRange'), opacityValue: document.getElementById('opacityValue'),
@@ -41,10 +42,15 @@ async function initialize() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     hitIndex = await response.json()
     setStatus('取込済みの公式ポリゴンを表示中です', '')
-    render()
   } catch (error) {
     console.error(error)
     setStatus(`区域情報を読み込めませんでした（${error.message}）`, 'error')
+  } finally {
+    // The first host refresh can finish before this controller switches its
+    // LOD <animation> elements from hidden to visible. Reparse once after
+    // initialization so the matching SVGs load without requiring a pan.
+    render()
+    svgMap.refreshScreen()
   }
 }
 
@@ -78,7 +84,7 @@ function updateCountsAndHitData() {
     .reduce((subtotal, type) => subtotal + Number(shard.counts?.[type] || 0), 0), 0)
   ui.filtered.textContent = total.toLocaleString('ja-JP')
   const view = normalizedView(svgMap.getGeoViewBox?.())
-  if (!view || view.east - view.west > POLYGON_DETAIL_VIEW_WIDTH) {
+  if (!view || view.east - view.west > POLYGON_HIT_VIEW_WIDTH) {
     hitLoadToken += 1
     hitLoadSignature = ''
     hitFeatures = []
@@ -131,7 +137,7 @@ function customHitTester(position) {
   if (!hitIndex || !hitFeatures.length) return null
   const enabled = enabledTypes()
   const view = normalizedView(svgMap.getGeoViewBox?.())
-  if (!view || view.east - view.west > POLYGON_DETAIL_VIEW_WIDTH) return null
+  if (!view || view.east - view.west > POLYGON_HIT_VIEW_WIDTH) return null
   const mapPixels = Math.max(1, Number(window.parent?.innerWidth || window.innerWidth || 1))
   const tolerance = (view.east - view.west) / mapPixels * 6
   const hits = hitFeatures.filter((feature) => enabled.has(feature.type) &&
@@ -143,6 +149,11 @@ function customHitTester(position) {
     // restored by changing the host property-view setting.
     const target = svgImage.createElement('g')
     target.setAttribute('data-title', feature.location || feature.siteNumber || '')
+    // CustomHitTester reads xlink:title for the multiple-hit chooser. Its
+    // ticker inserts that title as HTML, so escape the official data here.
+    const hitTitle = [feature.location || '所在地不明', feature.type,
+      feature.siteNumber ? `No.${feature.siteNumber}` : ''].filter(Boolean).join(' / ')
+    target.setAttribute('xlink:title', escapeHtml(hitTitle))
     target.setAttribute('content', [feature.siteNumber, feature.type, feature.location,
       feature.householdClass || '-', '令和7年度末']
       .map((value) => String(value ?? '').replace(/[\r\n,]/g, ' ')).join(','))

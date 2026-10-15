@@ -3,6 +3,7 @@
 import { loadApprovedSensors, showSensor } from 'https://mosa-github.github.io/data_test_server_page/assets/svgmap-data.js'
 import { showPropertyModal } from '../svg3-bosai/representative-pins/propertyModal.js'
 import { groupByFacility } from './view-model.js'
+import { registerOkayamaPropertyView } from '/okayama-property-view.js'
 
 const REFRESH_MS = 180_000
 const ui = {
@@ -21,10 +22,11 @@ let svgImage
 let layerID
 
 window.addEventListener('layerWebAppReady', initialize)
-if (window.svgMap && window.svgImage) queueMicrotask(initialize)
+const sandboxIsReady = () => window.svgMap?.constructor?.name !== 'SandboxSvgMap'
+if (window.svgMap && window.svgImage && sandboxIsReady()) queueMicrotask(initialize)
 let readinessChecks = 0
 const readinessTimer = window.setInterval(() => {
-  if (!initialized && window.svgMap && window.svgImage) void initialize()
+  if (!initialized && window.svgMap && window.svgImage && sandboxIsReady()) void initialize()
   if (initialized || ++readinessChecks >= 50) window.clearInterval(readinessTimer)
 }, 100)
 
@@ -33,7 +35,7 @@ async function initialize() {
   initialized = true
   ;({ svgMap, svgImage, layerID } = window)
   ui.reload.addEventListener('click', loadData)
-  svgMap.setShowPoiProperty(showFacilityProperty, layerID)
+  registerOkayamaPropertyView(svgMap, showFacilityProperty, layerID)
   await loadData()
   window.setInterval(() => {
     if (!document.hidden) void loadData()
@@ -81,12 +83,13 @@ function draw(nextFacilities) {
       const sensor = facility.sensors.find((item) => item.type === type)
       return sensor?.value == null ? '-' : `${sensor.value}${sensor.unit ? ` ${sensor.unit}` : ''}`
     }
-    const camera = facility.sensors.find((item) => item.cameras?.length)
+    const cameraImages = facility.sensors.flatMap((item) => item.cameras || [])
     const measuredAt = facility.sensors.reduce((latest, sensor) =>
       sensor.updated_at && (!latest || Date.parse(sensor.updated_at) > Date.parse(latest))
         ? sensor.updated_at : latest, null)
     marker.setAttribute('content', [facility.id, facility.name, sensorValue('generator'),
-      sensorValue('water'), sensorValue('power'), camera?.cameras?.[0]?.image_url || camera?.name || '-',
+      sensorValue('water'), sensorValue('power'), cameraImages[0]?.image_url || '-',
+      cameraImages[1]?.image_url || '-',
       formatDate(measuredAt)].map(csvSafe).join(','))
     fragment.appendChild(marker)
   })
@@ -103,51 +106,33 @@ function latestMeasurement() {
 export function showFacilityProperty(target) {
   const facility = facilities[Number(target?.getAttribute('data-record-index'))]
   if (!facility) return
-  const buttons = facility.sensors.map((sensor, index) =>
-    `<button type="button" data-sensor-index="${index}" aria-pressed="false">${escapeHtml(sensor.name || sensor.id)}</button>`).join('')
-  const info = showPropertyModal(`<article class="svg3-property svg3-property-webcam-compact">
+  // S-LaWA forwards modal HTML to the embedding map, but cannot forward
+  // event listeners attached here. Native <details> works in either origin.
+  const details = facility.sensors.map((sensor, index) => {
+    const supplierView = document.createElement('div')
+    showSensor(supplierView, sensor)
+    const description = supplierView.querySelector('p')?.textContent || '表示できるデータはありません'
+    const images = [...supplierView.querySelectorAll('img')].flatMap((image) => {
+      try {
+        const url = new URL(image.src)
+        if (url.protocol !== 'https:') return []
+        return `<div class="svg3-property-media"><img src="${escapeHtml(url.href)}" alt="${escapeHtml(image.alt)}" loading="lazy" referrerpolicy="no-referrer"></div>`
+      } catch { return [] }
+    }).join('')
+    return `<details class="mosademy-sensor" data-sensor-index="${index}"${index === 0 ? ' open' : ''}
+      style="border:1px solid #cbd5e1;border-radius:8px;background:#fff;overflow:hidden">
+      <summary style="padding:9px 11px;cursor:pointer;font-weight:600;color:#24364b">${escapeHtml(sensor.name || sensor.id)}</summary>
+      <div class="mosademy-detail" style="padding:4px 11px 11px;white-space:pre-wrap">${escapeHtml(description)}${images}</div>
+    </details>`
+  }).join('')
+  return showPropertyModal(`<article class="svg3-property svg3-property-webcam-compact">
     <header class="svg3-property-header"><p class="svg3-property-kind">MOSAdemy 設備監視</p>
     <h2 class="svg3-property-title">${escapeHtml(facility.name)}</h2>
     <div class="svg3-property-status"><span class="svg3-property-dot"></span><span>${facility.sensors.length}項目</span></div></header>
-    <div class="svg3-property-actions svg3-property-actions-padded" role="group" aria-label="表示する項目を選択"
-      style="grid-template-columns:repeat(2,minmax(0,1fr));padding:12px 17px 6px">${buttons}</div>
-    <div class="svg3-property-body"><div class="svg3-property-row mosademy-detail" aria-live="polite"></div></div>
+    <div class="svg3-property-body"><div class="svg3-property-row" style="display:block">
+      <div class="mosademy-sensors" style="display:grid;gap:8px">${details}</div>
+    </div></div>
     </article>`, { attribution: { label: 'MOSAdemy 公開承認済みデータ' } })
-  if (!info) return info
-  const buttonNodes = [...info.querySelectorAll('[data-sensor-index]')]
-  buttonNodes.forEach((button, index) => button.addEventListener('click', () => {
-    renderSelectedSensor(info, facility.sensors[index])
-    buttonNodes.forEach((node) => {
-      const selected = node === button
-      node.setAttribute('aria-pressed', String(selected))
-      node.style.background = selected ? '#e5f1eb' : '#fff'
-    })
-  }))
-  buttonNodes[0]?.click()
-  return info
-}
-
-function renderSelectedSensor(info, sensor) {
-  const supplierView = document.createElement('div')
-  showSensor(supplierView, sensor)
-  const detail = info.querySelector('.mosademy-detail')
-  const doc = detail.ownerDocument
-  const label = doc.createElement('dt')
-  label.textContent = sensor.name || sensor.id
-  const value = doc.createElement('dd')
-  value.textContent = supplierView.querySelector('p')?.textContent || '表示できるデータはありません'
-  detail.replaceChildren(label, value)
-  for (const supplierImage of supplierView.querySelectorAll('img')) {
-    const media = doc.createElement('div')
-    media.className = 'svg3-property-media'
-    const image = doc.createElement('img')
-    image.src = supplierImage.src
-    image.alt = supplierImage.alt
-    image.loading = 'lazy'
-    image.referrerPolicy = 'no-referrer'
-    media.appendChild(image)
-    value.appendChild(media)
-  }
 }
 
 function formatDate(value) {

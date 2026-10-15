@@ -70,6 +70,9 @@ const renderWebcamDetailWithPolicy = async (feature) => {
   const policy = await loadRuntimePolicy();
   return renderWebcamDetail(feature, {
     imageEnabled: policy?.riverWebcamImages?.enabled === true,
+    // The sandbox forwards HTML only; events attached to the original modal
+    // do not reach the embedding map's copy.
+    refreshEnabled: window.svgMap?.constructor?.name !== 'SandboxSvgMap',
   });
 };
 renderWebcamDetailWithPolicy.afterShow = (_feature, modal) => bindImageRefresh(modal);

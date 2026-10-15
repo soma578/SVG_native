@@ -1,4 +1,5 @@
 import { showPropertyModal } from '../svg3-bosai/representative-pins/propertyModal.js'
+import { registerOkayamaPropertyView } from '/okayama-property-view.js'
 
 const HIT_INDEX_URL = './geometry/hit/index.json'
 const SOURCE_URL = 'https://www.pref.okayama.jp/page/1036031.html'
@@ -32,7 +33,7 @@ async function initialize() {
   ;({ svgMap, svgImage, layerID } = window)
   ui.filters.forEach((filter) => filter.addEventListener('change', render))
   ui.opacity.addEventListener('input', applyOpacity)
-  svgMap.setShowPoiProperty(showDetails, layerID)
+  registerOkayamaPropertyView(svgMap, showDetails, layerID)
   window.customHitTester = customHitTester
   window.preRenderFunction = render
   window.addEventListener('zoomPanMap', render)
@@ -138,7 +139,9 @@ function customHitTester(position) {
   const enabled = enabledTypes()
   const view = normalizedView(svgMap.getGeoViewBox?.())
   if (!view || view.east - view.west > POLYGON_HIT_VIEW_WIDTH) return null
-  const mapPixels = Math.max(1, Number(window.parent?.innerWidth || window.innerWidth || 1))
+  let parentWidth
+  try { parentWidth = window.parent?.innerWidth } catch { /* cross-origin S-LaWA */ }
+  const mapPixels = Math.max(1, Number(parentWidth || window.innerWidth || 1))
   const tolerance = (view.east - view.west) / mapPixels * 6
   const hits = hitFeatures.filter((feature) => enabled.has(feature.type) &&
     featureContains(feature, Number(position.lng), Number(position.lat), tolerance))

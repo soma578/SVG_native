@@ -2,6 +2,12 @@
 // Change only this value to 'custom' to restore their existing detail cards.
 export const OKAYAMA_PROPERTY_VIEW = 'svgmap'
 
+// Controllers run in their own origin under S-LaWA, so a host-side override
+// alone cannot suppress their custom property callbacks.
+export function registerOkayamaPropertyView(svgMap, handler, layerId) {
+  if (OKAYAMA_PROPERTY_VIEW === 'custom') svgMap.setShowPoiProperty(handler, layerId)
+}
+
 export function installOkayamaPropertyView(svgMap, mode = OKAYAMA_PROPERTY_VIEW) {
   if (mode !== 'svgmap' && mode !== 'custom') throw new Error(`Unsupported property view: ${mode}`)
   const original = svgMap.setShowPoiProperty.bind(svgMap)

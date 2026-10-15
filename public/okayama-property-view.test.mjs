@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { installOkayamaPropertyView, OKAYAMA_PROPERTY_VIEW } from './okayama-property-view.js'
+import { installOkayamaPropertyView, registerOkayamaPropertyView, OKAYAMA_PROPERTY_VIEW } from './okayama-property-view.js'
 
 function fakeMap() {
   const calls = []
@@ -19,6 +19,9 @@ svgmap.setShowPoiProperty(custom, 'okayama')
 svgmap.setShowPoiProperty(custom, 'upstream')
 svgmap.setShowPoiProperty(custom)
 assert.equal(OKAYAMA_PROPERTY_VIEW, 'svgmap')
+const remote = fakeMap()
+registerOkayamaPropertyView(remote, custom, 'okayama')
+assert.deepEqual(remote.calls, [], 'S-LaWA controllers must keep SVGMap properties by default')
 assert.deepEqual(svgmap.calls, [
   { handler: null, id: 'okayama' },
   { handler: custom, id: 'upstream' },

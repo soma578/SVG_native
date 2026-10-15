@@ -43,6 +43,16 @@ assert(assetGenerator.includes("'svgmapAppLayers', 'authoringLayers', 'bbs'"),
   'PHP-backed BBS authoring files must be excluded from public assets')
 assert(assetGenerator.includes("const localLayerLib = '/svgmapjs/svgMapLayerLib.js'"),
   'AppLayers must use the local svgMapLayerLib.js snapshot')
+for (const controller of [
+  'mizupigui/mizupigui.html',
+  'mosademy/mosademy.html',
+  'emergencyAssets/battery.html',
+  'emergencyAssets/movingHouse.html',
+]) {
+  const html = fs.readFileSync(`svgmapAppLayers/appLayers/${controller}`, 'utf8')
+  assert(html.includes('<script src="/svgmapjs/svgMapLayerLib.js"></script>'),
+    `${controller} must initialize under cross-origin S-LaWA`)
+}
 assert(page.includes('id="vScale"') && page.includes('id="globalMessage"'),
   'The host page must expose SVGMap scale and LaWA message elements')
 assert(bootstrap.includes("await import('/customShowPoiProperty.js')")

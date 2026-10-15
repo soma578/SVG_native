@@ -4,6 +4,7 @@ import { displayStatusForObservation } from './observationFreshness.js';
 import { decodeDensityPointDocument } from './densityPointFormat.js';
 import { PIN_LAYER_PROFILES, resolvePinProfile } from './pinLayerProfiles.js';
 import { showPropertyModal } from './propertyModal.js';
+import { registerOkayamaPropertyView } from '/okayama-property-view.js';
 import {
   densityLimitForZoom,
   selectQtctDensityCells,
@@ -1158,7 +1159,7 @@ export const initRepresentativePinsLayer = ({
   const registerPoiHandler = () => {
     const layerId = window.layerID;
     if (window.svgMap?.setShowPoiProperty && layerId) {
-      window.svgMap.setShowPoiProperty(customShowPoiProperty, layerId);
+      registerOkayamaPropertyView(window.svgMap, customShowPoiProperty, layerId);
       return true;
     }
     return false;

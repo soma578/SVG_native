@@ -1,6 +1,7 @@
 import { fetchWithRuntimeCache } from '../representative-pins/runtimeCache.js';
 import { MAP_MESSAGES } from '../representative-pins/mapMessages.js';
 import { showPropertyModal } from '../representative-pins/propertyModal.js';
+import { registerOkayamaPropertyView } from '/okayama-property-view.js';
 import {
   municipalityMap,
   latestReportDatetime,
@@ -240,7 +241,7 @@ export const initFloodWarningLayer = ({ onStateChange = null } = {}) => {
   let tries = 0;
   const handlerTimer = window.setInterval(() => {
     if (window.svgMap?.setShowPoiProperty && window.layerID) {
-      window.svgMap.setShowPoiProperty(showPoiProperty, window.layerID);
+      registerOkayamaPropertyView(window.svgMap, showPoiProperty, window.layerID);
       window.clearInterval(handlerTimer);
     } else if (++tries > 30) window.clearInterval(handlerTimer);
   }, 100);

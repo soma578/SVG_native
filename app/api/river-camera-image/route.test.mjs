@@ -21,7 +21,20 @@ try {
   assert.equal(seen[0].options.redirect, 'manual')
   assert.equal((await GET(request('..%2Fprivate'))).status, 400)
   assert.equal((await GET(request('311777010', { 'Sec-Fetch-Site': 'cross-site' }))).status, 403)
-  assert.equal(seen.length, 1)
+  const embedded = await GET(request('311777010', {
+    'Sec-Fetch-Site': 'cross-site', 'Sec-Fetch-Dest': 'image',
+  }))
+  assert.equal(embedded.status, 200)
+  assert.equal(embedded.headers.get('cross-origin-resource-policy'), 'cross-origin')
+  const sameSiteImage = await GET(request('311777010', {
+    'Sec-Fetch-Site': 'same-site', 'Sec-Fetch-Dest': 'image',
+  }))
+  assert.equal(sameSiteImage.status, 200)
+  assert.equal(sameSiteImage.headers.get('cross-origin-resource-policy'), 'cross-origin')
+  assert.equal((await GET(request('311777010', {
+    'Sec-Fetch-Site': 'cross-site', 'Sec-Fetch-Dest': 'empty',
+  }))).status, 403)
+  assert.equal(seen.length, 3)
 
   globalThis.fetch = async () => new Response('blocked', { status: 403, headers: { 'Content-Type': 'text/html' } })
   assert.equal((await GET(request('311777010'))).status, 502)

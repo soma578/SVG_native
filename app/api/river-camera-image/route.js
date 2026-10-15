@@ -14,10 +14,17 @@ const headers = {
 export async function GET(request) {
   const url = new URL(request.url)
   const id = url.searchParams.get('id')
+  // An S-LaWA modal is rendered by the embedding map, which may be hosted on
+  // another origin. Permit image elements there, but not cross-site fetch/XHR.
+  const crossSite = request.headers.get('sec-fetch-site') === 'cross-site'
+  const imageEmbed = request.headers.get('sec-fetch-dest') === 'image'
+  const responseHeaders = imageEmbed
+    ? { ...headers, 'Cross-Origin-Resource-Policy': 'cross-origin' }
+    : headers
   if (!id || !/^[A-Za-z0-9_-]{1,80}$/.test(id)) {
-    return new Response('Invalid camera ID', { status: 400, headers })
+    return new Response('Invalid camera ID', { status: 400, headers: responseHeaders })
   }
-  if (request.headers.get('sec-fetch-site') === 'cross-site') {
+  if (crossSite && !imageEmbed) {
     return new Response('Cross-site access is not allowed', { status: 403, headers })
   }
 
@@ -38,12 +45,12 @@ export async function GET(request) {
     const type = upstream.headers.get('content-type')?.split(';')[0]?.trim().toLowerCase()
     if (!upstream.ok || type !== 'image/jpeg' || !upstream.body) {
       await upstream.body?.cancel().catch(() => {})
-      return new Response('Camera image unavailable', { status: 502, headers })
+      return new Response('Camera image unavailable', { status: 502, headers: responseHeaders })
     }
     const length = Number(upstream.headers.get('content-length') || 0)
     if (length > MAX_BYTES) {
       await upstream.body.cancel().catch(() => {})
-      return new Response('Camera image too large', { status: 502, headers })
+      return new Response('Camera image too large', { status: 502, headers: responseHeaders })
     }
 
     const reader = upstream.body.getReader()
@@ -55,7 +62,7 @@ export async function GET(request) {
       size += value.byteLength
       if (size > MAX_BYTES) {
         await reader.cancel().catch(() => {})
-        return new Response('Camera image too large', { status: 502, headers })
+        return new Response('Camera image too large', { status: 502, headers: responseHeaders })
       }
       chunks.push(value)
     }
@@ -65,10 +72,10 @@ export async function GET(request) {
       image.set(chunk, offset)
       offset += chunk.byteLength
     }
-    return new Response(image, { headers: { ...headers, 'Content-Type': 'image/jpeg' } })
+    return new Response(image, { headers: { ...responseHeaders, 'Content-Type': 'image/jpeg' } })
   } catch (error) {
     console.warn('[river-camera-image] upstream failed', { id, reason: error?.name || 'fetch' })
-    return new Response('Camera image unavailable', { status: 502, headers })
+    return new Response('Camera image unavailable', { status: 502, headers: responseHeaders })
   } finally {
     clearTimeout(timeout)
   }

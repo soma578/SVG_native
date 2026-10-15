@@ -4,6 +4,7 @@ import {
   normalizeOxygenDeviceCsvText,
 } from './oxygenDeviceCsv.js'
 import { showPropertyModal } from '../svg3-bosai/representative-pins/propertyModal.js'
+import { registerOkayamaPropertyView } from '/okayama-property-view.js'
 
 const ui = {
   reload: document.getElementById('reloadButton'),
@@ -59,7 +60,7 @@ async function initialize() {
 }
 
 function configureDetails() {
-  svgMap.setShowPoiProperty((target) => {
+  registerOkayamaPropertyView(svgMap, (target) => {
     const record = records[Number(target?.getAttribute('data-record-index'))]
     if (!record) return
     const fields = [

@@ -1,5 +1,6 @@
 import { showPropertyModal } from '../svg3-bosai/representative-pins/propertyModal.js'
 import { displayState, parseAssets } from './model.js'
+import { registerOkayamaPropertyView } from '/okayama-property-view.js'
 
 const kind = document.body.dataset.kind
 const dataFile = kind === 'battery' ? 'battery.json' : 'movingHouse.json'
@@ -20,10 +21,11 @@ let svgImage
 let layerID
 
 window.addEventListener('layerWebAppReady', initialize)
-if (window.svgMap && window.svgImage) queueMicrotask(initialize)
+const sandboxIsReady = () => window.svgMap?.constructor?.name !== 'SandboxSvgMap'
+if (window.svgMap && window.svgImage && sandboxIsReady()) queueMicrotask(initialize)
 let readinessChecks = 0
 const readinessTimer = window.setInterval(() => {
-  if (!initialized && window.svgMap && window.svgImage) void initialize()
+  if (!initialized && window.svgMap && window.svgImage && sandboxIsReady()) void initialize()
   if (initialized || ++readinessChecks >= 50) window.clearInterval(readinessTimer)
 }, 100)
 
@@ -32,7 +34,7 @@ async function initialize() {
   initialized = true
   ;({ svgMap, svgImage, layerID } = window)
   ui.reload.addEventListener('click', loadData)
-  svgMap.setShowPoiProperty(showAssetProperty, layerID)
+  registerOkayamaPropertyView(svgMap, showAssetProperty, layerID)
   await loadData()
 }
 

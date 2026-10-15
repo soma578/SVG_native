@@ -1,4 +1,5 @@
 import { showPropertyModal } from '../svg3-bosai/representative-pins/propertyModal.js'
+import { registerOkayamaPropertyView } from '/okayama-property-view.js'
 
 const API_URL = '/api/chugoku-outages'
 const SOURCE_URL = 'https://www.teideninfo.energia.co.jp/'
@@ -29,7 +30,7 @@ async function initialize() {
 }
 
 function configureDetails() {
-  svgMap.setShowPoiProperty((target) => {
+  registerOkayamaPropertyView(svgMap, (target) => {
     const record = records[Number(target?.getAttribute('data-record-index'))]
     if (!record) return
     const areaRows = record.areas.map((area) => `${area.name}${area.households ? `（約${area.households.toLocaleString('ja-JP')}戸）` : ''}`).join('\n')

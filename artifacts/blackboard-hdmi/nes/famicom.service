@@ -1,0 +1,17 @@
+# Starts the Famicom emulator on HDMI at boot and restarts it if it exits.
+# Install: sudo cp famicom.service /etc/systemd/system/ && sudo systemctl enable --now famicom
+# The ROM is set in /home/ubuntu/nes/famicom.env (ROM=/path/to/game.nes).
+[Unit]
+Description=Famicom emulator on HDMI
+After=multi-user.target
+
+[Service]
+Environment=ROM=/home/ubuntu/roms/bobl.nes
+EnvironmentFile=-/home/ubuntu/nes/famicom.env
+WorkingDirectory=/home/ubuntu/nes
+ExecStart=/home/ubuntu/nes/nes ${ROM}
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

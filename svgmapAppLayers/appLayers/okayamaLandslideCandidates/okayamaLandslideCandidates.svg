@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      viewBox="12800 -3700 720 550"
      data-controller="okayamaLandslideCandidates.html#exec=appearOnLayerLoad&amp;requiredHeight=490"
-     property="箇所番号,種別,位置,人家分類,情報時点">
+     property="箇所番号,種別,位置,人家分類,情報時点,出典,出典公式ページ">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)"/>
   <g id="officialPolygons" opacity="0.9" pointer-events="none">
     <animation id="steepVeryFar" x="13328" y="-3534" width="114" height="105"

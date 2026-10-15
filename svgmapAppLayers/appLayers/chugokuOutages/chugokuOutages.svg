@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      viewBox="12800 -3700 720 550"
      data-controller="chugokuOutages.html#exec=appearOnLayerLoad&amp;requiredHeight=520"
-     property="都道府県,市区町村,発生日時,復旧日時,地域,停電戸数,状態,停電理由">
+     property="都道府県,市区町村,発生日時,復旧日時,地域,停電戸数,状態,停電理由,出典,出典公式ページ">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)"/>
   <defs>
     <g id="outage-marker">

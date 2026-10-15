@@ -72,10 +72,10 @@ function draw() {
     marker.setAttribute('data-feature-id', record.id)
     marker.setAttribute('data-layer-id', 'mizupigui')
     marker.setAttribute('data-kind', 'poi')
-    marker.setAttribute('data-title', record.name)
+    marker.setAttribute('data-title', '水ピィ杭 最新状態（logpot）')
     marker.setAttribute('content', [record.id, record.name, waterLevelLabel(record.waterLevel),
       tiltLabel(record.tiltDetected), batteryLabel(record.batteryOk), record.lastReceivedAt,
-      record.floodedAt || ''].map(csvSafe).join(','))
+      record.floodedAt || '', 'logpot提供データ'].map(csvSafe).join(','))
     marker.setAttribute('xlink:title', record.name)
     marker.setAttribute('pointer-events', 'all')
     fragment.appendChild(marker)

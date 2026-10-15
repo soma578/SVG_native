@@ -711,6 +711,10 @@ export const initRepresentativePinsLayer = ({
       includeImageUrlInMetadata ? feature.imageUrl || '' : '',
       feature.pageUrl || '',
     ]),
+    ...(profile().includeAttributionInMetadata ? [
+      profile().attribution?.label || '',
+      profile().attribution?.url || '',
+    ] : []),
   ].map((value) => String(value ?? '').replace(/[\r\n,]/g, ' ').trim()).join(',');
 
   // グローバル座標系は 1度 = 100単位 (matrix(100,0,0,-100,0,0))。ピンの配置でも
@@ -932,7 +936,7 @@ export const initRepresentativePinsLayer = ({
       use.setAttribute('data-feature-id', item.id);
       use.setAttribute('data-layer-id', layerId);
       use.setAttribute('data-kind', item.representative ? 'representative-pin' : 'poi');
-      use.setAttribute('data-title', item.title);
+      use.setAttribute('data-title', profile().propertyTitle || item.title);
       const payload = JSON.stringify(featurePayload(item));
       use.setAttribute('data-feature', payload);
       use.setAttribute('content', contentFor(featurePayload(item)));

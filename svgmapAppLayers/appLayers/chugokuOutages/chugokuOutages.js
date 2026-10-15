@@ -116,10 +116,11 @@ function draw() {
     marker.setAttribute('transform', `ref(svg,${(record.lon * 100).toFixed(5)},${(-record.lat * 100).toFixed(5)})`)
     marker.setAttribute('data-record-index', String(index)); marker.setAttribute('data-feature-id', record.id)
     marker.setAttribute('data-layer-id', 'chugokuOutages'); marker.setAttribute('data-kind', 'poi')
-    marker.setAttribute('data-title', record.title); marker.setAttribute('data-feature', JSON.stringify(record))
+    marker.setAttribute('data-title', '中国電力 停電情報・履歴（中国地方）'); marker.setAttribute('data-feature', JSON.stringify(record))
     marker.setAttribute('content', [record.prefectureName, record.municipalityName || record.municipalityCode,
       record.startedAt, record.restoredAt, record.areas.map((area) => area.name).join('・'), record.households,
-      record.state === 'current' ? '停電発生中' : '復旧済み', record.reason].map(csvSafe).join(','))
+      record.state === 'current' ? '停電発生中' : '復旧済み', record.reason,
+      '中国電力ネットワーク', SOURCE_URL].map(csvSafe).join(','))
     marker.setAttribute('xlink:title', record.title); marker.setAttribute('pointer-events', 'all'); fragment.appendChild(marker)
   })
   svgImage.getElementById('outagePoints').replaceChildren(fragment)

@@ -1,5 +1,5 @@
-/* CPU address space: 2 KB RAM, PPU registers, controller port, cartridge.
- * The APU is not emulated yet; its registers read as zero. */
+/* CPU address space: 2 KB RAM, PPU registers, APU and controller ports,
+ * cartridge. */
 #include "nes.h"
 
 uint8_t pad_buttons;
@@ -21,6 +21,7 @@ uint8_t bus_read(uint16_t addr)
         }
         return bit | 0x40;
     }
+    if (addr == 0x4015) return apu_read_status();
     if (addr < 0x4020) return addr == 0x4017 ? 0x40 : 0;
     return cart_cpu_read(addr);
 }
@@ -41,6 +42,8 @@ void bus_write(uint16_t addr, uint8_t val)
         if (pad_strobe) pad_shift = pad_buttons;
         pad_strobe = val & 1;
         if (pad_strobe) pad_shift = pad_buttons;
+    } else if (addr <= 0x4013 || addr == 0x4015 || addr == 0x4017) {
+        apu_write(addr, val);
     } else if (addr >= 0x4020) {
         cart_cpu_write(addr, val);
     }
@@ -49,6 +52,7 @@ void bus_write(uint16_t addr, uint8_t val)
 void nes_reset(void)
 {
     ppu_reset();
+    apu_reset();
     cpu_reset();
 }
 
@@ -56,7 +60,10 @@ void nes_run_frame(void)
 {
     ppu.frame_ready = 0;
     while (!ppu.frame_ready) {
-        cpu.irq = cart.irq;
-        ppu_step(cpu_step() * 3);
+        cpu.irq = cart.irq | apu_irq();
+        int cycles = cpu_step();
+        ppu_step(cycles * 3);
+        apu_run(cycles);
+        cart_cpu_cycles(cycles);
     }
 }

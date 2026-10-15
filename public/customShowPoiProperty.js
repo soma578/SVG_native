@@ -92,6 +92,16 @@
     table.appendChild(row)
   }
 
+  function isOkayamaLayer(layerName) {
+    if (!layerName) return false
+    try {
+      const layer = window.svgMap.getRootLayersProps()
+        .find((item) => item.title === layerName)
+      return Boolean(layer && window.svgMap.getLayer(layer.id)
+        ?.getAttribute('class')?.split(/\s+/).includes('岡山大学'))
+    } catch { return false }
+  }
+
   function customShowPoiProperty(target) {
     const table = document.createElement('table')
     table.style.cssText = 'table-layout:fixed;width:100%;border:solid orange;border-collapse:collapse;font-size:12px'
@@ -109,7 +119,8 @@
       const schema = target.ownerDocument.documentElement.getAttribute('property')?.split(',') || []
       const title = target.getAttribute('data-title')
       const layerName = target.getAttribute('data-layername')
-      if (title || layerName) appendRow(table, 'title/Layer', [title, layerName].filter(Boolean).join('/'))
+      if (title || layerName) appendRow(table, 'title/Layer', isOkayamaLayer(layerName) || title === layerName
+        ? layerName : [title, layerName].filter(Boolean).join('/'))
       metadata.forEach((value, index) => appendRow(table, schema[index] || String(index), value))
     } else {
       for (const attribute of target.attributes) appendRow(table, attribute.name, attribute.value)

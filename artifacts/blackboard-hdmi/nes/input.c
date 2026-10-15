@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <linux/input.h>
 #include <stdio.h>
+#include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -14,7 +15,8 @@
 static int fds[MAX_EVENT_DEVICES] = { [0 ... MAX_EVENT_DEVICES - 1] = -1 };
 static uint8_t keys;
 static int esc;
-static time_t last_scan;
+static time_t last_check;
+static struct timespec dir_mtime;
 
 static int is_keyboard(int fd)
 {
@@ -56,12 +58,19 @@ static uint8_t key_bit(int code)
     }
 }
 
-uint8_t input_poll(int *quit)
+uint8_t input_poll(int *reset)
 {
+    /* Hotplug: rescan only when /dev/input changes. Opening a USB HID
+     * device can block for tens of milliseconds, so never poll by opening. */
     time_t now = time(NULL);
-    if (now - last_scan >= 2) {     /* hotplug: look for new keyboards */
-        last_scan = now;
-        scan_devices();
+    if (now != last_check) {
+        last_check = now;
+        struct stat st;
+        if (stat("/dev/input", &st) == 0 &&
+            (st.st_mtim.tv_sec != dir_mtime.tv_sec || st.st_mtim.tv_nsec != dir_mtime.tv_nsec)) {
+            dir_mtime = st.st_mtim;
+            scan_devices();
+        }
     }
     for (int i = 0; i < MAX_EVENT_DEVICES; ++i) {
         if (fds[i] < 0) continue;
@@ -80,7 +89,8 @@ uint8_t input_poll(int *quit)
             keys = 0;
         }
     }
-    *quit = esc;
+    *reset = esc;
+    esc = 0;
 
     uint32_t b = board_buttons();
     uint8_t board = (uint8_t)(((b & 1) ? 1 << 3 : 0) | ((b & 2) ? 1 << 2 : 0) |

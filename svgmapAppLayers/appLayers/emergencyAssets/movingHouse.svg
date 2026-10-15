@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      viewBox="12243.4 -4605.6 3205.3 2251"
      data-controller="movingHouse.html#exec=appearOnLayerLoad&amp;requiredHeight=340"
-     property="住宅ID,名称,設置状況,利用可否,定員,入居人数,最終確認,データ種別">
+     property="住宅ID,名称,設置状況,利用可否,定員,入居人数,最終確認,データ種別,出典">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)"/>
   <defs>
     <!-- 車輪と牽引部で、避難所の通常の家マークと区別する。 -->

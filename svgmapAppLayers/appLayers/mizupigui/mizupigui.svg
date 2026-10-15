@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      viewBox="12243.4 -4605.6 3205.3 2251"
      data-controller="mizupigui.html#exec=appearOnLayerLoad&amp;requiredHeight=360"
-     property="杭ID,名称,水位,傾斜,電池,最終受信,浸水開始">
+     property="杭ID,名称,水位,傾斜,電池,最終受信,浸水開始,出典">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)"/>
   <defs>
     <g id="stake-dry"><circle cx="0" cy="0" r="9" fill="#16a34a" stroke="#ffffff" stroke-width="2"/></g>

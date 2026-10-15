@@ -30,7 +30,7 @@ test('MOSAdemy published data appears as one facility pin with two camera detail
     try { return window.svgMap?.getRootLayersProps?.().length || 0 } catch { return 0 }
   })).toBeGreaterThan(0)
   await page.evaluate(() => {
-    const layer = window.svgMap.getRootLayersProps().find((entry) => entry.title === 'MOSAdemy 設備監視')
+    const layer = window.svgMap.getRootLayersProps().find((entry) => entry.title === 'MOSAdemy 設備監視（岡山大学医学部）')
     if (!layer) throw new Error('MOSAdemy layer not registered')
     window.svgMap.setGeoViewPort(34.6507388, 133.9158887, 0.4, 0.4)
     window.svgMap.setRootLayersProps(layer.id, true, false)
@@ -51,12 +51,16 @@ test('MOSAdemy published data appears as one facility pin with two camera detail
     const root = window.svgImage.documentElement
     const marker = window.svgImage.getElementById('sensor-root').querySelector('image')
     return { schema: root.getAttribute('property').split(','),
-      values: window.svgMap.parseEscapedCsvLine(marker.getAttribute('content')) }
+      values: window.svgMap.parseEscapedCsvLine(marker.getAttribute('content')),
+      title: marker.getAttribute('title') }
   })
-  expect(standardMetadata.schema).toEqual(['施設ID', '施設名', '燃料残量', '水位残量', '電力', 'カメラ１画像', 'カメラ２画像', '最終計測'])
+  expect(standardMetadata.schema).toEqual(['施設ID', '施設名', '燃料残量', '水位残量', '電力', 'カメラ１画像', 'カメラ２画像', '最終計測', '出典', '出典公式ページ'])
+  expect(standardMetadata.title).toBe('MOSAdemy 設備監視（岡山大学医学部）')
   expect(standardMetadata.values.slice(0, 5)).toEqual(['1', '岡山大学病院', '3232.9 L', '45.5 %', '7031.8 W'])
   expect(standardMetadata.values[5]).toBe(cameras[0].image_url)
   expect(standardMetadata.values[6]).toBe(cameras[1].image_url)
+  expect(standardMetadata.values[8]).toBe('MOSAdemy 公開データ')
+  expect(standardMetadata.values[9]).toBe('https://mosa-github.github.io/data_test_server_page/')
   await expect.poll(() => page.evaluate(() => [...document.querySelectorAll('img')]
     .some((img) => img.src.includes('/mosademy/icons/available.svg') && img.complete && img.naturalWidth > 0)))
     .toBe(true)
@@ -68,6 +72,16 @@ test('MOSAdemy published data appears as one facility pin with two camera detail
     }
   })
   await page.locator('img[src*="mosademy"][src*="available.svg"]').first().click({ timeout: 5000 })
+  await expect.poll(() => page.evaluate(() => {
+    const table = window.__mosademyPropertyModal
+    const row = [...(table?.querySelectorAll?.('tr') || [])].find((item) => item.cells?.[0]?.textContent === 'title/Layer')
+    return row?.cells?.[1]?.textContent
+  })).toBe('MOSAdemy 設備監視（岡山大学医学部）')
+  expect(await page.evaluate(() => [...(window.__mosademyPropertyModal?.querySelectorAll?.('tr') || [])]
+    .find((row) => row.cells?.[0]?.textContent === '出典')?.cells?.[1]?.textContent)).toBe('MOSAdemy 公開データ')
+  expect(await page.evaluate(() => [...(window.__mosademyPropertyModal?.querySelectorAll?.('tr') || [])]
+    .find((row) => row.cells?.[0]?.textContent === '出典公式ページ')?.querySelector('a')?.href))
+    .toBe('https://mosa-github.github.io/data_test_server_page/')
   await expect.poll(() => page.evaluate(() => [...(window.__mosademyPropertyModal?.querySelectorAll?.('img') || [])]
     .map((image) => [image.src, image.naturalWidth])))
     .toEqual(cameras.map((camera) => [camera.image_url, 1]))

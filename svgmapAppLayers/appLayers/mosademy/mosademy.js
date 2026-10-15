@@ -6,6 +6,9 @@ import { groupByFacility } from './view-model.js'
 import { registerOkayamaPropertyView } from '/okayama-property-view.js'
 
 const REFRESH_MS = 180_000
+const LAYER_TITLE = 'MOSAdemy 設備監視（岡山大学医学部）'
+const SOURCE_LABEL = 'MOSAdemy 公開データ'
+const SOURCE_URL = 'https://mosa-github.github.io/data_test_server_page/'
 const ui = {
   reload: document.getElementById('reloadButton'),
   status: document.getElementById('statusMessage'),
@@ -78,7 +81,9 @@ function draw(nextFacilities) {
     marker.setAttribute('transform', `ref(svg,${facility.lng},${-facility.lat})`)
     marker.setAttribute('data-record-index', String(index))
     marker.setAttribute('data-facility-id', facility.id)
-    marker.setAttribute('title', facility.name)
+    marker.setAttribute('title', LAYER_TITLE)
+    // SVGMap derives its rendered POI title from xlink:title, not title.
+    marker.setAttribute('xlink:title', LAYER_TITLE)
     const sensorValue = (type) => {
       const sensor = facility.sensors.find((item) => item.type === type)
       return sensor?.value == null ? '-' : `${sensor.value}${sensor.unit ? ` ${sensor.unit}` : ''}`
@@ -90,7 +95,7 @@ function draw(nextFacilities) {
     marker.setAttribute('content', [facility.id, facility.name, sensorValue('generator'),
       sensorValue('water'), sensorValue('power'), cameraImages[0]?.image_url || '-',
       cameraImages[1]?.image_url || '-',
-      formatDate(measuredAt)].map(csvSafe).join(','))
+      formatDate(measuredAt), SOURCE_LABEL, SOURCE_URL].map(csvSafe).join(','))
     fragment.appendChild(marker)
   })
   svgImage.getElementById('sensor-root').replaceChildren(fragment)
@@ -126,13 +131,13 @@ export function showFacilityProperty(target) {
     </details>`
   }).join('')
   return showPropertyModal(`<article class="svg3-property svg3-property-webcam-compact">
-    <header class="svg3-property-header"><p class="svg3-property-kind">MOSAdemy 設備監視</p>
+    <header class="svg3-property-header"><p class="svg3-property-kind">${escapeHtml(LAYER_TITLE)}</p>
     <h2 class="svg3-property-title">${escapeHtml(facility.name)}</h2>
     <div class="svg3-property-status"><span class="svg3-property-dot"></span><span>${facility.sensors.length}項目</span></div></header>
     <div class="svg3-property-body"><div class="svg3-property-row" style="display:block">
       <div class="mosademy-sensors" style="display:grid;gap:8px">${details}</div>
     </div></div>
-    </article>`, { attribution: { label: 'MOSAdemy 公開承認済みデータ' } })
+    </article>`, { attribution: { label: SOURCE_LABEL, url: SOURCE_URL } })
 }
 
 function formatDate(value) {

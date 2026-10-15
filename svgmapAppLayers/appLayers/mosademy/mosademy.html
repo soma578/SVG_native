@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MOSAdemy 設備監視</title>
+  <title>MOSAdemy 設備監視（岡山大学医学部）</title>
   <style>
     :root { color-scheme: light; font-family: system-ui, sans-serif; }
     body { margin: 9px; color: #1f2937; font-size: 13px; line-height: 1.5; }
@@ -13,18 +13,16 @@
     button:disabled { cursor: wait; opacity: .6; }
     .status { margin: 8px 0; padding: 7px 9px; border-left: 4px solid #15803d; background: #f0fdf4; }
     .status.error { border-color: #b91c1c; background: #fef2f2; color: #7f1d1d; }
-    .notice { padding: 7px 9px; border-left: 3px solid #64748b; background: #f8fafc; font-size: 11px; }
   </style>
   <script src="/svgmapjs/svgMapLayerLib.js"></script>
   <script type="module" src="./mosademy.js"></script>
 </head>
 <body>
-  <h1>MOSAdemy 設備監視</h1>
+  <h1>MOSAdemy 設備監視（岡山大学医学部）</h1>
   <button id="reloadButton" type="button">公開データを再取得</button>
   <div id="statusMessage" class="status" role="status" aria-live="polite">読み込み待ち</div>
   <p>表示施設: <strong id="facilityCount">-</strong>件 ／ 公開項目: <strong id="sensorCount">-</strong>件</p>
   <p>最新計測: <span id="measuredAt">-</span></p>
   <p>最終取得: <span id="fetchedAt">-</span></p>
-  <p class="notice">地図のピンは施設ごとに1つです。開いた画面で燃料・水位・電力・各カメラの項目を選べます。約3分ごとに再取得しますが、配信側のキャッシュにより値が遅れる場合があります。水位残量は設備内の残量%であり、浸水深ではありません。</p>
 </body>
 </html>

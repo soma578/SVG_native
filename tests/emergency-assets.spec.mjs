@@ -52,7 +52,8 @@ for (const item of cases) {
         values: window.svgMap.parseEscapedCsvLine(point.getAttribute('content')) }
     })
     expect(metadata.values).toHaveLength(metadata.labels.length)
-    expect(metadata.values.at(-1)).toBe('手動登録データ')
+    expect(metadata.values.at(-2)).toBe('手動登録データ')
+    expect(metadata.values.at(-1)).toBe('岡山大学・手動登録データ')
     await expect.poll(() => page.evaluate((icon) => [...document.querySelectorAll('img')]
       .some((img) => img.src.includes(`/emergencyAssets/icons/${icon}`) && img.complete && img.naturalWidth > 0), item.icon))
       .toBe(true)

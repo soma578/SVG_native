@@ -41,6 +41,12 @@ test('Okayama landslide polygon opens its standard property table', async ({ pag
   await page.mouse.click(point.x, point.y)
   await expect.poll(() => page.evaluate(() => window.__landslidePropertyModal?.textContent || ''))
     .toContain('12010001')
+  expect(await page.evaluate(() => [...(window.__landslidePropertyModal?.querySelectorAll?.('tr') || [])]
+    .find((row) => row.cells?.[0]?.textContent === 'title/Layer')?.cells?.[1]?.textContent))
+    .toBe('岡山県 新たな土砂災害リスク箇所')
+  expect(await page.evaluate(() => [...(window.__landslidePropertyModal?.querySelectorAll?.('tr') || [])]
+    .find((row) => row.cells?.[0]?.textContent === '出典公式ページ')?.querySelector('a')?.href))
+    .toBe('https://www.pref.okayama.jp/page/1036031.html')
 
   // The simplified overview polygons must remain selectable before the
   // detailed outline takes over.

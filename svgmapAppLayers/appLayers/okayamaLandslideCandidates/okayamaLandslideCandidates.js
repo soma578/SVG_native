@@ -151,14 +151,14 @@ function customHitTester(position) {
     // element. Retain data-hitTestIndex so the original custom card can be
     // restored by changing the host property-view setting.
     const target = svgImage.createElement('g')
-    target.setAttribute('data-title', feature.location || feature.siteNumber || '')
+    target.setAttribute('data-title', '岡山県 新たな土砂災害リスク箇所')
     // CustomHitTester reads xlink:title for the multiple-hit chooser. Its
     // ticker inserts that title as HTML, so escape the official data here.
     const hitTitle = [feature.location || '所在地不明', feature.type,
       feature.siteNumber ? `No.${feature.siteNumber}` : ''].filter(Boolean).join(' / ')
     target.setAttribute('xlink:title', escapeHtml(hitTitle))
     target.setAttribute('content', [feature.siteNumber, feature.type, feature.location,
-      feature.householdClass || '-', '令和7年度末']
+      feature.householdClass || '-', '令和7年度末', '岡山県 土木部 防災砂防課', SOURCE_URL]
       .map((value) => String(value ?? '').replace(/[\r\n,]/g, ' ')).join(','))
     return target
   }) : null

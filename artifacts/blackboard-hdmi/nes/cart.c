@@ -1,5 +1,5 @@
 /* iNES cartridge loader and mappers: 0 NROM, 1 MMC1, 2 UxROM, 3 CNROM,
- * 4 MMC3, 7 AxROM. Banks are exposed as 8 KB PRG / 1 KB CHR windows. */
+ * 4 MMC3, 7 AxROM, 69 Sunsoft FME-7 (without its 5B sound). Banks are exposed as 8 KB PRG / 1 KB CHR windows. */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,6 +7,8 @@
 #include "nes.h"
 
 struct cart cart;
+
+static char save_path[4096];
 
 static int wrap(int bank, int count)
 {
@@ -134,18 +136,38 @@ int cart_load(const char *path)
         map_chr8(0);
         cart.mirror = MIRROR_SINGLE0;
         break;
+    case 69:
+        for (int i = 0; i < 4; ++i) map_prg8(i, i == 3 ? -1 : i);
+        map_chr8(0);
+        cart.prg_ram_size = 0x8000;
+        break;
     default:
         fprintf(stderr, "%s: mapper %d is not supported yet\n", path, cart.mapper);
         return -1;
     }
+    if (cart.battery && !cart.prg_ram_size) cart.prg_ram_size = 0x2000;
+    snprintf(save_path, sizeof save_path, "%s.sav", path);
     printf("%s: mapper %d, PRG %u KB, CHR %u KB%s\n", path, cart.mapper,
            cart.prg_size / 1024, cart.chr_size / 1024, cart.chr_is_ram ? " (RAM)" : "");
     return 0;
 }
 
+/* FME-7 command 8 decides what appears at $6000: ROM, RAM or nothing. */
+static uint8_t *fme7_low_bank(void)
+{
+    uint8_t r = cart.regs[0];
+    if (!(r & 0x40)) return cart.prg + wrap(r & 0x3F, (int)(cart.prg_size / 0x2000)) * 0x2000;
+    if (r & 0x80) return cart.prg_ram + (r & 3) * 0x2000;
+    return NULL;
+}
+
 uint8_t cart_cpu_read(uint16_t addr)
 {
     if (addr >= 0x8000) return cart.prg_map[(addr - 0x8000) >> 13][addr & 0x1FFF];
+    if (cart.mapper == 69 && addr >= 0x6000) {
+        uint8_t *bank = fme7_low_bank();
+        return bank ? bank[addr & 0x1FFF] : 0;
+    }
     if (addr >= 0x6000) return cart.prg_ram[addr & 0x1FFF];
     return 0;
 }
@@ -153,7 +175,11 @@ uint8_t cart_cpu_read(uint16_t addr)
 void cart_cpu_write(uint16_t addr, uint8_t val)
 {
     if (addr < 0x6000) return;
-    if (addr < 0x8000) { cart.prg_ram[addr & 0x1FFF] = val; return; }
+    if (addr < 0x8000) {
+        if (cart.mapper != 69) cart.prg_ram[addr & 0x1FFF] = val;
+        else if ((cart.regs[0] & 0xC0) == 0xC0) cart.prg_ram[(cart.regs[0] & 3) * 0x2000 + (addr & 0x1FFF)] = val;
+        return;
+    }
 
     switch (cart.mapper) {
     case 1:
@@ -197,6 +223,32 @@ void cart_cpu_write(uint16_t addr, uint8_t val)
         map_prg16(1, (val & 7) * 2 + 1);
         cart.mirror = (val & 0x10) ? MIRROR_SINGLE1 : MIRROR_SINGLE0;
         break;
+    case 69:
+        if (addr < 0xA000) {
+            cart.bank_select = val & 0x0F;
+            break;
+        }
+        if (addr >= 0xC000) break;      /* Sunsoft 5B audio, not emulated */
+        switch (cart.bank_select) {
+        case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+            map_chr1(cart.bank_select, val);
+            break;
+        case 8: cart.regs[0] = val; break;
+        case 9: case 10: case 11: map_prg8(cart.bank_select - 9, val & 0x3F); break;
+        case 12: {
+            static const enum mirror m[4] = {
+                MIRROR_VERTICAL, MIRROR_HORIZONTAL, MIRROR_SINGLE0, MIRROR_SINGLE1 };
+            cart.mirror = m[val & 3];
+            break;
+        }
+        case 13:
+            cart.irq_enabled = val & 0x81;   /* bit 0 IRQ, bit 7 counting */
+            cart.irq = 0;
+            break;
+        case 14: cart.irq_count16 = (cart.irq_count16 & 0xFF00) | val; break;
+        case 15: cart.irq_count16 = (uint16_t)((cart.irq_count16 & 0x00FF) | val << 8); break;
+        }
+        break;
     }
 }
 
@@ -216,4 +268,31 @@ void cart_scanline(void)
         cart.irq_counter--;
     }
     if (cart.irq_counter == 0 && cart.irq_enabled) cart.irq = 1;
+}
+
+/* FME-7 counts down every CPU cycle and fires when it wraps past zero. */
+void cart_cpu_cycles(int cycles)
+{
+    if (cart.mapper != 69 || !(cart.irq_enabled & 0x80)) return;
+    if (cycles > cart.irq_count16 && (cart.irq_enabled & 0x01)) cart.irq = 1;
+    cart.irq_count16 = (uint16_t)(cart.irq_count16 - cycles);
+}
+
+void cart_load_save(void)
+{
+    if (!cart.battery) return;
+    FILE *f = fopen(save_path, "rb");
+    if (!f) return;
+    size_t n = fread(cart.prg_ram, 1, cart.prg_ram_size, f);
+    fclose(f);
+    printf("loaded %zu bytes from %s\n", n, save_path);
+}
+
+void cart_write_save(void)
+{
+    if (!cart.battery) return;
+    FILE *f = fopen(save_path, "wb");
+    if (!f) { perror(save_path); return; }
+    fwrite(cart.prg_ram, 1, cart.prg_ram_size, f);
+    fclose(f);
 }

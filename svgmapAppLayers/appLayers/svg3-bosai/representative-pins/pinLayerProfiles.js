@@ -53,6 +53,8 @@ export const PIN_LAYER_PROFILES = {
   },
   evacuation: {
     label: '避難所代表ピン',
+    propertyTitle: 'L2 避難所',
+    includeAttributionInMetadata: true,
     attribution: {
       label: '国土地理院「指定緊急避難場所・指定避難所データ」',
       url: 'https://www.gsi.go.jp/bousaichiri/hinanbasho.html',
@@ -84,6 +86,8 @@ export const PIN_LAYER_PROFILES = {
   },
   teamActivity: {
     label: '活動情報代表ピン',
+    propertyTitle: 'L3 チーム活動',
+    includeAttributionInMetadata: true,
     attribution: { label: 'SVG3チーム活動CSV' },
     symbol: '活',
     color: '#7c3aed',
@@ -123,6 +127,8 @@ export const PIN_LAYER_PROFILES = {
   },
   japanRiverWebcam: {
     label: '河川監視カメラ',
+    propertyTitle: '全国河川監視カメラ',
+    includeAttributionInMetadata: true,
     attribution: {
       label: '国土交通省「川の防災情報」',
       url: 'https://www.river.go.jp/',

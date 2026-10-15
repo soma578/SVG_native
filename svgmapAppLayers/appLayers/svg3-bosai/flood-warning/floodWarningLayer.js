@@ -154,8 +154,9 @@ export const initFloodWarningLayer = ({ onStateChange = null } = {}) => {
       use.setAttribute('data-feature-id', record.id);
       use.setAttribute('data-layer-id', 'floodWarning');
       use.setAttribute('data-kind', 'warning-area');
-      use.setAttribute('data-title', record.title);
-      use.setAttribute('content', [record.title, record.status, record.summary, record.municipalityCode]
+      use.setAttribute('data-title', '洪水・気象警報(岡山大SVG3)');
+      use.setAttribute('content', [record.title, record.status, record.summary, record.municipalityCode,
+        JMA_WARNING_ATTRIBUTION.label, JMA_WARNING_ATTRIBUTION.url]
         .map((value) => String(value || '').replace(/[\r\n,]/g, ' ')).join(','));
       use.setAttribute('xlink:title', record.title);
       use.setAttribute('pointer-events', 'all');

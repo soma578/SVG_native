@@ -28,6 +28,17 @@ void bus_write(uint16_t addr, uint8_t val);
 void nes_reset(void);
 void nes_run_frame(void);
 
+/* ---- apu.c: 2A03 sound, 48 kHz mono ---- */
+#define APU_SAMPLE_RATE 48000
+#define APU_MAX_SAMPLES 4096
+extern int16_t apu_samples[APU_MAX_SAMPLES];   /* produced since last cleared */
+extern int apu_sample_count;
+void apu_reset(void);
+void apu_run(int cycles);
+int apu_irq(void);
+uint8_t apu_read_status(void);
+void apu_write(uint16_t addr, uint8_t val);
+
 /* ---- ppu.c: 2C02, rendered a scanline at a time ---- */
 struct ppu {
     uint8_t ctrl, mask, status, oam_addr;
@@ -49,7 +60,7 @@ uint8_t ppu_reg_read(uint16_t addr);
 void ppu_reg_write(uint16_t addr, uint8_t val);
 void ppu_oam_dma(const uint8_t page[256]);
 
-/* ---- cart.c: iNES loader and mappers 0, 1, 2, 3, 4, 7 ---- */
+/* ---- cart.c: iNES loader and mappers 0, 1, 2, 3, 4, 7, 69 ---- */
 enum mirror { MIRROR_HORIZONTAL, MIRROR_VERTICAL, MIRROR_SINGLE0,
               MIRROR_SINGLE1, MIRROR_FOUR };
 struct cart {
@@ -57,12 +68,14 @@ struct cart {
     uint32_t prg_size, chr_size;
     int chr_is_ram, mapper, battery;
     enum mirror mirror;
-    uint8_t prg_ram[0x2000];
+    uint8_t prg_ram[0x8000];
+    uint32_t prg_ram_size;  /* bytes saved to .sav for battery carts */
     uint8_t *prg_map[4];    /* 8 KB windows at 0x8000 */
     uint8_t *chr_map[8];    /* 1 KB windows at 0x0000 */
     /* mapper state */
     uint8_t regs[8], bank_select, shift, shift_count, control;
     uint8_t irq_latch, irq_counter;
+    uint16_t irq_count16;   /* FME-7 cycle counter */
     int irq_reload, irq_enabled, irq;
 };
 extern struct cart cart;
@@ -71,6 +84,10 @@ uint8_t cart_cpu_read(uint16_t addr);
 void cart_cpu_write(uint16_t addr, uint8_t val);
 void cart_chr_write(uint16_t addr, uint8_t val);
 void cart_scanline(void);
+void cart_cpu_cycles(int cycles);
+/* Battery RAM lives next to the ROM as <rom>.sav. */
+void cart_load_save(void);
+void cart_write_save(void);
 static inline uint8_t cart_chr_read(uint16_t addr)
 {
     return cart.chr_map[addr >> 10][addr & 0x3FF];

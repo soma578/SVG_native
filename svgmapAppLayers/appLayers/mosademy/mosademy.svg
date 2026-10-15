@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      viewBox="122.434 -46.056 32.053 22.51"
      data-controller="mosademy.html#exec=appearOnLayerLoad&amp;requiredHeight=360"
-     property="施設ID,施設名,燃料残量,水位残量,電力,カメラ１画像,カメラ２画像,最終計測">
+     property="施設ID,施設名,燃料残量,水位残量,電力,カメラ１画像,カメラ２画像,最終計測,出典,出典公式ページ">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(1,0,0,-1,0,0)"/>
   <g id="sensor-root"/>
 </svg>

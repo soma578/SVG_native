@@ -226,6 +226,8 @@
 <animation xlink:href="./appLayers/layer-recommender/recommender.svg" title="ローカルAIレイヤー検索" data-cross-origin-proxy-required="true" x="-30000" y="-30000" width="60000" height="60000" class="レイヤー検索" opacity="0.6" visibility="hidden"/>
 
   <!-- 岡山大学で追加・管理するレイヤー。新規レイヤーは原則このグループへ追加する。 -->
+  <!-- 一時非表示: 外部CSV現地情報。再開時はこのコメントを外す。 -->
+  <!--
   <animation
              id="external-csv-photo-layer"
              title="外部CSV現地情報"
@@ -234,6 +236,7 @@
              opacity="1"
              x="-30000" y="-30000" width="60000" height="60000"
              xlink:href="./authoringLayers/local/csvLayer/csvXhr_r20.svg#csvPath=/api/private-sheet-csv&amp;latCol=2&amp;lngCol=3&amp;titleCol=1&amp;popup=externalCsvPhoto" />
+  -->
   <animation x="-30000" y="-30000" width="60000" height="60000"
              xlink:href="./appLayers/oxygenDeviceLog/oxygenDeviceLog.svg"
              class="岡山大学 clickable" title="酸素濃縮装置 最新ログ（山陽電子）" visibility="hidden" opacity="1" />

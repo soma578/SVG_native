@@ -45,10 +45,23 @@ assert(assetGenerator.includes("const localLayerLib = '/svgmapjs/svgMapLayerLib.
   'AppLayers must use the local svgMapLayerLib.js snapshot')
 assert(page.includes('id="vScale"') && page.includes('id="globalMessage"'),
   'The host page must expose SVGMap scale and LaWA message elements')
-assert(page.includes('src="/customShowPoiProperty.js"')
+assert(bootstrap.includes("await import('/customShowPoiProperty.js')")
+  && !page.includes('src="/customShowPoiProperty.js"')
   && poiRenderer.includes('window.svgMap.setShowPoiProperty(customShowPoiProperty)'),
-  'The host page must register its safe POI renderer')
+  'Bootstrap must register its safe POI renderer before loading layers')
 assert(!poiRenderer.includes('innerHTML'), 'The host POI renderer must not inject metadata as HTML')
+assert(poiRenderer.includes("'/api/private-sheet-image'") && poiRenderer.includes("'/api/drive-image'"),
+  'The SVGMap property table must preview signed Sheet photos and Drive images')
+assert(poiRenderer.includes('/api/river-camera-image')
+  && swGenerator.includes("url.pathname === '/api/river-camera-image'"),
+  'River camera previews must use the fixed relay without Service Worker caching')
+const webcamRoot = fs.readFileSync('svgmapAppLayers/appLayers/svg3-bosai/japan-river-webcams/map/layers/portable/japan-river-webcams/webcamLayer.svg', 'utf8')
+const webcamController = fs.readFileSync('svgmapAppLayers/appLayers/svg3-bosai/japan-river-webcams/map/layers/portable/japan-river-webcams/webcamLayer.html', 'utf8')
+const webcamPins = fs.readFileSync('svgmapAppLayers/appLayers/svg3-bosai/japan-river-webcams/map/layers/portable/representative-pins/representativePinsCore.js', 'utf8')
+assert(webcamRoot.includes('カメラ画像,公式ページ')
+  && webcamController.includes('includeImageUrlInMetadata: policy?.riverWebcamImages?.enabled === true')
+  && webcamPins.includes("includeImageUrlInMetadata ? feature.imageUrl || '' : ''"),
+  'Webcam property metadata must expose image URLs only when its runtime policy allows images')
 assert(!/title="eMAFF農地情報"[^>]*data-special-server-required|data-special-server-required[^>]*title="eMAFF農地情報"/.test(container),
   'eMAFF must use the fixed local backend')
 assert(/title="海底ケーブル\(海しる\)"[^>]*data-external-api-changed/.test(container),

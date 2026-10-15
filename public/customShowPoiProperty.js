@@ -13,16 +13,41 @@
   }
 
   function parseWebUrl(value) {
-    if (!/^https?:\/\//i.test(String(value))) return null
+    const raw = String(value)
+    const localImage = /^\/api\/(?:private-sheet-image|drive-image)\?/.test(raw)
+    if (!/^https?:\/\//i.test(raw) && !localImage) return null
     try {
-      const url = new URL(value)
-      return ['http:', 'https:'].includes(url.protocol) ? url : null
+      const url = new URL(raw, window.location.origin)
+      if (!['http:', 'https:'].includes(url.protocol)) return null
+      if (localImage && url.origin !== window.location.origin) return null
+      return url
     } catch {
       return null
     }
   }
 
-  function appendValue(cell, value) {
+  function imageSource(url, fieldName) {
+    const imageField = /image|photo|写真|画像|カメラ/i.test(fieldName)
+    if (!imageField) return imagePath.test(url.pathname) ? url.href : null
+    const riverCamera = url.protocol === 'https:' && url.hostname === 'cam.river.go.jp'
+      ? url.pathname.match(/^\/cam\/now\/([A-Za-z0-9_-]{1,80})\.jpg$/) : null
+    if (riverCamera) return `/api/river-camera-image?id=${encodeURIComponent(riverCamera[1])}`
+    if (url.origin === window.location.origin &&
+        ['/api/private-sheet-image', '/api/drive-image'].includes(url.pathname)) return url.href
+    if (url.hostname === 'drive.google.com' && url.protocol === 'https:') {
+      const id = url.pathname.match(/^\/file\/d\/([A-Za-z0-9_-]+)(?:\/|$)/)?.[1]
+        || (url.pathname === '/open' ? url.searchParams.get('id') : null)
+      if (!id || !/^[A-Za-z0-9_-]+$/.test(id)) return null
+      const preview = new URL('/api/drive-image', window.location.origin)
+      preview.searchParams.set('id', id)
+      const resourceKey = url.searchParams.get('resourcekey')
+      if (resourceKey && /^[A-Za-z0-9_-]+$/.test(resourceKey)) preview.searchParams.set('resourcekey', resourceKey)
+      return preview.href
+    }
+    return imagePath.test(url.pathname) ? url.href : null
+  }
+
+  function appendValue(cell, value, fieldName = '') {
     const text = value == null || value === '' ? '--' : String(value)
     const url = parseWebUrl(text)
     if (!url) {
@@ -30,19 +55,29 @@
       return
     }
 
+    const source = imageSource(url, fieldName)
     const link = document.createElement('a')
     link.href = url.href
     link.target = '_blank'
     link.rel = 'noopener noreferrer'
-    link.textContent = url.href
+    link.textContent = source ? '画像を開く' : /公式|official/i.test(fieldName) ? '公式ページを開く' : 'リンクを開く'
     cell.appendChild(link)
 
-    if (imagePath.test(url.pathname)) {
+    if (source) {
       const image = document.createElement('img')
-      image.alt = ''
-      image.loading = 'lazy'
-      image.style.cssText = 'display:block;max-width:100%;opacity:1'
-      image.src = url.protocol === 'http:' ? window.svgMap.getCORSURL(url.href) : url.href
+      image.alt = fieldName || '画像'
+      // A property panel is opened by an explicit click; load its image now.
+      image.loading = 'eager'
+      image.referrerPolicy = 'no-referrer'
+      image.style.cssText = 'display:block;max-width:100%;max-height:360px;object-fit:contain;opacity:1'
+      image.addEventListener('error', () => {
+        image.remove()
+        const notice = document.createElement('span')
+        notice.textContent = '画像を表示できません。リンクから確認してください。'
+        notice.style.display = 'block'
+        cell.appendChild(notice)
+      }, { once: true })
+      image.src = source.startsWith('http:') ? window.svgMap.getCORSURL(source) : source
       cell.appendChild(image)
     }
   }
@@ -52,7 +87,7 @@
     appendCell(row, name)
     const valueCell = document.createElement('td')
     valueCell.style.wordBreak = 'break-all'
-    appendValue(valueCell, value)
+    appendValue(valueCell, value, name)
     row.appendChild(valueCell)
     table.appendChild(row)
   }
@@ -88,7 +123,6 @@
     window.svgMap.showModal(table, 400, 600)
   }
 
-  window.addEventListener('load', () => {
-    if (window.svgMap?.setShowPoiProperty) window.svgMap.setShowPoiProperty(customShowPoiProperty)
-  })
+  // Imported by svgmap-bootstrap after svgMap exists and before initLoad().
+  window.svgMap.setShowPoiProperty(customShowPoiProperty)
 })()

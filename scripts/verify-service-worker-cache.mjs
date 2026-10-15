@@ -38,6 +38,8 @@ assert.equal(await dispatch('https://map.example/svgmapAppLayers/Container.svg')
   'Application SVG must not be served from the Service Worker cache')
 assert.equal((await dispatch('https://map.example/api/mizupigui')).status, 200,
   'Live water-stake data must bypass Service Worker caches')
+assert.equal((await dispatch('https://map.example/api/river-camera-image?id=311777010')).status, 200,
+  'Current river camera images must bypass Service Worker caches')
 
 let activation
 handlers.get('activate')({ waitUntil: (promise) => { activation = promise } })

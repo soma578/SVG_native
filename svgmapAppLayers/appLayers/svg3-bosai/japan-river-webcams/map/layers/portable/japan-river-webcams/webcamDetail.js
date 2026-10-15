@@ -16,6 +16,13 @@ const allowedImageUrl = (value) => {
   }
 };
 
+const cameraImageSource = (imageUrl) => {
+  const url = new URL(imageUrl);
+  const match = url.protocol === 'https:' && url.hostname === 'cam.river.go.jp'
+    ? url.pathname.match(/^\/cam\/now\/([A-Za-z0-9_-]{1,80})\.jpg$/) : null;
+  return match ? `/api/river-camera-image?id=${encodeURIComponent(match[1])}` : imageUrl;
+};
+
 /**
  * 公式ページの URL。元データ (river.go.jp) のものだけを通す。
  * 空文字を href に入れると現在のページを開き直すだけになり、利用者には
@@ -67,11 +74,11 @@ export const renderWebcamDetail = (feature, { imageEnabled = false } = {}) => {
             <figure class="svg3-property-media">
               <img
                 data-webcam-image
-                data-source="${escapeHtml(imageUrl)}"
-                data-slawa-media-source="${escapeHtml(imageUrl)}"
-                src="${escapeHtml(imageUrl)}"
+                data-source="${escapeHtml(cameraImageSource(imageUrl))}"
+                data-slawa-media-source="${escapeHtml(cameraImageSource(imageUrl))}"
+                src="${escapeHtml(cameraImageSource(imageUrl))}"
                 alt="${escapeHtml(feature.title || '河川監視カメラ')}"
-                loading="lazy"
+                loading="eager"
                 decoding="async"
                 fetchpriority="low"
                 referrerpolicy="no-referrer"

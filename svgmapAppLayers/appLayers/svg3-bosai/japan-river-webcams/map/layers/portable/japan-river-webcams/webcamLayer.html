@@ -75,12 +75,14 @@ const renderWebcamDetailWithPolicy = async (feature) => {
 renderWebcamDetailWithPolicy.afterShow = (_feature, modal) => bindImageRefresh(modal);
 
 let started = false;
-const start = () => {
+const start = async () => {
   if (started) return;
   started = true;
+  const policy = await loadRuntimePolicy();
   initRepresentativePinsLayer({
     mode: 'portable',
     renderFeatureDetail: renderWebcamDetailWithPolicy,
+    includeImageUrlInMetadata: policy?.riverWebcamImages?.enabled === true,
   });
 };
 window.addEventListener('layerWebAppReady', start, { once: true });

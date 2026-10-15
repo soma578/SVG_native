@@ -45,6 +45,7 @@ export const initRepresentativePinsLayer = ({
   renderFeatureDetail = null,
   bridge = null,
   refreshIntervalMs = 0,
+  includeImageUrlInMetadata = null,
   networkFetch = globalThis.fetch?.bind(globalThis),
   dataParams = null,
 } = {}) => {
@@ -705,6 +706,10 @@ export const initRepresentativePinsLayer = ({
     feature.operator || '',
     feature.summary || '',
     feature.municipalityCode || '',
+    ...(includeImageUrlInMetadata === null ? [] : [
+      includeImageUrlInMetadata ? feature.imageUrl || '' : '',
+      feature.pageUrl || '',
+    ]),
   ].map((value) => String(value ?? '').replace(/[\r\n,]/g, ' ').trim()).join(',');
 
   // グローバル座標系は 1度 = 100単位 (matrix(100,0,0,-100,0,0))。ピンの配置でも

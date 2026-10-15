@@ -13,6 +13,8 @@ test('MOSAdemy published data appears as one facility pin with detail buttons', 
   const locations = [{ facility_id: '1', facility_name: '岡山大学病院', latitude: 34.6507388, longitude: 133.9158887 }]
   const cameras = [{ sensor_id: '1', facility_id: '1', name: 'カメラ１',
     image_url: `${root}images/6b86b273ff34fce19d6b804eff5a3f57.jpg`, measured_at: measured, status: 'normal' }]
+  await page.route(cameras[0].image_url, (route) => route.fulfill({ status: 200,
+    contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1" />' }))
   for (const [filename, data] of Object.entries({ catalog, latest, locations, cameras })) {
     await page.route(`${root}${filename}.json`, (route) => route.fulfill({ status: 200,
       headers: { 'Access-Control-Allow-Origin': '*' }, contentType: 'application/json', body: JSON.stringify(data) }))
@@ -24,6 +26,7 @@ test('MOSAdemy published data appears as one facility pin with detail buttons', 
   await page.evaluate(() => {
     const layer = window.svgMap.getRootLayersProps().find((entry) => entry.title === 'MOSAdemy 設備監視')
     if (!layer) throw new Error('MOSAdemy layer not registered')
+    window.svgMap.setGeoViewPort(34.6507388, 133.9158887, 0.4, 0.4)
     window.svgMap.setRootLayersProps(layer.id, true, false)
     window.svgMap.refreshScreen()
   })
@@ -50,6 +53,18 @@ test('MOSAdemy published data appears as one facility pin with detail buttons', 
   await expect.poll(() => page.evaluate(() => [...document.querySelectorAll('img')]
     .some((img) => img.src.includes('/mosademy/icons/available.svg') && img.complete && img.naturalWidth > 0)))
     .toBe(true)
+  await page.evaluate(() => {
+    const showModal = window.svgMap.showModal.bind(window.svgMap)
+    window.svgMap.showModal = (element, ...args) => {
+      window.__mosademyPropertyModal = element
+      return showModal(element, ...args)
+    }
+  })
+  await page.locator('img[src*="mosademy"][src*="available.svg"]').first().click({ timeout: 5000 })
+  await expect.poll(() => page.evaluate(() => window.__mosademyPropertyModal?.querySelector?.('img')?.src || ''))
+    .toBe(cameras[0].image_url)
+  await expect.poll(() => page.evaluate(() => window.__mosademyPropertyModal?.querySelector?.('img')?.naturalWidth || 0))
+    .toBe(1)
   const detail = await frame.evaluate(() => {
     const marker = window.svgImage.getElementById('sensor-root').querySelector('image')
     return import('./mosademy.js').then(({ showFacilityProperty }) => {

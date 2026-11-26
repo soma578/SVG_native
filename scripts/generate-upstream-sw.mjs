@@ -201,6 +201,8 @@ self.addEventListener('fetch', (event) => {
       || url.pathname === '/api/cors-proxy'
       || url.pathname === '/api/mizupigui'
       || url.pathname === '/api/chugoku-outages'
+      || url.pathname === '/api/aed-navi-data'
+      || url.pathname === '/api/aed-navi-detail'
       || url.pathname === '/api/river-camera-image')) {
     event.respondWith(fetch(request));
     return;

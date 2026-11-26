@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AED N@VI 設置情報（岡山県）</title>
+  <style>
+    :root { font-family: system-ui,sans-serif; color-scheme: light; }
+    body { margin: 10px; color: #253243; font-size: 13px; line-height: 1.55; }
+    h1 { margin: 0 0 8px; font-size: 17px; }
+    p { margin: 7px 0; }
+    button { font: inherit; padding: 5px 10px; border: 1px solid #8ca6a1; border-radius: 6px; background: white; cursor: pointer; }
+    #status { padding: 8px; background: #eef6f3; border-left: 3px solid #087e63; }
+    .note { color: #516070; font-size: 11px; }
+    a { color: #0c5d9a; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/gh/svgmap/svgmapjs@latest/svgMapLayerLib.js"></script>
+  <script type="module" src="./aedNavi.js"></script>
+</head>
+<body>
+  <h1>AED N@VI 設置情報（岡山県）</h1>
+  <p id="status" role="status">読み込み中</p>
+  <p><button id="reload" type="button">データを再読み込み</button>　<a href="https://aed-navi.jp/map" target="_blank" rel="noopener noreferrer">AED N@VI 公式地図</a></p>
+  <p>最終確認日時: <time id="retrievedAt">-</time></p>
+  <p class="note">表示は掲載された設置情報です。緑は登録された通常の利用時間内、茶は時間外、灰は時間情報なしを示します。祝日・臨時休業や実機の状態は反映できません。緊急時は現地で利用可否を確認してください。</p>
+</body>
+</html>

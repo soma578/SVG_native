@@ -14,6 +14,8 @@
     "data:hazard-raster-tiles": "node scripts/generate-hazard-raster-tiles.mjs",
     "data:hazard-detail-tiles": "node scripts/generate-hazard-detail-tiles.mjs",
     "data:oxygen-log": "node scripts/import-oxygen-device-log.mjs",
+    "data:aed-navi": "node scripts/import-aed-navi.mjs",
+    "test:aed-navi": "node --test scripts/aed-navi-data.test.mjs && playwright test tests/aed-navi-layer.spec.mjs",
     "data:okayama-landslide": "node scripts/import-okayama-landslide-candidates.mjs",
     "data:okayama-landslide-geometry": "node scripts/import-okayama-landslide-geometry.mjs",
     "test:oxygen-log": "node scripts/import-oxygen-device-log.mjs --check",

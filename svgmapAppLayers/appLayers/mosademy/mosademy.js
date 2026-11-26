@@ -2,7 +2,7 @@
 // returned sensors by facility so one location has one pin and detail buttons.
 import { loadApprovedSensors, showSensor } from 'https://mosa-github.github.io/data_test_server_page/assets/svgmap-data.js'
 import { showPropertyModal } from '../svg3-bosai/representative-pins/propertyModal.js'
-import { groupByFacility } from './view-model.js'
+import { formatOutageSummary, groupByFacility } from './view-model.js'
 import { registerOkayamaPropertyView } from '/okayama-property-view.js'
 
 const REFRESH_MS = 180_000
@@ -95,7 +95,7 @@ function draw(nextFacilities) {
     marker.setAttribute('content', [facility.id, facility.name, sensorValue('generator'),
       sensorValue('water'), sensorValue('power'), cameraImages[0]?.image_url || '-',
       cameraImages[1]?.image_url || '-',
-      formatDate(measuredAt), SOURCE_LABEL, SOURCE_URL].map(csvSafe).join(','))
+      formatOutageSummary(facility.sensors), formatDate(measuredAt), SOURCE_LABEL, SOURCE_URL].map(csvSafe).join(','))
     fragment.appendChild(marker)
   })
   svgImage.getElementById('sensor-root').replaceChildren(fragment)

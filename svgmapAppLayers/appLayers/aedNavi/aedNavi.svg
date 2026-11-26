@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="13300 -3550 170 130"
+     data-controller="aedNavi.html#exec=appearOnLayerLoad&amp;requiredHeight=300"
+     property="施設名,所在地,AED N@VI ID,掲載時間の目安,緯度,経度,データ取得日時,出典,出典公式ページ">
+  <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)"/>
+  <defs>
+    <g id="aed-open"><circle r="9" fill="#087e63" stroke="white" stroke-width="2.5"/><path d="M-4 0 H4 M0 -4 V4" stroke="white" stroke-width="2"/></g>
+    <g id="aed-closed"><circle r="8" fill="#9c6432" stroke="white" stroke-width="2.5"/><path d="M-3 0 H3" stroke="white" stroke-width="2"/></g>
+    <g id="aed-unknown"><circle r="8" fill="#65758b" stroke="white" stroke-width="2.5"/><circle r="2" fill="white"/></g>
+  </defs>
+  <g id="aedPoints"/>
+</svg>

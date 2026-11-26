@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test('MOSAdemy published data appears as one facility pin with two camera details', async ({ page }) => {
+test('MOSAdemy groups both facilities and shows outage status alongside camera details', async ({ page }) => {
   const root = 'https://mosa-github.github.io/data_test_server_page/public-data/'
   const measured = new Date().toISOString()
   const catalog = { generated_at: measured, datasets: ['latest', 'locations', 'cameras']
@@ -9,8 +9,15 @@ test('MOSAdemy published data appears as one facility pin with two camera detail
     { sensor_id: '3', facility_id: '1', name: '燃料残量', type: 'generator', value: 3232.9, unit: 'L', measured_at: measured, status: 'normal' },
     { sensor_id: '4', facility_id: '1', name: '水位残量', type: 'water', value: 45.5, unit: '%', measured_at: measured, status: 'normal' },
     { sensor_id: '5', facility_id: '1', name: '電力', type: 'power', value: 7031.8, unit: 'W', measured_at: measured, status: 'normal' },
+    { sensor_id: '6', facility_id: '2', name: '監視ポイント1', type: 'outage', value: null, unit: 'W',
+      measured_at: measured, status: 'offline', power_state: 'OFFLINE', is_demo: true },
+    { sensor_id: '7', facility_id: '2', name: '監視ポイント2', type: 'outage', value: 33.2, unit: 'W',
+      measured_at: measured, status: 'normal', power_state: 'NORMAL', is_demo: true },
   ]
-  const locations = [{ facility_id: '1', facility_name: '岡山大学病院', latitude: 34.6507388, longitude: 133.9158887 }]
+  const locations = [
+    { facility_id: '1', facility_name: '岡山大学病院', latitude: 34.6507388, longitude: 133.9158887 },
+    { facility_id: '2', facility_name: '岡山大学（津島キャンパス）', latitude: 34.6897933, longitude: 133.9237438 },
+  ]
   const cameras = [
     { sensor_id: '1', facility_id: '1', name: 'カメラ１',
       image_url: `${root}images/6b86b273ff34fce19d6b804eff5a3f57.jpg`, measured_at: measured, status: 'normal' },
@@ -38,29 +45,39 @@ test('MOSAdemy published data appears as one facility pin with two camera detail
   })
   await expect.poll(() => page.frames().some((frame) => frame.url().includes('/mosademy/mosademy.html'))).toBe(true)
   const frame = page.frames().find((entry) => entry.url().includes('/mosademy/mosademy.html'))
-  await expect(frame.locator('#facilityCount')).toHaveText('1')
-  await expect(frame.locator('#sensorCount')).toHaveText('5')
+  await expect(frame.locator('#facilityCount')).toHaveText('2')
+  await expect(frame.locator('#sensorCount')).toHaveText('7')
   expect(await frame.evaluate(() => window.svgMap.getLayer(window.layerID)?.getAttribute('class')))
     .toContain('岡山大学')
   const points = await frame.evaluate(() => {
     return [...window.svgImage.getElementById('sensor-root').querySelectorAll('image')]
       .map((marker) => [marker.getAttribute('data-facility-id'), marker.getAttribute('transform')])
   })
-  expect(points).toEqual([['1', 'ref(svg,133.9158887,-34.6507388)']])
+  expect(points).toEqual(expect.arrayContaining([
+    ['1', 'ref(svg,133.9158887,-34.6507388)'],
+    ['2', 'ref(svg,133.9237438,-34.6897933)'],
+  ]))
   const standardMetadata = await frame.evaluate(() => {
     const root = window.svgImage.documentElement
-    const marker = window.svgImage.getElementById('sensor-root').querySelector('image')
+    const marker = window.svgImage.getElementById('sensor-root').querySelector('[data-facility-id="1"]')
+    const outageMarker = window.svgImage.getElementById('sensor-root').querySelector('[data-facility-id="2"]')
     return { schema: root.getAttribute('property').split(','),
       values: window.svgMap.parseEscapedCsvLine(marker.getAttribute('content')),
+      outageValues: window.svgMap.parseEscapedCsvLine(outageMarker.getAttribute('content')),
       title: marker.getAttribute('title') }
   })
-  expect(standardMetadata.schema).toEqual(['施設ID', '施設名', '燃料残量', '水位残量', '電力', 'カメラ１画像', 'カメラ２画像', '最終計測', '出典', '出典公式ページ'])
+  expect(standardMetadata.schema).toEqual(['施設ID', '施設名', '燃料残量', '水位残量', '電力', 'カメラ１画像', 'カメラ２画像', '停電感知情報', '最終計測', '出典', '出典公式ページ'])
   expect(standardMetadata.title).toBe('MOSAdemy 設備監視（岡山大学医学部）')
   expect(standardMetadata.values.slice(0, 5)).toEqual(['1', '岡山大学病院', '3232.9 L', '45.5 %', '7031.8 W'])
   expect(standardMetadata.values[5]).toBe(cameras[0].image_url)
   expect(standardMetadata.values[6]).toBe(cameras[1].image_url)
-  expect(standardMetadata.values[8]).toBe('MOSAdemy 公開データ')
-  expect(standardMetadata.values[9]).toBe('https://mosa-github.github.io/data_test_server_page/')
+  expect(standardMetadata.values[7]).toBe('-')
+  expect(standardMetadata.values[9]).toBe('MOSAdemy 公開データ')
+  expect(standardMetadata.values[10]).toBe('https://mosa-github.github.io/data_test_server_page/')
+  expect(standardMetadata.outageValues[0]).toBe('2')
+  expect(standardMetadata.outageValues[1]).toBe('岡山大学（津島キャンパス）')
+  expect(standardMetadata.outageValues[7]).toContain('監視ポイント1: 【検証用】停電・通信途絶の疑い（停電未確定）、電力値なし')
+  expect(standardMetadata.outageValues[7]).toContain('監視ポイント2: 【検証用】通電・稼働、33.2 W')
   await expect.poll(() => page.evaluate(() => [...document.querySelectorAll('img')]
     .some((img) => img.src.includes('/mosademy/icons/available.svg') && img.complete && img.naturalWidth > 0)))
     .toBe(true)
@@ -71,7 +88,7 @@ test('MOSAdemy published data appears as one facility pin with two camera detail
       return showModal(element, ...args)
     }
   })
-  await page.locator('img[src*="mosademy"][src*="available.svg"]').first().click({ timeout: 5000 })
+  await page.locator('img[src*="mosademy"][src*="available.svg"]').last().click({ timeout: 5000 })
   await expect.poll(() => page.evaluate(() => {
     const table = window.__mosademyPropertyModal
     const row = [...(table?.querySelectorAll?.('tr') || [])].find((item) => item.cells?.[0]?.textContent === 'title/Layer')
@@ -86,7 +103,7 @@ test('MOSAdemy published data appears as one facility pin with two camera detail
     .map((image) => [image.src, image.naturalWidth])))
     .toEqual(cameras.map((camera) => [camera.image_url, 1]))
   const detail = await frame.evaluate(() => {
-    const marker = window.svgImage.getElementById('sensor-root').querySelector('image')
+    const marker = window.svgImage.getElementById('sensor-root').querySelector('[data-facility-id="1"]')
     return import('./mosademy.js').then(({ showFacilityProperty }) => {
       const info = showFacilityProperty(marker)
       const details = [...info.querySelectorAll('[data-sensor-index]')]
@@ -113,4 +130,16 @@ test('MOSAdemy published data appears as one facility pin with two camera detail
   expect(detail.firstCamera.image).toBe(cameras[0].image_url)
   expect(detail.secondCamera.text).toContain('カメラ２')
   expect(detail.secondCamera.image).toBe(cameras[1].image_url)
+  const outageDetail = await frame.evaluate(() => {
+    const marker = window.svgImage.getElementById('sensor-root').querySelector('[data-facility-id="2"]')
+    return import('./mosademy.js').then(({ showFacilityProperty }) => {
+      const info = showFacilityProperty(marker)
+      return [...info.querySelectorAll('[data-sensor-index]')].map((section) => section.textContent)
+    })
+  })
+  expect(outageDetail).toHaveLength(2)
+  expect(outageDetail[0]).toContain('【検証用・ダミー】')
+  expect(outageDetail[0]).toContain('停電・通信途絶の疑い')
+  expect(outageDetail[0]).toContain('欠損')
+  expect(outageDetail[1]).toContain('33.2 W')
 })

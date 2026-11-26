@@ -255,6 +255,9 @@
   <animation x="-30000" y="-30000" width="60000" height="60000"
              xlink:href="./appLayers/chugokuOutages/chugokuOutages.svg"
              class="岡山大学 clickable" title="中国電力 停電情報・履歴（中国地方）" visibility="hidden" opacity="1" />
+  <animation x="-30000" y="-30000" width="60000" height="60000"
+             xlink:href="./appLayers/aedNavi/aedNavi.svg"
+             class="岡山大学 clickable" title="AED N@VI 設置情報（岡山県）" visibility="hidden" opacity="1" />
   <animation x="123" y="-46" width="22" height="22"
              xlink:href="./appLayers/okayamaLandslideCandidates/okayamaLandslideCandidates.svg"
              class="岡山大学" title="岡山県 新たな土砂災害リスク箇所" visibility="hidden" opacity="1" />

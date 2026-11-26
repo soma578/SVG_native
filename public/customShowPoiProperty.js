@@ -57,11 +57,8 @@
 
     const source = imageSource(url, fieldName)
     const link = document.createElement('a')
-    link.href = url.href
     link.target = '_blank'
     link.rel = 'noopener noreferrer'
-    link.textContent = source ? '画像を開く' : /公式|official/i.test(fieldName) ? '公式ページを開く' : 'リンクを開く'
-    cell.appendChild(link)
 
     if (source) {
       const image = document.createElement('img')
@@ -72,14 +69,18 @@
       image.style.cssText = 'display:block;max-width:100%;max-height:360px;object-fit:contain;opacity:1'
       image.addEventListener('error', () => {
         image.remove()
-        const notice = document.createElement('span')
-        notice.textContent = '画像を表示できません。リンクから確認してください。'
-        notice.style.display = 'block'
-        cell.appendChild(notice)
+        link.textContent = '画像を開く'
       }, { once: true })
       image.src = source.startsWith('http:') ? window.svgMap.getCORSURL(source) : source
-      cell.appendChild(image)
+      link.href = image.src
+      link.setAttribute('aria-label', `${fieldName || '画像'}を開く`)
+      link.style.cssText = 'display:inline-block;max-width:100%'
+      link.appendChild(image)
+    } else {
+      link.href = url.href
+      link.textContent = /公式|official/i.test(fieldName) ? '公式ページを開く' : 'リンクを開く'
     }
+    cell.appendChild(link)
   }
 
   function appendRow(table, name, value) {

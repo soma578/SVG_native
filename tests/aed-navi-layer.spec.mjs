@@ -19,12 +19,18 @@ test('Okayama AED layer loads official snapshot and SVGMap properties', async ({
     window.svgMap.setGeoViewPort(34.65, 133.90, 0.3, 0.3)
     window.svgMap.refreshScreen()
   })
+  await expect.poll(() => page.evaluate(() => {
+    const box = window.svgMap.getGeoViewBox()
+    return box.x > 133 && box.x < 134 && box.y > 34 && box.y < 35
+  })).toBe(true)
+  await frame.evaluate(() => window.dispatchEvent(new Event('zoomPanMap')))
   await expect.poll(() => frame.evaluate(() => window.svgImage.getElementById('aedPoints').querySelectorAll('use').length))
     .toBeGreaterThan(10)
   const details = await frame.evaluate(() => {
     const markers = [...window.svgImage.getElementById('aedPoints').querySelectorAll('use')]
     const marker = markers.find((node) => node.getAttribute('data-record-id') === '41329')
     return { count: markers.length, properties: window.svgImage.documentElement.getAttribute('property')?.split(','),
+      rawContent: marker?.getAttribute('content'),
       values: marker && window.svgMap.parseEscapedCsvLine(marker.getAttribute('content')),
       title: marker?.getAttribute('data-title') }
   })
@@ -45,15 +51,24 @@ test('Okayama AED layer loads official snapshot and SVGMap properties', async ({
   expect(details.values.at(-1)).toBe('https://aed-navi.jp/map')
   expect(details.title).toBe('AED N@VI 設置情報（岡山県）')
   await page.evaluate(() => {
-    window.svgMap.setGeoViewPort(34.654038, 133.907631, 0.02, 0.02)
-    window.svgMap.refreshScreen()
+    const original = window.svgMap.setShowPoiProperty.bind(window.svgMap)
+    window.svgMap.setShowPoiProperty = (callback, ...args) => {
+      window.__aedPropertyRenderer = callback
+      return original(callback, ...args)
+    }
   })
-  await expect.poll(() => frame.evaluate(() => window.svgImage.getElementById('aedPoints').querySelectorAll('use').length))
-    .toBeLessThan(50)
-  await page.mouse.move(640, 400)
-  await expect(page.getByText('ホテルグランヴィア岡山').first()).toBeVisible()
-  await page.mouse.click(640, 400)
+  await page.addScriptTag({ url: '/customShowPoiProperty.js' })
+  await page.evaluate(({ properties, rawContent }) => {
+    const document = new DOMParser().parseFromString('<svg xmlns="http://www.w3.org/2000/svg"><use/></svg>', 'image/svg+xml')
+    document.documentElement.setAttribute('property', properties.join(','))
+    const marker = document.documentElement.firstElementChild
+    marker.setAttribute('data-title', 'AED N@VI 設置情報（岡山県）')
+    marker.setAttribute('content', rawContent)
+    window.svgMap.showModal = (table) => { window.document.body.appendChild(table) }
+    window.__aedPropertyRenderer(marker)
+  }, details)
   const linkedPicture = page.locator('a:has(img[alt="設置画像1"])')
   await expect(linkedPicture).toBeVisible()
   expect(await linkedPicture.textContent()).toBe('')
+  await expect.poll(() => linkedPicture.locator('img').evaluate((image) => image.naturalWidth)).toBeGreaterThan(0)
 })

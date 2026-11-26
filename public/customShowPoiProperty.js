@@ -121,7 +121,12 @@
       const layerName = target.getAttribute('data-layername')
       if (title || layerName) appendRow(table, 'title/Layer', isOkayamaLayer(layerName) || title === layerName
         ? layerName : [title, layerName].filter(Boolean).join('/'))
-      metadata.forEach((value, index) => appendRow(table, schema[index] || String(index), value))
+      metadata.forEach((value, index) => {
+        const field = schema[index] || String(index)
+        if ((title === 'AED N@VI 設置情報（岡山県）' || layerName === 'AED N@VI 設置情報（岡山県）')
+          && /^設置画像\d+$/.test(field) && (!value || value === '-')) return
+        appendRow(table, field, value)
+      })
     } else {
       for (const attribute of target.attributes) appendRow(table, attribute.name, attribute.value)
     }

@@ -88,7 +88,16 @@ function render() {
     marker.setAttribute('data-layer-id', 'aedNavi')
     marker.setAttribute('data-kind', 'poi')
     marker.setAttribute('data-title', title)
-    marker.setAttribute('content', [record.name || `AED N@VI #${record.id}`, record.address || '-', record.id, stateLabel(state), record.lat, record.lng, formatDate(retrievedAt), 'AED N@VI', SOURCE_URL].map(csvSafe).join(','))
+    marker.setAttribute('content', [
+      record.images?.[0] || '-', record.images?.[1] || '-', record.images?.[2] || '-',
+      record.images?.[3] || '-', record.images?.[4] || '-',
+      record.name || `AED N@VI #${record.id}`, record.address || '-', record.placeNotes || '-',
+      record.placeTypeName || '-', record.sourceName || '-', record.notes || '-',
+      record.confirmName || '-', record.availName || '-', record.availInfo || '-',
+      record.alwaysAvailName || '-', record.availNotes || '-', scheduleSummary(record),
+      stateLabel(state), record.updatedAt || '-', formatDate(retrievedAt), record.id,
+      'AED N@VI', SOURCE_URL,
+    ].map(csvSafe).join(','))
     marker.setAttribute('xlink:title', record.name || `AED N@VI #${record.id}`)
     marker.setAttribute('pointer-events', 'all')
     fragment.appendChild(marker)
@@ -113,14 +122,41 @@ async function showDetails(target) {
     if (response.ok) detail = (await response.json()).record
   } catch (error) { console.warn('[aed-navi] detail unavailable', error) }
   const rows = [
-    ['所在地', detail?.place_address || record.address || '-'],
-    ['掲載時間', stateLabel(scheduleStatus(record, currentTokyoTime()))],
+    ['設置場所名', detail?.place_name || record.name || `AED N@VI #${id}`],
+    ['設置場所住所', detail?.place_address || record.address || '-'],
+    ['設置場所詳細', detail?.place_notes || record.placeNotes || '-'],
+    ['設置場所区分', detail?.place_type_name || record.placeTypeName || '-'],
+    ['情報源', detail?.source_name || record.sourceName || '-'],
+    ['備考', detail?.notes || record.notes || '-'],
+    ['設置管理者の確認', detail?.confirm_name || record.confirmName || '-'],
+    ['使用の了承', detail?.avail_name || record.availName || '-'],
+    ['AEDの利用補足', detail?.avail_info || record.availInfo || '-'],
+    ['24時間利用可', detail?.always_avail_name || record.alwaysAvailName || '-'],
+    ['利用時間の補足', detail?.avail_notes || record.availNotes || '-'],
+    ['曜日別利用時間', scheduleSummary(record)],
+    ['掲載時間の目安', stateLabel(scheduleStatus(record, currentTokyoTime()))],
+    ['情報更新日時', detail?.updated_at || record.updatedAt || '-'],
     ['AED N@VI ID', id],
-    ['備考', detail?.place_notes || detail?.avail_notes || '-'],
-    ['データ取得日時', formatDate(retrievedAt)],
-    ['出典', 'AED N@VI'],
   ].map(([name, value]) => `<div class="svg3-property-row"><dt>${escapeHtml(name)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')
-  showPropertyModal(`<article class="svg3-property svg3-property-webcam-compact"><header class="svg3-property-header"><h2 class="svg3-property-title">${escapeHtml(detail?.place_name || record.name || `AED N@VI #${id}`)}</h2></header><dl class="svg3-property-body">${rows}</dl><div class="svg3-property-actions svg3-property-actions-padded"><a class="svg3-property-link" href="${SOURCE_URL}" target="_blank" rel="noopener noreferrer">公式地図を開く</a></div></article>`, { attribution: { label: 'AED N@VI', url: SOURCE_URL } })
+  const photos = (detail?.imagelist ? publicImageUrls(detail.imagelist) : record.images || [])
+    .map((url, index) => `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer"><img src="${escapeHtml(url)}" alt="設置画像${index + 1}" loading="lazy" style="max-width:100%;max-height:260px;object-fit:contain"></a>`).join('')
+  showPropertyModal(`<article class="svg3-property svg3-property-webcam-compact"><header class="svg3-property-header"><h2 class="svg3-property-title">${escapeHtml(detail?.place_name || record.name || `AED N@VI #${id}`)}</h2></header>${photos ? `<div class="svg3-property-body">${photos}</div>` : ''}<dl class="svg3-property-body">${rows}</dl><div class="svg3-property-actions svg3-property-actions-padded"><a class="svg3-property-link" href="${SOURCE_URL}" target="_blank" rel="noopener noreferrer">公式地図を開く</a></div></article>`, { attribution: { label: 'AED N@VI', url: SOURCE_URL } })
+}
+
+function publicImageUrls(raw) {
+  return String(raw || '').split(',').filter((name) =>
+    /^(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_-]+\.(?:jpe?g|png|webp)$/i.test(name))
+    .map((name) => `https://aed-navi.jp/files/share/${name.split('/').map(encodeURIComponent).join('/')}`)
+}
+
+function scheduleSummary(record) {
+  if (record.alwaysAvail) return '24時間利用可（登録情報）'
+  const labels = ['月', '火', '水', '木', '金', '土', '日', '祝']
+  const entries = (record.hours || []).flatMap((hours, index) => {
+    if (!/^\d{8}$/.test(hours) || hours === '00000000') return []
+    return [`${labels[index]} ${hours.slice(0, 2)}:${hours.slice(2, 4)}～${hours.slice(4, 6)}:${hours.slice(6, 8)}`]
+  })
+  return entries.join(' / ') || '不明または利用時間の補足を参照'
 }
 
 function stateLabel(state) { return state === 'open' ? '通常の掲載時間内' : state === 'closed' ? '通常の掲載時間外' : '時間情報なし' }

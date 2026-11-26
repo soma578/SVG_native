@@ -17,15 +17,18 @@ test('Okayama AED layer loads official snapshot and SVGMap properties', async ({
   await expect(frame.locator('#status')).toContainText('画面内')
   const details = await frame.evaluate(() => {
     const markers = [...window.svgImage.getElementById('aedPoints').querySelectorAll('use')]
-    const marker = markers.find((node) => node.getAttribute('content')?.includes('岡山')) || markers[0]
+    const marker = markers.find((node) => node.getAttribute('data-record-id') === '41329')
     return { count: markers.length, properties: window.svgImage.documentElement.getAttribute('property')?.split(','),
       values: marker && window.svgMap.parseEscapedCsvLine(marker.getAttribute('content')),
       title: marker?.getAttribute('data-title') }
   })
   expect(details.count).toBeGreaterThan(10)
-  expect(details.properties).toEqual(['施設名', '所在地', 'AED N@VI ID', '掲載時間の目安', '緯度', '経度', 'データ取得日時', '出典', '出典公式ページ'])
-  expect(details.values[0]).toBeTruthy()
-  expect(details.values[7]).toBe('AED N@VI')
-  expect(details.values[8]).toBe('https://aed-navi.jp/map')
+  expect(details.properties.slice(0, 8)).toEqual(['設置画像1', '設置画像2', '設置画像3', '設置画像4', '設置画像5', '設置場所名', '設置場所住所', '設置場所詳細'])
+  expect(details.properties.length).toBe(details.values.length)
+  expect(details.values[0]).toMatch(/^https:\/\/aed-navi\.jp\/files\/share\/.+\.jpg$/)
+  expect(details.values[5]).toBe('ホテルグランヴィア岡山')
+  expect(details.values[9]).toBe('サポーター')
+  expect(details.values.at(-2)).toBe('AED N@VI')
+  expect(details.values.at(-1)).toBe('https://aed-navi.jp/map')
   expect(details.title).toBe('AED N@VI 設置情報（岡山県）')
 })

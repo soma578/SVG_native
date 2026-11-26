@@ -5,15 +5,27 @@ import { MESHES, inOkayama, loadOkayamaBoundary, parseTile } from './aed-navi-da
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const output = path.join(root, 'svgmapAppLayers/appLayers/aedNavi/data/okayama.json')
+const DETAIL_FIELDS = [
+  'name', 'address', 'placeNotes', 'placeTypeName', 'sourceName', 'notes',
+  'confirmName', 'availName', 'availInfo', 'alwaysAvailName', 'availNotes',
+  'images', 'updatedAt', 'detailCheckedAt',
+]
+
+function imageUrls(raw) {
+  return String(raw || '').split(',').filter((name) =>
+    /^(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_-]+\.(?:jpe?g|png|webp)$/i.test(name))
+    .map((name) => `https://aed-navi.jp/files/share/${name.split('/').map(encodeURIComponent).join('/')}`)
+}
 
 async function addPlaceDetails(records) {
   const previous = fs.existsSync(output) ? JSON.parse(fs.readFileSync(output, 'utf8')) : null
   const previousById = new Map((previous?.records || []).map((record) => [record.id, record]))
   for (const record of records) {
-    record.name = previousById.get(record.id)?.name || ''
-    record.address = previousById.get(record.id)?.address || ''
+    const prior = previousById.get(record.id) || {}
+    for (const field of DETAIL_FIELDS) if (prior[field] != null) record[field] = prior[field]
   }
-  const missing = records.filter((record) => !record.name)
+  const missing = records.filter((record) => !record.detailCheckedAt ||
+    Date.now() - Date.parse(record.detailCheckedAt) > 24 * 60 * 60 * 1000)
   for (let offset = 0; offset < missing.length; offset += 50) {
     const batch = missing.slice(offset, offset + 50)
     const form = new URLSearchParams({ latitude: '34.65', longitude: '133.90', request: '0' })
@@ -28,8 +40,21 @@ async function addPlaceDetails(records) {
       const detailsById = new Map((Array.isArray(details) ? details : []).map((detail) => [Number(detail.id), detail]))
       for (const record of batch) {
         const detail = detailsById.get(record.id)
+        if (!detail) continue
         record.name = String(detail?.place_name || '')
         record.address = String(detail?.place_address || '')
+        record.placeNotes = String(detail.place_notes || '')
+        record.placeTypeName = String(detail.place_type_name || '')
+        record.sourceName = String(detail.source_name || '')
+        record.notes = String(detail.notes || '')
+        record.confirmName = String(detail.confirm_name || '')
+        record.availName = String(detail.avail_name || '')
+        record.availInfo = String(detail.avail_info || '')
+        record.alwaysAvailName = String(detail.always_avail_name || '')
+        record.availNotes = String(detail.avail_notes || '')
+        record.images = imageUrls(detail.imagelist)
+        record.updatedAt = String(detail.updated_at || '')
+        record.detailCheckedAt = new Date().toISOString()
       }
     } catch (error) {
       console.warn(`[aed-navi] detail batch ${offset / 50 + 1} unavailable: ${error.message}`)

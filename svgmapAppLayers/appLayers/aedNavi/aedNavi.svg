@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
      viewBox="13300 -3550 170 130"
      data-controller="aedNavi.html#exec=appearOnLayerLoad&amp;requiredHeight=300"
-     property="施設名,所在地,AED N@VI ID,掲載時間の目安,緯度,経度,データ取得日時,出典,出典公式ページ">
+     property="設置画像1,設置画像2,設置画像3,設置画像4,設置画像5,設置場所名,設置場所住所,設置場所詳細,設置場所区分,情報源,備考,設置管理者の確認,使用の了承,AEDの利用補足,24時間利用可,利用時間の補足,曜日別利用時間,掲載時間の目安,情報更新日時,最終確認日時,AED N@VI ID,出典,出典公式ページ">
   <globalCoordinateSystem srsName="http://purl.org/crs/84" transform="matrix(100,0,0,-100,0,0)"/>
   <defs>
     <g id="aed-open"><circle r="9" fill="#087e63" stroke="white" stroke-width="2.5"/><path d="M-4 0 H4 M0 -4 V4" stroke="white" stroke-width="2"/></g>
